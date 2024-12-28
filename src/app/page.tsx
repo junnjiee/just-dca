@@ -1,4 +1,4 @@
-import DCAInfoForm from "./components/Form";
+import DCAInfoForm from "./components/DCAInfoForm";
 
 export default function Home() {
   return (

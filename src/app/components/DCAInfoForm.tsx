@@ -45,7 +45,7 @@ export default function DCAInfoForm() {
           control={form.control}
           name="ticker"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="w-1/12">
               <FormControl>
                 <Input placeholder="Ticker" {...field} />
               </FormControl>
@@ -57,7 +57,7 @@ export default function DCAInfoForm() {
           control={form.control}
           name="amount"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="w-1/12">
               <FormControl>
                 <Input placeholder="Recurring Amount" {...field} />
               </FormControl>
@@ -65,7 +65,7 @@ export default function DCAInfoForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Generate</Button>
       </form>
     </Form>
   );
