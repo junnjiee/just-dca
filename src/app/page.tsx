@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { DCAInfoForm } from "./components/DCAInfoForm";
 
 export default function Home() {
