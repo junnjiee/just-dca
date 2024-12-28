@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { DatePickerWithRange } from "@/components/DatePickerWithRange";
 
 const formSchema = z.object({
   ticker: z.string(),
@@ -23,7 +24,7 @@ const formSchema = z.object({
   endDate: z.string().date(),
 });
 
-export default function DCAInfoForm() {
+export function DCAInfoForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,7 +41,10 @@ export default function DCAInfoForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-row gap-x-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-row gap-x-4"
+      >
         <FormField
           control={form.control}
           name="ticker"
@@ -65,6 +69,7 @@ export default function DCAInfoForm() {
             </FormItem>
           )}
         />
+        <DatePickerWithRange />
         <Button type="submit">Generate</Button>
       </form>
     </Form>
