@@ -1,9 +1,11 @@
-import Form from "./components/Form";
+import DCAInfoForm from "./components/Form";
 
 export default function Home() {
   return (
     <>
-      <Form />
+      <div className="my-5">
+        <DCAInfoForm />
+      </div>
     </>
   );
 }
