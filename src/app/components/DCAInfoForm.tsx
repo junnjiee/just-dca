@@ -19,7 +19,8 @@ import { DatePickerWithRange } from "@/components/DatePickerWithRange";
 
 const formSchema = z.object({
   ticker: z.string(),
-  amount: z.number(),
+  // amount: z.number(),
+  amount: z.string(),
   startDate: z.string().date(),
   endDate: z.string().date(),
 });
@@ -29,7 +30,8 @@ export function DCAInfoForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       ticker: "AAPL",
-      amount: 50,
+      amount: "50",
+      // amount: 50,
       startDate: "2024-01-01",
       endDate: "2024-12-01",
     },

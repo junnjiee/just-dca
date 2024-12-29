@@ -9,9 +9,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export function DataCard() {
+export function DataCard({ className }: { className?: string }) {
   return (
-    <Card>
+    <Card className={className}>
       <CardHeader>
         <CardTitle>Card Title</CardTitle>
         <CardDescription>Card Description</CardDescription>
