@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Card,
   CardContent,
@@ -13,15 +11,17 @@ export function DataCard({ className }: { className?: string }) {
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>Card Title</CardTitle>
-        <CardDescription>Card Description</CardDescription>
+        
       </CardHeader>
       <CardContent>
-        <p>Card Content</p>
+        <div className="border-t py-2">Card Content 1</div>
+        <div className="border-t py-2">Card Content 1</div>
+        <div className="border-t py-2">Card Content 1</div>
+        <div className="border-y py-2">Card Content 1</div>
       </CardContent>
-      <CardFooter>
+      {/* <CardFooter>
         <p>Card Footer</p>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 }
