@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { DCAInfoForm } from "./components/DCAInfoForm";
-import { DataCard } from "./components/DataCard";
-import { CustomLineChart } from "./components/CustomLineChart";
-import { DCADataTable } from "./components/DCADataTable";
+import { DCAInfoForm } from "./_components/DCAInfoForm";
+import { DataCard } from "./_components/DataCard";
+import { CustomLineChart } from "./_components/CustomLineChart";
+import { DCADataTable } from "./_components/DCADataTable";
 
 export default function Home() {
   return (
