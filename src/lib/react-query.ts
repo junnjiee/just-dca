@@ -1,5 +1,5 @@
 export const queryConfig = {
-    queries: {
-        
-    }
-}
+  queries: {
+    staleTime: 1000 * 60,
+  },
+};
