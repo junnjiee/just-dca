@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -19,8 +20,7 @@ import { DatePickerWithRange } from "@/components/DatePickerWithRange";
 
 const formSchema = z.object({
   ticker: z.string(),
-  // amount: z.number(),
-  amount: z.string(),
+  amount: z.number(),
   startDate: z.string().date(),
   endDate: z.string().date(),
 });
@@ -30,8 +30,7 @@ export function DCAInfoForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       ticker: "AAPL",
-      amount: "50",
-      // amount: 50,
+      amount: 50,
       startDate: "2024-01-01",
       endDate: "2024-12-01",
     },
@@ -65,13 +64,18 @@ export function DCAInfoForm() {
           render={({ field }) => (
             <FormItem className="w-1/12">
               <FormControl>
-                <Input placeholder="Recurring Amount" {...field} />
+                <Input
+                  type="number"
+                  step="0.01"
+                  placeholder="Recurring Amount"
+                  {...form.register("amount", { valueAsNumber: true })}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <DatePickerWithRange />
+        {/* <DatePickerWithRange /> */}
         <Button type="submit">Generate</Button>
       </form>
     </Form>

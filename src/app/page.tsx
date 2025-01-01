@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { DCAInfoForm } from "./_components/DCAInfoForm";
+import { FormV2 } from "./_components/FormV2";
 import { DataCard } from "./_components/DataCard";
 import { CustomLineChart } from "./_components/CustomLineChart";
 import { DCADataTable } from "./_components/DCADataTable";
@@ -10,6 +10,7 @@ export default function Home() {
   return (
     <>
       <div className="my-5">
+        <FormV2 />
         <DCAInfoForm />
       </div>
       <div className="border-b px-4 py-3 space-y-0.5 mb-3">
