@@ -1,6 +1,5 @@
 "use client";
 
-import { DCAInfoForm } from "./_components/DCAInfoForm";
 import { FormV2 } from "./_components/FormV2";
 import { DataCard } from "./_components/DataCard";
 import { CustomLineChart } from "./_components/CustomLineChart";
@@ -11,7 +10,6 @@ export default function Home() {
     <>
       <div className="my-5">
         <FormV2 />
-        <DCAInfoForm />
       </div>
       <div className="border-b px-4 py-3 space-y-0.5 mb-3">
         <div className="text-2xl">Apple Inc.</div>
