@@ -16,9 +16,7 @@ export default function DashboardPage() {
   });
 
   const { data, error, isError, isLoading } = useGetDCAData(userInput);
-  // console.log(userInput);
   console.log(data);
-  console.log(`${isError} ${error}`);
 
   return (
     <>
