@@ -10,7 +10,7 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
 
     # no official way to check if ticker exists in yfinance
     if len(stock.info) <= 1:
-        return HTTPException(
+        raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Ticker does not exist"
         )
 
@@ -21,7 +21,7 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
 
     # check if ticker exists but no historical data
     if history.shape[0] == 0:
-        return HTTPException(
+        raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Historical data not found for this ticker",
         )

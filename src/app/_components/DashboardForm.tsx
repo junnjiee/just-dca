@@ -1,43 +1,35 @@
 "use client";
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { dcaDataInputSchema, dcaDataInputType } from "@/features/get-dca-data";
 
-const formSchema = z.object({
-  ticker: z.string().toUpperCase().nonempty("Enter a ticker"),
-  contri: z
-    .number({
-      required_error: "Enter a number",
-      invalid_type_error: "Enter a number",
-    })
-    .positive(),
-  startDate: z.string().date().nonempty(),
-  endDate: z.string().date().nonempty(),
-});
+type DashboardFormProps = {
+  userInput: dcaDataInputType;
+  setUserInput: React.Dispatch<React.SetStateAction<dcaDataInputType>>;
+};
 
-type FormProps = z.infer<typeof formSchema>;
-
-export function FormV2() {
+export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormProps>({
-    resolver: zodResolver(formSchema),
+  } = useForm<dcaDataInputType>({
+    resolver: zodResolver(dcaDataInputSchema),
     defaultValues: {
       ticker: "AAPL",
       contri: 50,
-      startDate: "2024-01-01",
-      endDate: "2024-12-01",
+      start: "2024-01-01",
+      end: "2024-12-01",
     },
   });
 
-  function onSubmit(data: FormProps) {
-    console.log(data);
+  function onSubmit(data: dcaDataInputType) {
+    // console.log(data);
+    setUserInput(data);
   }
 
   return (
@@ -63,23 +55,19 @@ export function FormV2() {
       </div>
 
       <div>
-        <Label htmlFor="startDate">Start Date</Label>
+        <Label htmlFor="start">Start Date</Label>
         <Input
-          id="startDate"
+          id="start"
           type="date"
-          {...register("startDate", { required: true })}
+          {...register("start", { required: true })}
         />
-        {errors.startDate && <p>{errors.startDate.message}</p>}
+        {errors.start && <p>{errors.start.message}</p>}
       </div>
 
       <div>
-        <Label htmlFor="endDate">End Date</Label>
-        <Input
-          id="endDate"
-          type="date"
-          {...register("endDate", { required: true })}
-        />
-        {errors.endDate && <p>{errors.endDate.message}</p>}
+        <Label htmlFor="end">End Date</Label>
+        <Input id="end" type="date" {...register("end", { required: true })} />
+        {errors.end && <p>{errors.end.message}</p>}
       </div>
 
       <Button type="submit">Generate</Button>

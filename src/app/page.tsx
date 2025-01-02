@@ -1,15 +1,33 @@
 "use client";
 
-import { FormV2 } from "./_components/FormV2";
+import { useState } from "react";
+import { DashboardForm } from "./_components/DashboardForm";
 import { DataCard } from "./_components/DataCard";
 import { CustomLineChart } from "./_components/CustomLineChart";
 import { DCADataTable } from "./_components/DCADataTable";
+import { useGetDCAData } from "@/features/get-dca-data";
 
-export default function Home() {
+export default function DashboardPage() {
+  const [userInput, setUserInput] = useState({
+    ticker: "AAPL",
+    contri: 50,
+    start: "2024-01-01",
+    end: "2024-12-01",
+  });
+
+  const { data, error, isError, isLoading } = useGetDCAData(
+    userInput,
+    userInput
+  );
+  // console.log(userInput);
+  console.log(data);
+  console.log(`${isError} ${error}`);
+
   return (
     <>
+      {isError && <p>{error.message}</p>}
       <div className="my-5">
-        <FormV2 />
+        <DashboardForm userInput={userInput} setUserInput={setUserInput} />
       </div>
       <div className="border-b px-4 py-3 space-y-0.5 mb-3">
         <div className="text-2xl">Apple Inc.</div>
