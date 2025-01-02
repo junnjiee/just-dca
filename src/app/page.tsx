@@ -15,10 +15,7 @@ export default function DashboardPage() {
     end: "2024-12-01",
   });
 
-  const { data, error, isError, isLoading } = useGetDCAData(
-    userInput,
-    userInput
-  );
+  const { data, error, isError, isLoading } = useGetDCAData(userInput);
   // console.log(userInput);
   console.log(data);
   console.log(`${isError} ${error}`);

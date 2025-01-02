@@ -26,9 +26,9 @@ export const dcaDataOutputSchema = z.array(
   })
 );
 
-export function useGetDCAData(params: dcaDataInputType, key: any) {
+export function useGetDCAData(params: dcaDataInputType) {
   return useQuery({
-    queryKey: [key],
+    queryKey: ["dcaData", params],
     queryFn: async () => {
       const newUrl = buildUrlWithParamsObj(
         `${process.env.NEXT_PUBLIC_URL!}/api/dca/returns`,

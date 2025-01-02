@@ -5,7 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { dcaDataInputSchema, dcaDataInputType } from "@/features/get-dca-data";
+import {
+  useGetDCAData,
+  dcaDataInputSchema,
+  dcaDataInputType,
+} from "@/features/get-dca-data";
 
 type DashboardFormProps = {
   userInput: dcaDataInputType;
@@ -27,8 +31,9 @@ export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
     },
   });
 
+  const { error, isError, isLoading, promise } = useGetDCAData(userInput);
+
   function onSubmit(data: dcaDataInputType) {
-    // console.log(data);
     setUserInput(data);
   }
 
@@ -70,7 +75,7 @@ export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
         {errors.end && <p>{errors.end.message}</p>}
       </div>
 
-      <Button type="submit">Generate</Button>
+      <Button type="submit">{isLoading ? "Loading" : "Generate"}</Button>
     </form>
   );
 }
