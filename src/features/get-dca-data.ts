@@ -18,6 +18,7 @@ export type dcaDataInputType = z.infer<typeof dcaDataInputSchema>;
 
 export const dcaDataOutputSchema = z.array(
   z.object({
+    date: z.string(),
     stock_price: z.number(),
     contribution: z.number(),
     shares_bought: z.number(),
@@ -28,7 +29,7 @@ export const dcaDataOutputSchema = z.array(
 
 export function useGetDCAData(params: dcaDataInputType) {
   return useQuery({
-    queryKey: ["dcaData", params],
+    queryKey: ["/api/dca/returns", params],
     queryFn: async () => {
       const newUrl = buildUrlWithParamsObj(
         `${process.env.NEXT_PUBLIC_URL!}/api/dca/returns`,

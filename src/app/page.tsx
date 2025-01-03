@@ -29,7 +29,7 @@ export default function DashboardPage() {
         <div className="text-xs">AAPL &bull; NASDAQ</div>
       </div>
       <div className="flex flex-row gap-x-4 mb-3">
-        <CustomLineChart className="basis-2/3" />
+        <CustomLineChart userInput={userInput} className="basis-2/3" />
         <DataCard className="basis-1/3" />
       </div>
       <DCADataTable />

@@ -1,7 +1,6 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+import { CartesianGrid, Area, AreaChart, XAxis } from "recharts";
 
 import {
   Card,
@@ -16,24 +15,30 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
 } from "@/components/ui/chart";
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-];
+import { useGetDCAData, dcaDataInputType } from "@/features/get-dca-data";
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
+  total_val: {
+    label: "Investment Value",
+    color: "#22c55e",
+  },
+  contribution: {
+    label: "Contribution",
+    color: "#2563eb",
   },
 } satisfies ChartConfig;
 
-export function CustomLineChart({ className }: { className?: string }) {
+type LineChartProps = {
+  userInput: dcaDataInputType;
+  className?: string;
+};
+
+export function CustomLineChart({ userInput, className }: LineChartProps) {
+  const { data, error, isError, isLoading } = useGetDCAData(userInput);
+
   return (
     <Card className={className}>
       <CardHeader>
@@ -42,44 +47,66 @@ export function CustomLineChart({ className }: { className?: string }) {
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <LineChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Line
-              dataKey="desktop"
+          {/* recharts component */}
+          <AreaChart data={data}>
+            <defs>
+              <linearGradient id="fillTotalVal" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-total_val)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="70%"
+                  stopColor="var(--color-total_val)"
+                  stopOpacity={0}
+                />
+              </linearGradient>
+
+              <linearGradient id="fillContribution" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-contribution)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="70%"
+                  stopColor="var(--color-contribution)"
+                  stopOpacity={0}
+                />
+              </linearGradient>
+            </defs>
+
+            <Area
+              fillOpacity={0.3}
+              dataKey="total_val"
+              stroke="var(--color-total_val)"
+              fill="url(#fillTotalVal)"
               type="linear"
-              stroke="var(--color-desktop)"
-              strokeWidth={2}
-              dot={false}
             />
-          </LineChart>
+            <Area
+              fillOpacity={0.3}
+              dataKey="contribution"
+              stroke="var(--color-contribution)"
+              fill="url(#fillContribution)"
+              type="linear"
+            />
+
+            <CartesianGrid vertical={false} />
+            <XAxis dataKey="date" />
+            <ChartTooltip content={<ChartTooltipContent />} />
+            <ChartLegend content={<ChartLegendContent />} />
+          </AreaChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
+      {/* <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
           Showing total visitors for the last 6 months
         </div>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 }
