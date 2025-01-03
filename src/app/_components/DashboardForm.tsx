@@ -23,59 +23,67 @@ export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
     formState: { errors },
   } = useForm<dcaDataInputType>({
     resolver: zodResolver(dcaDataInputSchema),
-    defaultValues: {
-      ticker: "AAPL",
-      contri: 50,
-      start: "2024-01-01",
-      end: "2024-12-01",
-    },
+    defaultValues: userInput,
   });
 
-  const { error, isError, isLoading, promise } = useGetDCAData(userInput);
+  const { isLoading } = useGetDCAData(userInput);
 
   function onSubmit(data: dcaDataInputType) {
     setUserInput(data);
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <Label htmlFor="ticker">Ticker</Label>
-        <Input id="ticker" placeholder="Ticker" {...register("ticker")} />
-        {errors.ticker && <p>{errors.ticker.message}</p>}
+    <form
+      className="grid grid-rows-3 grid-flow-col items-end gap-x-2 gap-y-0.5"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <Label htmlFor="ticker">Ticker</Label>
+      <Input id="ticker" placeholder="Ticker" {...register("ticker")} />
+      <div className="place-self-start">
+        {errors.ticker && (
+          <span className="text-red-600 text-sm">{errors.ticker.message}</span>
+        )}
       </div>
 
-      <div>
-        <Label htmlFor="contribution">Contribution</Label>
-        <Input
-          id="contribution"
-          type="number"
-          placeholder="USD"
-          step=".01"
-          {...register("contri", {
-            valueAsNumber: true,
-          })}
-        />
-        {errors.contri && <p>{errors.contri.message}</p>}
+      <Label htmlFor="contribution">Contribution</Label>
+      <Input
+        id="contribution"
+        type="number"
+        placeholder="USD"
+        step=".01"
+        {...register("contri", {
+          valueAsNumber: true,
+        })}
+      />
+      <div className="place-self-start">
+        {errors.contri && (
+          <span className="text-red-600 text-sm">{errors.contri.message}</span>
+        )}
       </div>
 
-      <div>
-        <Label htmlFor="start">Start Date</Label>
-        <Input
-          id="start"
-          type="date"
-          {...register("start", { required: true })}
-        />
-        {errors.start && <p>{errors.start.message}</p>}
+      <Label htmlFor="start">Start Date</Label>
+      <Input
+        id="start"
+        type="date"
+        {...register("start", { required: true })}
+      />
+      <div className="place-self-start">
+        {errors.start && (
+          <span className="text-red-600 text-sm">{errors.start.message}</span>
+        )}
       </div>
 
-      <div>
-        <Label htmlFor="end">End Date</Label>
-        <Input id="end" type="date" {...register("end", { required: true })} />
-        {errors.end && <p>{errors.end.message}</p>}
+      <Label htmlFor="end">End Date</Label>
+      <Input id="end" type="date" {...register("end", { required: true })} />
+      <div className="place-self-start">
+        {errors.end && (
+          <span className="text-red-600 text-sm">{errors.end.message}</span>
+        )}
       </div>
 
-      <Button type="submit">{isLoading ? "Loading" : "Generate"}</Button>
+      <div className="row-span-3 place-self-center justify-self-start">
+        <Button type="submit">{isLoading ? "Loading" : "Generate"}</Button>
+      </div>
     </form>
   );
 }

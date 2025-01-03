@@ -24,23 +24,24 @@ export default function DashboardPage() {
     end: "2024-12-01",
   });
 
-  const { data, error, isError, isLoading, isSuccess, promise } =
-    useGetDCAData(userInput);
-  console.log(data);
+  const { error, isError, isLoading, isSuccess } = useGetDCAData(userInput);
 
   useEffect(() => {
     if (isLoading) {
       // hacky way to ensure that toast transitions are smooth if user submits another form
       // when the toast is still shown
-      toast.loading("Generating Dashboard", {
-        position: "top-center",
-        toastId: 1,
-      });
+      // NOTE: toast does not load when submit is immediately clicked during disappearing animation
+      console.log("LOAD");
       toast.update(1, {
         render: "Generating Dashboard",
         isLoading: true,
       });
+      toast.loading("Generating Dashboard", {
+        position: "top-center",
+        toastId: 1,
+      });
     } else if (isSuccess) {
+      console.log("GOOD");
       toast.update(1, {
         render: "Generated",
         type: "success",
