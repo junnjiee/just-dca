@@ -10,9 +10,7 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
     stock = yf.Ticker(ticker)
     check_ticker_validity(stock)
 
-    # change start date day to first of month to get price of that month
-    modified_start = start[:-2] + "01"
-    history = stock.history(start=modified_start, end=end, interval="1mo")
+    history = stock.history(start=start, end=end, interval="1mo")
     check_history_validity(history)
 
     # calculate relevant data points for each month
@@ -29,19 +27,20 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
             "total_val": 0,  # total value of investment
         }
         data["date"] = history.index[i].strftime("%d %b %Y")
-        data["stock_price"] = history["Open"].iloc[i]
-        data["shares_bought"] = contri / history["Open"].iloc[i]
+        data["stock_price"] = history["Open"].iloc[i].round(2)
+        data["shares_bought"] = (contri / history["Open"].iloc[i]).round(2)
         data["contribution"] = contri * (i + 1)
 
         shares_owned += data["shares_bought"]
-        data["shares_owned"] = shares_owned
+        data["shares_owned"] = shares_owned.round(2)
 
         # profit varies by which month stock is bought
-        data["total_val"] = contri
+        total_val = contri
         for row in table:
-            data["total_val"] += (
-                contri * (history["Open"].iloc[i] / row["stock_price"])
-            ).round(2)
+            # P/L for that month = current price / price for that month * contribution
+            total_val += contri * (history["Open"].iloc[i] / row["stock_price"])
+
+        data["total_val"] = round(total_val, 2)
 
         table.append(data)
 

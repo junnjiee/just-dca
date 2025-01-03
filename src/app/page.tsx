@@ -5,9 +5,19 @@ import { toast } from "react-toastify";
 import { DashboardForm } from "./_components/DashboardForm";
 import { CustomLineChart } from "./_components/CustomLineChart";
 import { DCADataTable } from "./_components/DCADataTable";
-import { useGetDCAData } from "@/features/get-dca-data";
+import { dcaDataInputType, useGetDCAData } from "@/features/get-dca-data";
 import { useGetStockInfo } from "@/features/get-stock-info";
-
+import { cn } from "@/lib/utils";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   Card,
   CardContent,
@@ -65,21 +75,26 @@ export default function DashboardPage() {
       <div className="my-5">
         <DashboardForm userInput={userInput} setUserInput={setUserInput} />
       </div>
-      <TickerInfoCard ticker={userInput.ticker} />
+      <TickerInfoCard ticker={userInput.ticker} className="mb-3" />
       <div className="flex flex-row gap-x-4 mb-3">
         <CustomLineChart userInput={userInput} className="basis-2/3" />
         <DataCard className="basis-1/3" />
       </div>
-      <DCADataTable />
+      <DataTable userInput={userInput} />
     </>
   );
 }
 
-function TickerInfoCard({ ticker }: { ticker: string }) {
+type TickerInfoCardProps = {
+  ticker: string;
+  className?: string;
+};
+
+function TickerInfoCard({ ticker, className }: TickerInfoCardProps) {
   const { data, error, isError, isLoading } = useGetStockInfo(ticker);
 
   return (
-    <div className="border-b px-4 py-3 space-y-0.5 mb-3">
+    <div className={cn("border-b pb-3 space-y-0.5", className)}>
       <div className="text-2xl">{data?.longName}</div>
       <div className="text-xs">
         {data?.underlyingSymbol} &bull; {data?.quoteType}
@@ -88,7 +103,11 @@ function TickerInfoCard({ ticker }: { ticker: string }) {
   );
 }
 
-function DataCard({ className }: { className?: string }) {
+type DataCardProps = {
+  className?: string;
+};
+
+function DataCard({ className }: DataCardProps) {
   return (
     <Card className={className}>
       <CardHeader></CardHeader>
@@ -103,5 +122,43 @@ function DataCard({ className }: { className?: string }) {
         <p>Card Footer</p>
       </CardFooter> */}
     </Card>
+  );
+}
+
+type DataTableProps = {
+  userInput: dcaDataInputType;
+  className?: string;
+};
+
+// NOTE: add pagination
+function DataTable({ userInput, className }: DataTableProps) {
+  const { data, error, isError, isLoading } = useGetDCAData(userInput);
+
+  return (
+    <Table className={className}>
+      <TableCaption>All prices are shown in the US Dollar.</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[100px]">Date</TableHead>
+          <TableHead>Stock Price</TableHead>
+          <TableHead>Shares Bought</TableHead>
+          <TableHead>Shares Owned</TableHead>
+          <TableHead>Contribution</TableHead>
+          <TableHead className="text-right">Total Value</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {data?.map((row) => (
+          <TableRow key={row.date}>
+            <TableCell className="font-medium">{row.date}</TableCell>
+            <TableCell>{row.stock_price}</TableCell>
+            <TableCell>{row.shares_bought}</TableCell>
+            <TableCell>{row.shares_owned}</TableCell>
+            <TableCell>{row.contribution}</TableCell>
+            <TableCell className="text-right">{row.total_val}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 }
