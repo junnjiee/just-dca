@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import { DashboardForm } from "./_components/DashboardForm";
 import { CustomLineChart } from "./_components/CustomLineChart";
 import { DCADataTable } from "./_components/DCADataTable";
@@ -23,12 +24,41 @@ export default function DashboardPage() {
     end: "2024-12-01",
   });
 
-  const { data, error, isError, isLoading } = useGetDCAData(userInput);
+  const { data, error, isError, isLoading, isSuccess, promise } =
+    useGetDCAData(userInput);
   console.log(data);
+
+  useEffect(() => {
+    if (isLoading) {
+      // hacky way to ensure that toast transitions are smooth if user submits another form
+      // when the toast is still shown
+      toast.loading("Generating Dashboard", {
+        position: "top-center",
+        toastId: 1,
+      });
+      toast.update(1, {
+        render: "Generating Dashboard",
+        isLoading: true,
+      });
+    } else if (isSuccess) {
+      toast.update(1, {
+        render: "Generated",
+        type: "success",
+        autoClose: 5000,
+        isLoading: false,
+      });
+    } else if (isError) {
+      toast.update(1, {
+        render: error.message,
+        type: "error",
+        autoClose: 5000,
+        isLoading: false,
+      });
+    }
+  }, [isLoading]);
 
   return (
     <>
-      {isError && <p>{error.message}</p>}
       <div className="my-5">
         <DashboardForm userInput={userInput} setUserInput={setUserInput} />
       </div>
