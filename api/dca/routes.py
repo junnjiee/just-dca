@@ -32,7 +32,7 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
         data["contribution"] = contri * (i + 1)
 
         shares_owned += data["shares_bought"]
-        data["shares_owned"] = shares_owned.round(2)
+        data["shares_owned"] = round(shares_owned, 2)
 
         # profit varies by which month stock is bought
         total_val = contri

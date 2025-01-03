@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { DashboardForm } from "./_components/DashboardForm";
 import { CustomLineChart } from "./_components/CustomLineChart";
-import { DCADataTable } from "./_components/DCADataTable";
 import { dcaDataInputType, useGetDCAData } from "@/features/get-dca-data";
 import { useGetStockInfo } from "@/features/get-stock-info";
 import { cn } from "@/lib/utils";
@@ -13,7 +12,6 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -27,6 +25,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+// NOTE: check how to create fallback components
+// NOTE: show error page if invalid input entered in form
+// How to keep previous data till new data is loaded?
 export default function DashboardPage() {
   // NOTE: ensure start date < end date
   const [userInput, setUserInput] = useState({
@@ -78,7 +79,7 @@ export default function DashboardPage() {
       <TickerInfoCard ticker={userInput.ticker} className="mb-3" />
       <div className="flex flex-row gap-x-4 mb-3">
         <CustomLineChart userInput={userInput} className="basis-2/3" />
-        <DataCard className="basis-1/3" />
+        <DataCard userInput={userInput} className="basis-1/3" />
       </div>
       <DataTable userInput={userInput} />
     </>
@@ -104,10 +105,13 @@ function TickerInfoCard({ ticker, className }: TickerInfoCardProps) {
 }
 
 type DataCardProps = {
+  userInput: dcaDataInputType;
   className?: string;
 };
 
-function DataCard({ className }: DataCardProps) {
+function DataCard({ userInput, className }: DataCardProps) {
+  const { data, error, isError, isLoading } = useGetDCAData(userInput);
+
   return (
     <Card className={className}>
       <CardHeader></CardHeader>
