@@ -6,6 +6,7 @@ import { DashboardForm } from "./_components/DashboardForm";
 import { CustomLineChart } from "./_components/CustomLineChart";
 import { DCADataTable } from "./_components/DCADataTable";
 import { useGetDCAData } from "@/features/get-dca-data";
+import { useGetStockInfo } from "@/features/get-stock-info";
 
 import {
   Card,
@@ -64,16 +65,26 @@ export default function DashboardPage() {
       <div className="my-5">
         <DashboardForm userInput={userInput} setUserInput={setUserInput} />
       </div>
-      <div className="border-b px-4 py-3 space-y-0.5 mb-3">
-        <div className="text-2xl">Apple Inc.</div>
-        <div className="text-xs">AAPL &bull; NASDAQ</div>
-      </div>
+      <TickerInfoCard ticker={userInput.ticker} />
       <div className="flex flex-row gap-x-4 mb-3">
         <CustomLineChart userInput={userInput} className="basis-2/3" />
         <DataCard className="basis-1/3" />
       </div>
       <DCADataTable />
     </>
+  );
+}
+
+function TickerInfoCard({ ticker }: { ticker: string }) {
+  const { data, error, isError, isLoading } = useGetStockInfo(ticker);
+
+  return (
+    <div className="border-b px-4 py-3 space-y-0.5 mb-3">
+      <div className="text-2xl">{data?.longName}</div>
+      <div className="text-xs">
+        {data?.underlyingSymbol} &bull; {data?.quoteType}
+      </div>
+    </div>
   );
 }
 

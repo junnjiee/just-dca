@@ -43,8 +43,11 @@ export function useGetDCAData(params: dcaDataInputType) {
 
         // fetch does not throw error on codes outside of 2xx
         if (!res.ok) {
-          const parsedError = errorSchema.parse(data);
-          throw new Error(parsedError.detail);
+          const parsedErrorResult = errorSchema.safeParse(data);
+          if (parsedErrorResult.success) {
+            throw new Error(data.detail);
+          }
+          throw new Error(data);
         }
 
         return dcaDataOutputSchema.parse(data);
