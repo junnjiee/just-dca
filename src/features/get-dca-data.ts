@@ -27,12 +27,14 @@ export const dcaDataOutputSchema = z.array(
   })
 );
 
+const API_ROUTE = "/api/dca/returns";
+
 export function useGetDCAData(params: dcaDataInputType) {
   return useQuery({
-    queryKey: ["/api/dca/returns", params],
+    queryKey: [API_ROUTE, params],
     queryFn: async () => {
       const newUrl = buildUrlWithParamsObj(
-        `${process.env.NEXT_PUBLIC_URL!}/api/dca/returns`,
+        `${process.env.NEXT_PUBLIC_URL!}${API_ROUTE}`,
         params
       );
       try {

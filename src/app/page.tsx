@@ -2,10 +2,18 @@
 
 import { useState } from "react";
 import { DashboardForm } from "./_components/DashboardForm";
-import { DataCard } from "./_components/DataCard";
 import { CustomLineChart } from "./_components/CustomLineChart";
 import { DCADataTable } from "./_components/DCADataTable";
 import { useGetDCAData } from "@/features/get-dca-data";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function DashboardPage() {
   const [userInput, setUserInput] = useState({
@@ -34,5 +42,23 @@ export default function DashboardPage() {
       </div>
       <DCADataTable />
     </>
+  );
+}
+
+function DataCard({ className }: { className?: string }) {
+  return (
+    <Card className={className}>
+      <CardHeader></CardHeader>
+      <CardContent>
+        <div className="border-t py-2">Profit/Loss</div>
+        <div className="border-t py-2">Investment Value</div>
+        <div className="border-t py-2">Contribution</div>
+        <div className="border-t py-2">Shares Bought</div>
+        <div className="border-y py-2">Average Stock Price</div>
+      </CardContent>
+      {/* <CardFooter>
+        <p>Card Footer</p>
+      </CardFooter> */}
+    </Card>
   );
 }

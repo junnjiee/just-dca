@@ -1,6 +1,6 @@
 "use client";
 
-import { CartesianGrid, Area, AreaChart, XAxis } from "recharts";
+import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from "recharts";
 
 import {
   Card,
@@ -57,7 +57,7 @@ export function CustomLineChart({ userInput, className }: LineChartProps) {
                   stopOpacity={0.8}
                 />
                 <stop
-                  offset="70%"
+                  offset="75%"
                   stopColor="var(--color-total_val)"
                   stopOpacity={0}
                 />
@@ -70,7 +70,7 @@ export function CustomLineChart({ userInput, className }: LineChartProps) {
                   stopOpacity={0.8}
                 />
                 <stop
-                  offset="70%"
+                  offset="75%"
                   stopColor="var(--color-contribution)"
                   stopOpacity={0}
                 />
@@ -82,18 +82,22 @@ export function CustomLineChart({ userInput, className }: LineChartProps) {
               dataKey="total_val"
               stroke="var(--color-total_val)"
               fill="url(#fillTotalVal)"
-              type="linear"
             />
             <Area
               fillOpacity={0.3}
               dataKey="contribution"
               stroke="var(--color-contribution)"
               fill="url(#fillContribution)"
-              type="linear"
             />
 
             <CartesianGrid vertical={false} />
             <XAxis dataKey="date" />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tickMargin={10}
+              tickCount={8}
+            />
             <ChartTooltip content={<ChartTooltipContent />} />
             <ChartLegend content={<ChartLegendContent />} />
           </AreaChart>

@@ -4,7 +4,6 @@ import yfinance as yf
 router = APIRouter()
 
 
-
 @router.get("/returns", status_code=status.HTTP_200_OK)
 def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
     stock = yf.Ticker(ticker)
@@ -51,7 +50,9 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
         # profit varies by which month stock is bought
         data["total_val"] = contri
         for row in table:
-            data["total_val"] += contri * (history["Open"].iloc[i] / row["stock_price"])
+            data["total_val"] += (
+                contri * (history["Open"].iloc[i] / row["stock_price"])
+            ).round(2)
 
         table.append(data)
 
