@@ -21,7 +21,7 @@ export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<dcaDataInputType>({
+  } = useForm({
     resolver: zodResolver(dcaDataInputSchema),
     defaultValues: userInput,
   });

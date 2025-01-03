@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/card";
 
 export default function DashboardPage() {
+  // NOTE: ensure start date < end date
   const [userInput, setUserInput] = useState({
     ticker: "AAPL",
     contri: 50,

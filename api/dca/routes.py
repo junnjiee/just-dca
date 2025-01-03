@@ -1,5 +1,6 @@
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, status
 import yfinance as yf
+from api.lib.utils import check_ticker_validity, check_history_validity
 
 router = APIRouter()
 
@@ -7,24 +8,12 @@ router = APIRouter()
 @router.get("/returns", status_code=status.HTTP_200_OK)
 def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
     stock = yf.Ticker(ticker)
-
-    # no official way to check if ticker exists in yfinance
-    if len(stock.info) <= 1:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Ticker does not exist"
-        )
+    check_ticker_validity(stock)
 
     # change start date day to first of month to get price of that month
     modified_start = start[:-2] + "01"
-
     history = stock.history(start=modified_start, end=end, interval="1mo")
-
-    # check if ticker exists but no historical data
-    if history.shape[0] == 0:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Historical data not found for this ticker",
-        )
+    check_history_validity(history)
 
     # calculate relevant data points for each month
     table = []
