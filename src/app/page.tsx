@@ -26,11 +26,11 @@ import {
 } from "@/components/ui/card";
 
 // NOTE: check how to create fallback components
-// NOTE: show error page if invalid input entered in form
+// NOTE: show error page if error occur in backend when retrieving data
 // How to keep previous data till new data is loaded?
 export default function DashboardPage() {
   // NOTE: ensure start date < end date
-  const [userInput, setUserInput] = useState({
+  const [userInput, setUserInput] = useState<dcaDataInputType>({
     ticker: "AAPL",
     contri: 50,
     start: "2024-01-01",
@@ -39,6 +39,7 @@ export default function DashboardPage() {
 
   const { error, isError, isLoading, isSuccess } = useGetDCAData(userInput);
 
+  // needed
   useEffect(() => {
     if (isLoading) {
       // hacky way to ensure that toast transitions are smooth if user submits another form
@@ -92,13 +93,19 @@ type TickerInfoCardProps = {
 };
 
 function TickerInfoCard({ ticker, className }: TickerInfoCardProps) {
-  const { data, error, isError, isLoading } = useGetStockInfo(ticker);
+  const { data } = useGetStockInfo(ticker);
 
   return (
     <div className={cn("border-b pb-3 space-y-0.5", className)}>
       <div className="text-2xl">{data?.longName}</div>
       <div className="text-xs">
-        {data?.underlyingSymbol} &bull; {data?.quoteType}
+        {data ? (
+          <>
+            {data?.underlyingSymbol} &bull; {data?.quoteType}
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
@@ -110,17 +117,61 @@ type DataCardProps = {
 };
 
 function DataCard({ userInput, className }: DataCardProps) {
-  const { data, error, isError, isLoading } = useGetDCAData(userInput);
+  const { data, isError, isLoading, isSuccess } = useGetDCAData(userInput);
+
+  const getDcaPrice = () =>
+    isSuccess
+      ? (
+          data.reduce(
+            (accumulator, currentVal) => accumulator + currentVal.stock_price,
+            0
+          ) / data?.length
+        ).toFixed(2)
+      : 0;
+
+  const getTotalShares = () =>
+    isSuccess
+      ? data
+          .reduce(
+            (accumulator, currentVal) => accumulator + currentVal.shares_bought,
+            0
+          )
+          .toFixed(2)
+      : 0;
+
+  const getProfit = () =>
+    isSuccess
+      ? parseFloat(
+          (data.at(-1)?.total_val! - data.at(-1)?.contribution!).toFixed(2)
+        )
+      : 0;
 
   return (
     <Card className={className}>
       <CardHeader></CardHeader>
-      <CardContent>
-        <div className="border-t py-2">Profit/Loss</div>
-        <div className="border-t py-2">Investment Value</div>
-        <div className="border-t py-2">Contribution</div>
-        <div className="border-t py-2">Shares Bought</div>
-        <div className="border-y py-2">Average Stock Price</div>
+      <CardContent className="grid grid-cols-1 divide-y">
+        <div className="flex flex-row justify-between py-4">
+          <div>Profit/Loss</div>
+          <div className={getProfit() > 0 ? "text-green-500" : "text-red-500"}>
+            {isSuccess && getProfit()}
+          </div>
+        </div>
+        <div className="flex flex-row justify-between py-4">
+          <div>Investment Value</div>{" "}
+          <div>{isSuccess && data.at(-1)?.total_val}</div>
+        </div>
+        <div className="flex flex-row justify-between py-4">
+          <div>Contribution</div>
+          <div>{isSuccess && data.at(-1)?.contribution}</div>
+        </div>
+        <div className="flex flex-row justify-between py-4">
+          <div>Shares Bought</div>
+          <div>{isSuccess && getTotalShares()}</div>
+        </div>
+        <div className="flex flex-row justify-between py-4">
+          <div>Average Stock Price</div>
+          <div>{isSuccess && getDcaPrice()}</div>
+        </div>
       </CardContent>
       {/* <CardFooter>
         <p>Card Footer</p>
@@ -136,7 +187,7 @@ type DataTableProps = {
 
 // NOTE: add pagination
 function DataTable({ userInput, className }: DataTableProps) {
-  const { data, error, isError, isLoading } = useGetDCAData(userInput);
+  const { data } = useGetDCAData(userInput);
 
   return (
     <Table className={className}>

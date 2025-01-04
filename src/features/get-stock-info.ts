@@ -10,7 +10,6 @@ export type stockInfoInputType = z.infer<typeof stockInfoInputSchema>;
 export const stockInfoOutputSchema = z.object({
   longName: z.string(),
   currency: z.string(),
-  exchange: z.string(),
   quoteType: z.string(),
   underlyingSymbol: z.string(),
 });

@@ -29,7 +29,7 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
         data["date"] = history.index[i].strftime("%d %b %Y")
         data["stock_price"] = history["Open"].iloc[i].round(2)
         data["shares_bought"] = (contri / history["Open"].iloc[i]).round(2)
-        data["contribution"] = contri * (i + 1)
+        data["contribution"] = round(contri * (i + 1), 2)
 
         shares_owned += data["shares_bought"]
         data["shares_owned"] = round(shares_owned, 2)

@@ -9,23 +9,26 @@ export const dcaDataInputSchema = z.object({
       required_error: "Enter a number",
       invalid_type_error: "Enter a number",
     })
-    .positive(),
+    .positive()
+    .multipleOf(0.01, "2 decimal places only (e.g. 0.01)"),
   start: z.string().date().nonempty(),
   end: z.string().date().nonempty(),
 });
 
 export type dcaDataInputType = z.infer<typeof dcaDataInputSchema>;
 
-export const dcaDataOutputSchema = z.array(
-  z.object({
-    date: z.string(),
-    stock_price: z.number(),
-    contribution: z.number(),
-    shares_bought: z.number(),
-    shares_owned: z.number(),
-    total_val: z.number(),
-  })
-);
+export const dcaDataOutputSchema = z
+  .array(
+    z.object({
+      date: z.string(),
+      stock_price: z.number(),
+      contribution: z.number(),
+      shares_bought: z.number(),
+      shares_owned: z.number(),
+      total_val: z.number(),
+    })
+  )
+  .nonempty();
 
 const API_ROUTE = "/api/dca/returns";
 

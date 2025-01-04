@@ -36,6 +36,7 @@ export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
     <form
       className="grid grid-rows-3 grid-flow-col items-end gap-x-2 gap-y-0.5"
       onSubmit={handleSubmit(onSubmit)}
+      noValidate
     >
       <Label htmlFor="ticker">Ticker</Label>
       <Input id="ticker" placeholder="Ticker" {...register("ticker")} />
@@ -50,7 +51,7 @@ export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
         id="contribution"
         type="number"
         placeholder="USD"
-        step=".01"
+        // step=".01"
         {...register("contri", {
           valueAsNumber: true,
         })}
