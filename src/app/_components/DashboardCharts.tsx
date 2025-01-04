@@ -36,7 +36,7 @@ type LineChartProps = {
   className?: string;
 };
 
-export function CustomLineChart({ userInput, className }: LineChartProps) {
+export function InvestmentChart({ userInput, className }: LineChartProps) {
   const { data, error, isError, isLoading } = useGetDCAData(userInput);
 
   return (
