@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { dcaDataInputType, useGetDCAData } from "@/features/get-dca-data";
 import { DashboardForm } from "./_components/DashboardForm";
 import { InvestmentChart } from "./_components/DashboardCharts";
-import { dcaDataInputType, useGetDCAData } from "@/features/get-dca-data";
 import { TickerInfoCard, DataCard, DataTable } from "./_components/DataScreens";
 
 // NOTE: check how to create fallback components
@@ -19,7 +19,8 @@ export default function DashboardPage() {
     end: "2024-12-01",
   });
 
-  const { error, isError, isLoading, isSuccess } = useGetDCAData(userInput);
+  const { data, error, isError, isLoading, isSuccess } =
+    useGetDCAData(userInput);
 
   // needed
   useEffect(() => {
@@ -64,7 +65,7 @@ export default function DashboardPage() {
         <InvestmentChart userInput={userInput} className="basis-2/3" />
         <DataCard userInput={userInput} className="basis-1/3" />
       </div>
-      <DataTable userInput={userInput} />
+      <DataTable data={isSuccess ? data : []} />
     </>
   );
 }
