@@ -72,14 +72,14 @@ export function DataCard({ data, className }: DataCardProps) {
         <div className="flex flex-row justify-between py-4">
           <div>Profit/Loss</div>
           {data.length ? (
-            <div className={`text-${profitData.color}-500`}>
-              <div className="flex flex-row gap-x-2">
-                {profitData.amount}
-                <div className="flex flex-row">
-                  {profitData.icon}
-                  {profitData.pct}
-                </div>
-              </div>
+            <div
+              className={`flex flex-row gap-x-2 text-${profitData.color}-500 `}
+            >
+              <span>{profitData.amount}</span>
+              <span className="flex flex-row">
+                {profitData.icon}
+                {profitData.pct}
+              </span>
             </div>
           ) : (
             <></>

@@ -8,12 +8,14 @@ import {
   dcaDataOutputRowType,
   useGetDCAData,
 } from "@/features/get-dca-data";
+import { createDate } from "@/lib/utils";
 import { DataTable } from "@/components/data-table";
 import { DashboardForm } from "./_components/DashboardForm";
 import { InvestmentChart } from "./_components/DashboardCharts";
 import { TickerInfoCard, DataCard } from "./_components/DataScreens";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const tableColumns: ColumnDef<dcaDataOutputRowType>[] = [
   { accessorKey: "date", header: "Date" },
@@ -31,8 +33,8 @@ export default function DashboardPage() {
   const [userInput, setUserInput] = useState<dcaDataInputType>({
     ticker: "AAPL",
     contri: 50,
-    start: "2024-01-01",
-    end: "2024-12-01",
+    start: createDate(12),
+    end: createDate(0),
   });
 
   // const [comparisonInput, setComparisonInput] = useState("");
@@ -77,18 +79,6 @@ export default function DashboardPage() {
 
   return (
     <>
-      <Button
-        onClick={() =>
-          setUserInput((prev) => ({
-            ...prev,
-            start: "2023-01-01",
-            end: "2023-12-01",
-          }))
-        }
-      >
-        1Y
-      </Button>
-
       <div className="my-5">
         <DashboardForm userInput={userInput} setUserInput={setUserInput} />
       </div>
@@ -102,7 +92,8 @@ export default function DashboardPage() {
                 <span className="text-3xl">${data?.at(-1)?.total_val}</span>
               </div>
             </div>
-            <div></div>
+            <DateRangeTabs userInput={userInput} setUserInput={setUserInput} />
+
             <InvestmentChart data={isSuccess ? data : []} />
           </div>
           <div>
@@ -117,5 +108,51 @@ export default function DashboardPage() {
       {/* NOTE: export to excel? */}
       <DataTable columns={tableColumns} data={isSuccess ? data : []} />
     </>
+  );
+}
+
+type DateRangeTabsProps = {
+  userInput: dcaDataInputType;
+  setUserInput: React.Dispatch<React.SetStateAction<dcaDataInputType>>;
+};
+
+function DateRangeTabs({ userInput, setUserInput }: DateRangeTabsProps) {
+  const datePresets = [
+    { dateRange: "3M", start: createDate(3), end: createDate(0) },
+    { dateRange: "6M", start: createDate(6), end: createDate(0) },
+    { dateRange: "YTD", start: createDate(12), end: createDate(0) },
+    { dateRange: "5Y", start: createDate(60), end: createDate(0) },
+    { dateRange: "10Y", start: createDate(120), end: createDate(0) },
+  ];
+
+  // if date chosen matches preset, select that tab
+  const chosenPreset = () => {
+    const preset = datePresets.find(
+      (preset) => userInput.start == preset.start && userInput.end == preset.end
+    )?.dateRange;
+
+    return preset ? preset : "";
+  };
+
+  return (
+    <Tabs value={chosenPreset()}>
+      <TabsList>
+        {datePresets.map((preset) => (
+          <TabsTrigger
+            key={preset.dateRange}
+            value={preset.dateRange}
+            onClick={() =>
+              setUserInput((prev) => ({
+                ...prev,
+                start: preset.start,
+                end: preset.end,
+              }))
+            }
+          >
+            {preset.dateRange}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+    </Tabs>
   );
 }
