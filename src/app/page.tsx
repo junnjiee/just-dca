@@ -1,15 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { ColumnDef } from "@tanstack/react-table";
 import { toast } from "react-toastify";
-import { dcaDataInputType, useGetDCAData } from "@/features/get-dca-data";
+import {
+  dcaDataInputType,
+  dcaDataOutputRowType,
+  useGetDCAData,
+} from "@/features/get-dca-data";
+import { DataTable } from "@/components/data-table";
 import { DashboardForm } from "./_components/DashboardForm";
 import { InvestmentChart } from "./_components/DashboardCharts";
-import { TickerInfoCard, DataCard, DataTable } from "./_components/DataScreens";
+import { TickerInfoCard, DataCard } from "./_components/DataScreens";
 
 // NOTE: check how to create fallback components
 // NOTE: show error page if error occur in backend when retrieving data
-// How to keep previous data till new data is loaded?
 export default function DashboardPage() {
   // NOTE: ensure start date < end date
   const [userInput, setUserInput] = useState<dcaDataInputType>({
@@ -22,7 +27,18 @@ export default function DashboardPage() {
   const { data, error, isError, isLoading, isSuccess } =
     useGetDCAData(userInput);
 
+  // maybe useref or memoize this?
+  const columns: ColumnDef<dcaDataOutputRowType>[] = [
+    { accessorKey: "date", header: "Date" },
+    { accessorKey: "stock_price", header: "Stock Price" },
+    { accessorKey: "shares_bought", header: "Shares Bought" },
+    { accessorKey: "shares_owned", header: "Shares Owned" },
+    { accessorKey: "contribution", header: "Contribution" },
+    { accessorKey: "total_val", header: "Total Value" },
+  ];
+
   // needed
+  // NOTE: toast is buggy
   useEffect(() => {
     if (isLoading) {
       // hacky way to ensure that toast transitions are smooth if user submits another form
@@ -65,7 +81,8 @@ export default function DashboardPage() {
         <InvestmentChart userInput={userInput} className="basis-2/3" />
         <DataCard data={isSuccess ? data : []} className="basis-1/3" />
       </div>
-      <DataTable data={isSuccess ? data : []} />
+      {/* NOTE: export to excel? */}
+      <DataTable columns={columns} data={isSuccess ? data : []} />
     </>
   );
 }
