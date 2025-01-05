@@ -1,4 +1,5 @@
-from fastapi import APIRouter, status
+from typing import Annotated
+from fastapi import APIRouter, status, Query
 import yfinance as yf
 from api.lib.utils import check_ticker_validity, check_history_validity
 
@@ -45,3 +46,16 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
         table.append(data)
 
     return table
+
+
+# # For querying a list in URL params
+# # https://fastapi.tiangolo.com/tutorial/query-params-str-validations/#query-parameter-list-multiple-values
+# @router.get("/compare", status_code=status.HTTP_200_OK)
+# def compare_dca_returns(
+#     ticker: str,
+#     contri: float,
+#     start: str,
+#     end: str,
+#     comparisons: Annotated[list[str] | None, Query()],
+# ):
+#     return comparisons

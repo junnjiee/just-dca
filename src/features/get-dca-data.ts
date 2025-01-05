@@ -41,7 +41,7 @@ export type dcaDataOutputRowType = {
 
 const API_ROUTE = "/api/dca/returns";
 
-export function useGetDCAData(params: dcaDataInputType) {
+export function useGetDCAData(params: dcaDataInputType, enabled = true) {
   return useQuery({
     queryKey: [API_ROUTE, params],
     queryFn: async () => {
@@ -68,5 +68,6 @@ export function useGetDCAData(params: dcaDataInputType) {
         throw err;
       }
     },
+    enabled: enabled,
   });
 }

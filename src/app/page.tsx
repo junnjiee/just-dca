@@ -37,11 +37,45 @@ export default function DashboardPage() {
     end: createDate(0),
   });
 
-  // const [comparisonInput, setComparisonInput] = useState("");
-  // console.log(comparisonInput);
-
   const { data, error, isError, isLoading, isSuccess } =
     useGetDCAData(userInput);
+
+  const [comparisonState, setComparisonState] = useState<{
+    currInput: string;
+    verifiedTickers: string[];
+  }>({
+    currInput: "",
+    verifiedTickers: [],
+  });
+  console.log(comparisonState);
+
+  // cached results are returned, even when auto refetching is disabled, success/error
+  // booleans will be activated when the cached keys matches input
+  const {
+    error: newTickerQueryError,
+    fetchStatus,
+    isSuccess: newTickerQueryIsSuccess,
+    isError: newTickerQueryIsError,
+    refetch,
+  } = useGetDCAData(
+    {
+      ...userInput,
+      ticker: comparisonState.currInput,
+    },
+    false
+  );
+  console.log(newTickerQueryIsError);
+
+  useEffect(() => {
+    console.log("ACTIVATE");
+    if (newTickerQueryIsSuccess) {
+      console.log("SUCCESS");
+      setComparisonState((prev) => ({
+        verifiedTickers: [...prev.verifiedTickers, prev.currInput],
+        currInput: "",
+      }));
+    }
+  }, [fetchStatus]);
 
   // needed
   // NOTE: toast is buggy
@@ -93,13 +127,30 @@ export default function DashboardPage() {
               </div>
             </div>
             <DateRangeTabs userInput={userInput} setUserInput={setUserInput} />
-
             <InvestmentChart data={isSuccess ? data : []} />
           </div>
           <div>
-            ccompare
-            {/* <Input onChange={(e) => setComparisonInput(e.target.value)} /> */}
-            {/* <Button onClick={}>Compare</Button> */}
+            <Input
+              value={comparisonState.currInput}
+              onChange={(e) =>
+                setComparisonState((prev) => ({
+                  ...prev,
+                  currInput: e.target.value,
+                }))
+              }
+            />
+            <Button
+              onClick={() => {
+                refetch();
+              }}
+            >
+              Compare
+            </Button>
+            {newTickerQueryIsError && (
+              <span className="text-red-500">
+                {newTickerQueryError.message}
+              </span>
+            )}
           </div>
         </div>
         {/* <StockChart data={isSuccess ? data : []} className="basis-1/2" /> */}
@@ -121,6 +172,7 @@ function DateRangeTabs({ userInput, setUserInput }: DateRangeTabsProps) {
     { dateRange: "3M", start: createDate(3), end: createDate(0) },
     { dateRange: "6M", start: createDate(6), end: createDate(0) },
     { dateRange: "YTD", start: createDate(12), end: createDate(0) },
+    { dateRange: "3Y", start: createDate(36), end: createDate(0) },
     { dateRange: "5Y", start: createDate(60), end: createDate(0) },
     { dateRange: "10Y", start: createDate(120), end: createDate(0) },
   ];
