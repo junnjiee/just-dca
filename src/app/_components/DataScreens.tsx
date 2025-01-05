@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 import {
-  dcaDataInputType,
   dcaDataOutputType,
   dcaDataOutputRowType,
-  useGetDCAData,
 } from "@/features/get-dca-data";
 import { useGetStockInfo } from "@/features/get-stock-info";
 import { cn } from "@/lib/utils";
@@ -51,58 +50,50 @@ type TickerInfoCardProps = {
 };
 
 export function TickerInfoCard({ ticker, className }: TickerInfoCardProps) {
-  const { data } = useGetStockInfo(ticker);
+  const { data, isSuccess } = useGetStockInfo(ticker);
 
   return (
     <div className={cn("border-b pb-3 space-y-0.5", className)}>
-      <div className="text-2xl">{data?.longName}</div>
-      <div className="text-xs">
-        {data ? (
-          <>
-            {data?.underlyingSymbol} &bull; {data?.quoteType}
-          </>
-        ) : (
-          <></>
-        )}
-      </div>
+      {isSuccess ? (
+        <>
+          <div className="text-2xl">{data.longName}</div>
+          <div className="text-xs">
+            {data.underlyingSymbol} &bull; {data.quoteType}
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
 
 type DataCardProps = {
-  userInput: dcaDataInputType;
+  data: dcaDataOutputType;
   className?: string;
 };
 
-export function DataCard({ userInput, className }: DataCardProps) {
-  const { data, isError, isLoading, isSuccess } = useGetDCAData(userInput);
+export function DataCard({ data, className }: DataCardProps) {
+  const avgSharePrice = () =>
+    (
+      data.reduce(
+        (accumulator, currentRow) => accumulator + currentRow.stock_price,
+        0
+      ) / data.length
+    ).toFixed(2);
 
-  const getDcaPrice = () =>
-    isSuccess
-      ? (
-          data.reduce(
-            (accumulator, currentVal) => accumulator + currentVal.stock_price,
-            0
-          ) / data?.length
-        ).toFixed(2)
-      : 0;
-
-  const getTotalShares = () =>
-    isSuccess
-      ? data
-          .reduce(
-            (accumulator, currentVal) => accumulator + currentVal.shares_bought,
-            0
-          )
-          .toFixed(2)
-      : 0;
-
-  const getProfit = () =>
-    isSuccess
-      ? parseFloat(
-          (data.at(-1)?.total_val! - data.at(-1)?.contribution!).toFixed(2)
-        )
-      : 0;
+  const profit = parseFloat(
+    (data.at(-1)?.total_val! - data.at(-1)?.contribution!).toFixed(2)
+  );
+  const profitData = {
+    amount: `${profit > 0 ? "+" : profit < 0 ? "-" : ""}${Math.abs(profit)}`,
+    pct: `${((Math.abs(profit) / data.at(-1)?.contribution!) * 100).toFixed(
+      2
+    )}%`,
+    color: profit > 0 ? "green" : profit < 0 ? "red" : "gray",
+    icon:
+      profit > 0 ? <ArrowUpRight /> : profit < 0 ? <ArrowDownRight /> : <></>,
+  };
 
   return (
     <Card className={className}>
@@ -110,25 +101,35 @@ export function DataCard({ userInput, className }: DataCardProps) {
       <CardContent className="grid grid-cols-1 divide-y">
         <div className="flex flex-row justify-between py-4">
           <div>Profit/Loss</div>
-          <div className={getProfit() > 0 ? "text-green-500" : "text-red-500"}>
-            {isSuccess && getProfit()}
-          </div>
+          {data.length ? (
+            <div className={`text-${profitData.color}-500`}>
+              <div className="flex flex-row gap-x-2">
+                {profitData.amount}
+                <div className="flex flex-row">
+                  {profitData.icon}
+                  {profitData.pct}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
         <div className="flex flex-row justify-between py-4">
-          <div>Investment Value</div>{" "}
-          <div>{isSuccess && data.at(-1)?.total_val}</div>
+          <div>Investment Value</div>
+          <div>{data.at(-1)?.total_val}</div>
         </div>
         <div className="flex flex-row justify-between py-4">
           <div>Contribution</div>
-          <div>{isSuccess && data.at(-1)?.contribution}</div>
+          <div>{data.at(-1)?.contribution}</div>
         </div>
         <div className="flex flex-row justify-between py-4">
-          <div>Shares Bought</div>
-          <div>{isSuccess && getTotalShares()}</div>
+          <div>Total Shares</div>
+          <div>{data.at(-1)?.shares_owned}</div>
         </div>
         <div className="flex flex-row justify-between py-4">
-          <div>Average Stock Price</div>
-          <div>{isSuccess && getDcaPrice()}</div>
+          <div>Average Share Price</div>
+          <div>{data.length ? avgSharePrice() : ""}</div>
         </div>
       </CardContent>
       {/* <CardFooter>

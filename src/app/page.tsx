@@ -63,7 +63,7 @@ export default function DashboardPage() {
       <TickerInfoCard ticker={userInput.ticker} className="mb-3" />
       <div className="flex flex-row gap-x-4 mb-3">
         <InvestmentChart userInput={userInput} className="basis-2/3" />
-        <DataCard userInput={userInput} className="basis-1/3" />
+        <DataCard data={isSuccess ? data : []} className="basis-1/3" />
       </div>
       <DataTable data={isSuccess ? data : []} />
     </>
