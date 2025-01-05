@@ -20,6 +20,7 @@ export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(dcaDataInputSchema),
@@ -31,6 +32,10 @@ export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
   function onSubmit(data: dcaDataInputType) {
     setUserInput(data);
   }
+
+  // programatically update date inputs if user clicks on the preset date ranges
+  setValue("start", userInput.start);
+  setValue("end", userInput.end);
 
   return (
     <form
@@ -46,7 +51,7 @@ export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
         )}
       </div>
 
-      <Label htmlFor="contribution">Contribution</Label>
+      <Label htmlFor="contribution">Monthly Contribution</Label>
       <Input
         id="contribution"
         type="number"
@@ -62,7 +67,7 @@ export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
         )}
       </div>
 
-      <Label htmlFor="start">Start Date</Label>
+      <Label htmlFor="start">From</Label>
       <Input
         id="start"
         type="date"
@@ -74,7 +79,7 @@ export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
         )}
       </div>
 
-      <Label htmlFor="end">End Date</Label>
+      <Label htmlFor="end">To</Label>
       <Input id="end" type="date" {...register("end", { required: true })} />
       <div className="place-self-start">
         {errors.end && (

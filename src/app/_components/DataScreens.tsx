@@ -25,10 +25,10 @@ export function TickerInfoCard({ ticker, className }: TickerInfoCardProps) {
     <div className={cn("border-b pb-3 space-y-0.5", className)}>
       {isSuccess ? (
         <>
-          <div className="text-2xl">{data.longName}</div>
-          <div className="text-xs">
+          <div className="text-xl">{data.longName}</div>
+          {/* <div className="text-xs">
             {data.underlyingSymbol} &bull; {data.quoteType}
-          </div>
+          </div> */}
         </>
       ) : (
         <></>
@@ -51,11 +51,12 @@ export function DataCard({ data, className }: DataCardProps) {
       ) / data.length
     ).toFixed(2);
 
-  const profit = parseFloat(
-    (data.at(-1)?.total_val! - data.at(-1)?.contribution!).toFixed(2)
-  );
+  const profit = data.at(-1)?.total_val! - data.at(-1)?.contribution!;
+
   const profitData = {
-    amount: `${profit > 0 ? "+" : profit < 0 ? "-" : ""}${Math.abs(profit)}`,
+    amount: `${profit > 0 ? "+" : profit < 0 ? "-" : ""}${Math.abs(
+      profit
+    ).toFixed(2)}`,
     pct: `${((Math.abs(profit) / data.at(-1)?.contribution!) * 100).toFixed(
       2
     )}%`,
@@ -85,7 +86,7 @@ export function DataCard({ data, className }: DataCardProps) {
           )}
         </div>
         <div className="flex flex-row justify-between py-4">
-          <div>Investment Value</div>
+          <div>Total Value</div>
           <div>{data.at(-1)?.total_val}</div>
         </div>
         <div className="flex flex-row justify-between py-4">
