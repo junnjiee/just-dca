@@ -1,15 +1,17 @@
 "use client";
 
-import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from "recharts";
-
+import { useEffect, useRef, useState } from "react";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  CartesianGrid,
+  Area,
+  AreaChart,
+  Line,
+  LineChart,
+  XAxis,
+  YAxis,
+  Tooltip,
+} from "recharts";
+import { Button } from "@/components/ui/button";
 import {
   ChartConfig,
   ChartContainer,
@@ -18,7 +20,12 @@ import {
   ChartLegend,
   ChartLegendContent,
 } from "@/components/ui/chart";
-import { dcaDataOutputType } from "@/features/get-dca-data";
+import {
+  dcaDataInputType,
+  useGetMultipleDcaData,
+  dcaDataOutputType,
+} from "@/features/get-dca-data";
+import { calculateProfitDetails } from "@/lib/utils";
 
 const investmentChartConfig = {
   total_val: {
@@ -40,7 +47,7 @@ export function InvestmentChart({ data, className }: ChartProps) {
   return (
     <ChartContainer config={investmentChartConfig}>
       {/* recharts component */}
-      <AreaChart data={data} syncId={"w"}>
+      <AreaChart data={data}>
         <defs>
           <linearGradient id="fillTotalVal" x1="0" y1="0" x2="0" y2="1">
             <stop
@@ -97,71 +104,152 @@ export function InvestmentChart({ data, className }: ChartProps) {
   );
 }
 
-// export function MultiInvestmentChart({mainData, new}) {
-// return ()
-// }
+const lines = ["line1", "line2", "line3", "line4", "line5"];
 
-const stockChartConfig = {
-  stock_price: {
-    label: "Price",
-    color: "#22c55e",
+const multiInvestmentChartConfig = {
+  line1: {
+    label: "",
+    color: "#a855f7",
+  },
+  line2: {
+    label: "",
+    color: "#f59e0b",
+  },
+  line3: {
+    label: "",
+    color: "#0ea5e9",
+  },
+  line4: {
+    label: "",
+    color: "#1e3a8a",
+  },
+  line5: {
+    label: "",
+    color: "#ea580c",
   },
 } satisfies ChartConfig;
 
-export function StockChart({ data, className }: ChartProps) {
+type MultiInvestmentChartProps = {
+  userInput: dcaDataInputType;
+  verifiedTickers: string[];
+  setComparisonState: React.Dispatch<
+    React.SetStateAction<{
+      currInput: string;
+      verifiedTickers: string[];
+    }>
+  >;
+};
+
+export function MultiInvestmentChart({
+  userInput,
+  verifiedTickers,
+  setComparisonState,
+}: MultiInvestmentChartProps) {
+  const allTickers = [userInput.ticker, ...verifiedTickers];
+
+  const paramsArr = allTickers.map((ticker) => ({
+    ...userInput,
+    ticker: ticker,
+  }));
+  const queryResults = useGetMultipleDcaData(paramsArr);
+
+  const defaultHoverData = queryResults.map((query, idx) => {
+    const profitDetails = calculateProfitDetails(
+      query.data?.at(-1)?.total_val!,
+      query.data?.at(-1)?.contribution!
+    );
+
+    return {
+      ticker: allTickers[idx],
+      totalVal: query.data?.at(-1)?.total_val,
+      profit: profitDetails.profitStr,
+      profitPct: profitDetails.profitPct,
+      trend: profitDetails.trend,
+    };
+  });
+  const [hoverData, setHoverData] = useState(defaultHoverData);
+
+  // check if all queries success, then update default hover data
+  const allReady = useRef(false);
+  allReady.current = queryResults.every((query) => query.isSuccess);
+  console.log(allReady);
+
+  useEffect(() => {
+    setHoverData(defaultHoverData);
+  }, [
+    allReady.current,
+    userInput.start,
+    userInput.end,
+    userInput.contri,
+    verifiedTickers.length,
+  ]);
+
   return (
-    <Card className={className}>
-      <CardHeader>
-        <CardTitle>Ticker Performance</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={stockChartConfig}>
-          {/* recharts component */}
-          <AreaChart data={data} syncId={"w"}>
-            <defs>
-              <linearGradient id="fillStockPrice" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-stock_price)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="75%"
-                  stopColor="var(--color-stock_price)"
-                  stopOpacity={0}
-                />
-              </linearGradient>
-            </defs>
+    <div>
+      <ChartContainer config={multiInvestmentChartConfig}>
+        <LineChart
+          onMouseMove={(state) => {
+            if (state.activePayload) {
+              const newHoverData = state.activePayload.map((data) => {
+                const profitDetails = calculateProfitDetails(
+                  data.payload.total_val,
+                  data.payload.contribution
+                );
 
-            <Area
-              fillOpacity={0.3}
-              dataKey="stock_price"
-              stroke="var(--color-stock_price)"
-              fill="url(#fillStockPrice)"
+                return {
+                  ticker: String(data.name),
+                  totalVal: data.payload.total_val,
+                  profit: profitDetails.profitStr,
+                  profitPct: profitDetails.profitPct,
+                  trend: profitDetails.trend,
+                };
+              });
+              setHoverData(newHoverData);
+            }
+          }}
+          onMouseLeave={() => setHoverData(defaultHoverData)}
+        >
+          <CartesianGrid vertical={false} />
+          {/* <ChartTooltip cursor={false} content={<ChartTooltipContent />} /> */}
+          {queryResults.map((query, idx) => (
+            <Line
+              dataKey="total_val"
+              data={query.data}
+              name={allTickers[idx]}
+              key={allTickers[idx]}
+              type="monotone"
+              stroke={`var(--color-${lines[idx]})`}
+              strokeWidth={2}
+              dot={false}
             />
-
-            <CartesianGrid vertical={false} />
-            <XAxis dataKey="date" />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              tickMargin={10}
-              tickCount={8}
-            />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <ChartLegend content={<ChartLegendContent />} />
-          </AreaChart>
-        </ChartContainer>
-      </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month
+          ))}
+          <XAxis dataKey="date" allowDuplicatedCategory={false} />
+          <YAxis dataKey="total_val" />
+          <Tooltip />
+        </LineChart>
+      </ChartContainer>
+      {hoverData.map((data) => (
+        <div
+          className="border-b flex flex-row justify-between"
+          key={data.ticker}
+        >
+          {data.ticker}
+          <div>{data.totalVal}</div>
+          <div>{data.profit}</div>
+          <Button
+            onClick={() =>
+              setComparisonState((prev) => ({
+                ...prev,
+                verifiedTickers: prev.verifiedTickers.filter(
+                  (ticker) => ticker !== data.ticker
+                ),
+              }))
+            }
+          >
+            Clear
+          </Button>
         </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter>
-    </Card>
+      ))}
+    </div>
   );
 }

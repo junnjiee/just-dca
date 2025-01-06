@@ -6,12 +6,15 @@ import { toast } from "react-toastify";
 import {
   dcaDataInputType,
   dcaDataOutputRowType,
-  useGetDCAData,
+  useGetDcaData,
 } from "@/features/get-dca-data";
 import { createDate } from "@/lib/utils";
 import { DataTable } from "@/components/data-table";
 import { DashboardForm } from "./_components/DashboardForm";
-import { InvestmentChart } from "./_components/DashboardCharts";
+import {
+  InvestmentChart,
+  MultiInvestmentChart,
+} from "./_components/DashboardCharts";
 import { TickerInfoCard, DataCard } from "./_components/DataScreens";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -38,7 +41,7 @@ export default function DashboardPage() {
   });
 
   const { data, error, isError, isLoading, isSuccess } =
-    useGetDCAData(userInput);
+    useGetDcaData(userInput);
 
   const [comparisonState, setComparisonState] = useState<{
     currInput: string;
@@ -57,27 +60,52 @@ export default function DashboardPage() {
     isSuccess: newTickerQueryIsSuccess,
     isError: newTickerQueryIsError,
     refetch,
-  } = useGetDCAData(
+  } = useGetDcaData(
     {
       ...userInput,
       ticker: comparisonState.currInput,
     },
     false
   );
-  console.log(newTickerQueryIsError);
 
+  // reset comparisonState everytime userInput ticker changes
+  useEffect(() => {
+    console.log("CHANGE DETECTED");
+    setComparisonState({
+      currInput: "",
+      verifiedTickers: [],
+    });
+  }, [userInput.ticker]);
+
+  // for updating verifiedTickers array in comparisonState
   useEffect(() => {
     console.log("ACTIVATE");
-    if (newTickerQueryIsSuccess) {
+    // checks done
+    // 1. successful query 2. ticker not in verified array 3. input ticker is not main ticker
+    if (
+      newTickerQueryIsSuccess &&
+      comparisonState.verifiedTickers.find(
+        (element) => element === comparisonState.currInput.toUpperCase()
+      ) === undefined &&
+      comparisonState.currInput.toUpperCase() !== userInput.ticker
+    ) {
       console.log("SUCCESS");
+
+      // max 4 tickers only
       setComparisonState((prev) => ({
-        verifiedTickers: [...prev.verifiedTickers, prev.currInput],
+        verifiedTickers:
+          prev.verifiedTickers.length < 4
+            ? [...prev.verifiedTickers, prev.currInput.toUpperCase()]
+            : [
+                ...prev.verifiedTickers.slice(0, 3),
+                prev.currInput.toUpperCase(),
+              ],
         currInput: "",
       }));
     }
   }, [fetchStatus]);
 
-  // needed
+  // needed for toast
   // NOTE: toast is buggy
   useEffect(() => {
     if (isLoading) {
@@ -127,8 +155,17 @@ export default function DashboardPage() {
               </div>
             </div>
             <DateRangeTabs userInput={userInput} setUserInput={setUserInput} />
-            <InvestmentChart data={isSuccess ? data : []} />
+            {comparisonState.verifiedTickers.length ? (
+              <MultiInvestmentChart
+                userInput={userInput}
+                verifiedTickers={comparisonState.verifiedTickers}
+                setComparisonState={setComparisonState}
+              />
+            ) : (
+              <InvestmentChart data={isSuccess ? data : []} />
+            )}
           </div>
+          {/* comparison input */}
           <div>
             <Input
               value={comparisonState.currInput}
@@ -144,12 +181,26 @@ export default function DashboardPage() {
                 refetch();
               }}
             >
-              Compare
+              Add Comparison
             </Button>
             {newTickerQueryIsError && (
               <span className="text-red-500">
                 {newTickerQueryError.message}
               </span>
+            )}
+            {comparisonState.verifiedTickers.length ? (
+              <Button
+                onClick={() =>
+                  setComparisonState((prev) => ({
+                    ...prev,
+                    verifiedTickers: [],
+                  }))
+                }
+              >
+                Clear All
+              </Button>
+            ) : (
+              <></>
             )}
           </div>
         </div>
@@ -168,6 +219,7 @@ type DateRangeTabsProps = {
 };
 
 function DateRangeTabs({ userInput, setUserInput }: DateRangeTabsProps) {
+  // NOTE: can memoize this
   const datePresets = [
     { dateRange: "3M", start: createDate(3), end: createDate(0) },
     { dateRange: "6M", start: createDate(6), end: createDate(0) },

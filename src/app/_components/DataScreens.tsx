@@ -3,7 +3,7 @@
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { dcaDataOutputType } from "@/features/get-dca-data";
 import { useGetStockInfo } from "@/features/get-stock-info";
-import { cn } from "@/lib/utils";
+import { cn, calculateProfitDetails } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -42,6 +42,8 @@ type DataCardProps = {
   className?: string;
 };
 
+
+
 export function DataCard({ data, className }: DataCardProps) {
   const avgSharePrice = () =>
     (
@@ -51,18 +53,16 @@ export function DataCard({ data, className }: DataCardProps) {
       ) / data.length
     ).toFixed(2);
 
-  const profit = data.at(-1)?.total_val! - data.at(-1)?.contribution!;
+  const profitData = calculateProfitDetails(
+    data.at(-1)?.total_val!,
+    data.at(-1)?.contribution!
+  );
 
-  const profitData = {
-    amount: `${profit > 0 ? "+" : profit < 0 ? "-" : ""}${Math.abs(
-      profit
-    ).toFixed(2)}`,
-    pct: `${((Math.abs(profit) / data.at(-1)?.contribution!) * 100).toFixed(
-      2
-    )}%`,
-    color: profit > 0 ? "green" : profit < 0 ? "red" : "gray",
-    icon:
-      profit > 0 ? <ArrowUpRight /> : profit < 0 ? <ArrowDownRight /> : <></>,
+  const color = { positive: "green", negative: "red", neutral: "grey" };
+  const arrowIcon = {
+    positive: <ArrowUpRight />,
+    negative: <ArrowDownRight />,
+    neutral: <></>,
   };
 
   return (
@@ -73,12 +73,14 @@ export function DataCard({ data, className }: DataCardProps) {
           <div>Profit/Loss</div>
           {data.length ? (
             <div
-              className={`flex flex-row gap-x-2 text-${profitData.color}-500 `}
+              className={`flex flex-row gap-x-2 text-${
+                color[profitData.trend]
+              }-500 `}
             >
-              <span>{profitData.amount}</span>
+              <span>{profitData.profitStr}</span>
               <span className="flex flex-row">
-                {profitData.icon}
-                {profitData.pct}
+                {arrowIcon[profitData.trend]}
+                {profitData.profitPct}
               </span>
             </div>
           ) : (

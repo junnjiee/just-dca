@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueries } from "@tanstack/react-query";
 import { errorSchema, buildUrlWithParamsObj } from "@/lib/api-helpers";
 
 export const dcaDataInputSchema = z.object({
@@ -41,33 +41,42 @@ export type dcaDataOutputRowType = {
 
 const API_ROUTE = "/api/dca/returns";
 
-export function useGetDCAData(params: dcaDataInputType, enabled = true) {
-  return useQuery({
-    queryKey: [API_ROUTE, params],
-    queryFn: async () => {
-      const newUrl = buildUrlWithParamsObj(
-        `${process.env.NEXT_PUBLIC_URL!}${API_ROUTE}`,
-        params
-      );
-      try {
-        const res = await fetch(newUrl);
-        const data = await res.json();
+async function fetchDcaData(params: dcaDataInputType) {
+  const newUrl = buildUrlWithParamsObj(
+    `${process.env.NEXT_PUBLIC_URL!}${API_ROUTE}`,
+    params
+  );
+  try {
+    const res = await fetch(newUrl);
+    const data = await res.json();
 
-        // fetch does not throw error on codes outside of 2xx
-        if (!res.ok) {
-          const parsedErrorResult = errorSchema.safeParse(data);
-          if (parsedErrorResult.success) {
-            throw new Error(data.detail);
-          }
-          throw new Error(data);
-        }
-
-        return dcaDataOutputSchema.parse(data);
-      } catch (err) {
-        console.error(err);
-        throw err;
+    // fetch does not throw error on codes outside of 2xx
+    if (!res.ok) {
+      const parsedErrorResult = errorSchema.safeParse(data);
+      if (parsedErrorResult.success) {
+        throw new Error(data.detail);
       }
-    },
+      throw new Error(data);
+    }
+
+    return dcaDataOutputSchema.parse(data);
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+export const useGetDcaData = (params: dcaDataInputType, enabled = true) =>
+  useQuery({
+    queryKey: [API_ROUTE, params],
+    queryFn: () => fetchDcaData(params),
     enabled: enabled,
   });
-}
+
+export const useGetMultipleDcaData = (paramsArr: dcaDataInputType[]) =>
+  useQueries({
+    queries: paramsArr.map((params) => ({
+      queryKey: [API_ROUTE, params],
+      queryFn: () => fetchDcaData(params),
+    })),
+  });

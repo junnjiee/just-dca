@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import {
-  useGetDCAData,
+  useGetDcaData,
   dcaDataInputSchema,
   dcaDataInputType,
 } from "@/features/get-dca-data";
@@ -27,13 +27,13 @@ export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
     defaultValues: userInput,
   });
 
-  const { isLoading } = useGetDCAData(userInput);
+  const { isLoading } = useGetDcaData(userInput);
 
   function onSubmit(data: dcaDataInputType) {
     setUserInput(data);
   }
 
-  // programatically update date inputs if user clicks on the preset date ranges
+  // programatically show updated date in the input boxes if user clicks on the preset date ranges
   setValue("start", userInput.start);
   setValue("end", userInput.end);
 
