@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CartesianGrid,
   Area,
@@ -170,14 +170,12 @@ export function MultiInvestmentChart({
   const [hoverData, setHoverData] = useState(defaultHoverData);
 
   // check if all queries success, then update default hover data
-  const allReady = useRef(false);
-  allReady.current = queryResults.every((query) => query.isSuccess);
-  console.log(allReady);
+  const allReady = queryResults.every((query) => query.isSuccess);
 
   useEffect(() => {
     setHoverData(defaultHoverData);
   }, [
-    allReady.current,
+    allReady,
     userInput.start,
     userInput.end,
     userInput.contri,
