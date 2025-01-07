@@ -34,7 +34,7 @@ const tableColumns: ColumnDef<dcaDataOutputRowType>[] = [
 export default function DashboardPage() {
   // NOTE: ensure start date < end date
   const [userInput, setUserInput] = useState<dcaDataInputType>({
-    ticker: "AAPL",
+    ticker: "RDDT",
     contri: 50,
     start: createDate(12),
     end: createDate(0),
@@ -52,7 +52,7 @@ export default function DashboardPage() {
   });
   console.log(comparisonState);
 
-  // cached results are returned, even when auto refetching is disabled, success/error
+  // cached results are returned, even when auto refetching is disabled, so success/error
   // booleans will be activated when the cached keys matches input
   const {
     error: newTickerQueryError,

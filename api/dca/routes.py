@@ -1,6 +1,7 @@
-from typing import Annotated
-from fastapi import APIRouter, status, Query
+from datetime import datetime
+from fastapi import APIRouter, status
 import yfinance as yf
+import pandas as pd
 from api.lib.utils import check_ticker_validity, check_history_validity
 
 router = APIRouter()
@@ -18,19 +19,30 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
     table = []
     shares_owned = 0
 
+    # pad dates if ticker IPO date is after input start date
+    ipo_date = stock.history(period="max").index[0].strftime("%d %b %Y")
+    dates = pd.date_range(start, ipo_date, freq="MS")
+    for date in dates:
+        table.append(
+            {
+                "date": date.strftime("%d %b %Y"),
+                "stock_price": None,
+                "shares_bought": None,
+                "contribution": None,
+                "shares_owned": None,
+                "total_val": None,  # total value of investment
+            }
+        )
+
     for i in range(0, history.shape[0]):
         data = {
-            "month": None,
-            "stock_price": 0,
-            "contribution": 0,
-            "shares_bought": 0,
+            "date": history.index[i].strftime("%d %b %Y"),
+            "stock_price": history["Open"].iloc[i].round(2),
+            "shares_bought": (contri / history["Open"].iloc[i]).round(2),
+            "contribution": round(contri * (i + 1), 2),
             "shares_owned": 0,
             "total_val": 0,  # total value of investment
         }
-        data["date"] = history.index[i].strftime("%d %b %Y")
-        data["stock_price"] = history["Open"].iloc[i].round(2)
-        data["shares_bought"] = (contri / history["Open"].iloc[i]).round(2)
-        data["contribution"] = round(contri * (i + 1), 2)
 
         shares_owned += data["shares_bought"]
         data["shares_owned"] = round(shares_owned, 2)
@@ -38,6 +50,8 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
         # profit varies by which month stock is bought
         total_val = contri
         for row in table:
+            if row["stock_price"] is None:
+                continue
             # P/L for that month = current price / price for that month * contribution
             total_val += contri * (history["Open"].iloc[i] / row["stock_price"])
 

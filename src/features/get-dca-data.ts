@@ -17,27 +17,20 @@ export const dcaDataInputSchema = z.object({
 
 export type dcaDataInputType = z.infer<typeof dcaDataInputSchema>;
 
-export const dcaDataOutputSchema = z.array(
-  z.object({
-    date: z.string(),
-    stock_price: z.number(),
-    contribution: z.number(),
-    shares_bought: z.number(),
-    shares_owned: z.number(),
-    total_val: z.number(),
-  })
-);
+const dcaDataOutputRowSchema = z.object({
+  date: z.string(),
+  stock_price: z.number().nullable(),
+  shares_bought: z.number().nullable(),
+  contribution: z.number().nullable(),
+  shares_owned: z.number().nullable(),
+  total_val: z.number().nullable(),
+});
+
+export type dcaDataOutputRowType = z.infer<typeof dcaDataOutputRowSchema>;
+
+export const dcaDataOutputSchema = z.array(dcaDataOutputRowSchema);
 
 export type dcaDataOutputType = z.infer<typeof dcaDataOutputSchema>;
-
-export type dcaDataOutputRowType = {
-  date: string;
-  stock_price: number;
-  contribution: number;
-  shares_bought: number;
-  shares_owned: number;
-  total_val: number;
-};
 
 const API_ROUTE = "/api/dca/returns";
 

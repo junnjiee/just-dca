@@ -147,18 +147,27 @@ export function MultiInvestmentChart({
 }: MultiInvestmentChartProps) {
   const allTickers = [userInput.ticker, ...verifiedTickers];
 
-  const paramsArr = allTickers.map((ticker) => ({
-    ...userInput,
-    ticker: ticker,
-  }));
-  const queryResults = useGetMultipleDcaData(paramsArr);
+  const queryResults = useGetMultipleDcaData(
+    allTickers.map((ticker) => ({
+      ...userInput,
+      ticker: ticker,
+    }))
+  );
+  const allQueriesReady = queryResults.every((query) => query.isSuccess);
 
+  // default hoverData state is built using queryResults
+  // hoverData state during tooltip hover is built using chart payload
+
+  // during hover, state will be set to track payload data depending on hover position
+  // when mouse leaves chart, state will be set to default data
+
+  // during chart payload change, need to preserve all ticker data in the case payload does not contain all tickers
   const defaultHoverData = queryResults.map((query, idx) => {
     const profitDetails = calculateProfitDetails(
+      // zod parse ensures these keys exist
       query.data?.at(-1)?.total_val!,
       query.data?.at(-1)?.contribution!
     );
-
     return {
       ticker: allTickers[idx],
       totalVal: query.data?.at(-1)?.total_val,
@@ -167,15 +176,22 @@ export function MultiInvestmentChart({
       trend: profitDetails.trend,
     };
   });
-  const [hoverData, setHoverData] = useState(defaultHoverData);
 
-  // check if all queries success, then update default hover data
-  const allReady = queryResults.every((query) => query.isSuccess);
+  type HoverDataType = {
+    ticker: string;
+    totalVal: number | null | undefined;
+    profit: string;
+    profitPct: string;
+    trend: "positive" | "negative" | "neutral";
+  }[];
+  const [hoverData, setHoverData] = useState<HoverDataType>(defaultHoverData);
 
+  // immediately render the default data if any of these dependencies change
+  // NOTE: try make main page use useQueries hook to cache on first success
   useEffect(() => {
     setHoverData(defaultHoverData);
   }, [
-    allReady,
+    allQueriesReady,
     userInput.start,
     userInput.end,
     userInput.contri,
@@ -184,24 +200,30 @@ export function MultiInvestmentChart({
 
   return (
     <div>
+      {/* <ResponsiveContainer height={400}> */}
       <ChartContainer config={multiInvestmentChartConfig}>
         <LineChart
           onMouseMove={(state) => {
+            console.log(state);
             if (state.activePayload) {
-              const newHoverData = state.activePayload.map((data) => {
-                const profitDetails = calculateProfitDetails(
-                  data.payload.total_val,
-                  data.payload.contribution
+              const newHoverData = state.activePayload.map((payloadData) => {
+                const { profitStr, profitPct, trend } = calculateProfitDetails(
+                  payloadData.payload.total_val,
+                  payloadData.payload.contribution
                 );
 
                 return {
-                  ticker: String(data.name),
-                  totalVal: data.payload.total_val,
-                  profit: profitDetails.profitStr,
-                  profitPct: profitDetails.profitPct,
-                  trend: profitDetails.trend,
+                  ticker: payloadData.name,
+                  totalVal:
+                    payloadData.value === null
+                      ? 0
+                      : payloadData.payload.total_val,
+                  profit: payloadData.value === null ? "--" : profitStr,
+                  profitPct: payloadData.value === null ? "0.00%" : profitPct,
+                  trend: payloadData.value === null ? "neutral" : trend,
                 };
               });
+
               setHoverData(newHoverData);
             }
           }}
@@ -221,20 +243,28 @@ export function MultiInvestmentChart({
               dot={false}
             />
           ))}
-          <XAxis dataKey="date" allowDuplicatedCategory={false} />
-          <YAxis dataKey="total_val" />
+          <XAxis
+            dataKey="date"
+            type="category"
+            allowDuplicatedCategory={false}
+          />
+          <YAxis dataKey="total_val" axisLine={false} tickLine={false} />
           <Tooltip />
         </LineChart>
       </ChartContainer>
+      {/* </ResponsiveContainer> */}
+
       {hoverData.map((data) => (
-        <div
-          className="border-b flex flex-row justify-between"
-          key={data.ticker}
-        >
-          {data.ticker}
-          <div>{data.totalVal}</div>
-          <div>{data.profit}</div>
+        <div key={data.ticker} className="flex flex-row py-3 justify-between">
+          <span>{data.ticker}</span>
+          <span>{data.totalVal}</span>
+          <div className="flex flex-row gap-x-10 justify-self-end">
+            <span>{data.profit}</span>
+            <span>{data.profitPct}</span>
+          </div>
           <Button
+            disabled={userInput.ticker == data.ticker}
+            className={`w-5 ${userInput.ticker == data.ticker && "invisible"}`}
             onClick={() =>
               setComparisonState((prev) => ({
                 ...prev,
@@ -244,7 +274,7 @@ export function MultiInvestmentChart({
               }))
             }
           >
-            Clear
+            X
           </Button>
         </div>
       ))}
