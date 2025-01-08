@@ -18,32 +18,6 @@ type TickerInfoCardProps = {
   className?: string;
 };
 
-export function TickerInfoCard({ ticker, className }: TickerInfoCardProps) {
-  const { data, isSuccess } = useGetStockInfo(ticker);
-
-  return (
-    <div className={cn("border-b pb-3 space-y-0.5", className)}>
-      {isSuccess ? (
-        <>
-          <div className="text-xl">{data.longName}</div>
-          {/* <div className="text-xs">
-            {data.underlyingSymbol} &bull; {data.quoteType}
-          </div> */}
-        </>
-      ) : (
-        <></>
-      )}
-    </div>
-  );
-}
-
-type DataCardProps = {
-  data: dcaDataOutputType;
-  className?: string;
-};
-
-
-
 export function DataCard({ data, className }: DataCardProps) {
   const avgSharePrice = () =>
     (

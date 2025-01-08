@@ -3,21 +3,19 @@
 import { useState, useEffect } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { toast } from "react-toastify";
+
 import {
   dcaDataInputType,
   dcaDataOutputRowType,
   useGetDcaData,
 } from "@/features/get-dca-data";
+import { useGetStockInfo } from "@/features/get-stock-info";
 import { createDate } from "@/lib/utils";
-import { DataTable } from "@/components/data-table";
+
 import { DashboardForm } from "./_components/DashboardForm";
-import {
-  InvestmentChart,
-  MultiInvestmentChart,
-} from "./_components/DashboardCharts";
-import { TickerInfoCard, DataCard } from "./_components/DataScreens";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { ChartGroup } from "./_components/ChartGroup";
+import { DataCard } from "./_components/DataScreens";
+import { DataTable } from "@/components/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const tableColumns: ColumnDef<dcaDataOutputRowType>[] = [
@@ -43,67 +41,9 @@ export default function DashboardPage() {
   const { data, error, isError, isLoading, isSuccess } =
     useGetDcaData(userInput);
 
-  const [comparisonState, setComparisonState] = useState<{
-    currInput: string;
-    verifiedTickers: string[];
-  }>({
-    currInput: "",
-    verifiedTickers: [],
-  });
-  console.log(comparisonState);
-
-  // cached results are returned, even when auto refetching is disabled, so success/error
-  // booleans will be activated when the cached keys matches input
-  const {
-    error: newTickerQueryError,
-    fetchStatus,
-    isSuccess: newTickerQueryIsSuccess,
-    isError: newTickerQueryIsError,
-    refetch,
-  } = useGetDcaData(
-    {
-      ...userInput,
-      ticker: comparisonState.currInput,
-    },
-    false
+  const { data: stockData, isSuccess: stockDataIsSuccess } = useGetStockInfo(
+    userInput.ticker
   );
-
-  // reset comparisonState everytime userInput ticker changes
-  useEffect(() => {
-    console.log("CHANGE DETECTED");
-    setComparisonState({
-      currInput: "",
-      verifiedTickers: [],
-    });
-  }, [userInput.ticker]);
-
-  // for updating verifiedTickers array in comparisonState
-  useEffect(() => {
-    console.log("ACTIVATE");
-    // checks done
-    // 1. successful query 2. ticker not in verified array 3. input ticker is not main ticker
-    if (
-      newTickerQueryIsSuccess &&
-      comparisonState.verifiedTickers.find(
-        (element) => element === comparisonState.currInput.toUpperCase()
-      ) === undefined &&
-      comparisonState.currInput.toUpperCase() !== userInput.ticker
-    ) {
-      console.log("SUCCESS");
-
-      // max 4 tickers only
-      setComparisonState((prev) => ({
-        verifiedTickers:
-          prev.verifiedTickers.length < 4
-            ? [...prev.verifiedTickers, prev.currInput.toUpperCase()]
-            : [
-                ...prev.verifiedTickers.slice(0, 3),
-                prev.currInput.toUpperCase(),
-              ],
-        currInput: "",
-      }));
-    }
-  }, [fetchStatus]);
 
   // needed for toast
   // NOTE: toast is buggy
@@ -144,65 +84,28 @@ export default function DashboardPage() {
       <div className="my-5">
         <DashboardForm userInput={userInput} setUserInput={setUserInput} />
       </div>
-      <TickerInfoCard ticker={userInput.ticker} className="mb-3" />
+      <div className="border-b pb-3 space-y-0.5 mb-3">
+        {stockDataIsSuccess ? (
+          <>
+            <div className="text-xl">{stockData.longName}</div>
+            {/* <div className="text-xs">
+                  {data.underlyingSymbol} &bull; {data.quoteType}
+                </div> */}
+          </>
+        ) : (
+          <></>
+        )}
+      </div>
       <div className="flex flex-row gap-x-4 mb-3">
         <div className="basis-2/3">
-          <div>
-            <div className="pb-2">
-              <span>Net Investment Value &bull; (USD)</span>
-              <div className="flex flex-row">
-                <span className="text-3xl">${data?.at(-1)?.total_val}</span>
-              </div>
+          <div className="pb-2">
+            <span>Net Investment Value &bull; (USD)</span>
+            <div className="flex flex-row">
+              <span className="text-4xl">${data?.at(-1)?.total_val}</span>
             </div>
-            <DateRangeTabs userInput={userInput} setUserInput={setUserInput} />
-            {comparisonState.verifiedTickers.length ? (
-              <MultiInvestmentChart
-                userInput={userInput}
-                verifiedTickers={comparisonState.verifiedTickers}
-                setComparisonState={setComparisonState}
-              />
-            ) : (
-              <InvestmentChart data={isSuccess ? data : []} />
-            )}
           </div>
-          {/* comparison input */}
-          <div>
-            <Input
-              value={comparisonState.currInput}
-              onChange={(e) =>
-                setComparisonState((prev) => ({
-                  ...prev,
-                  currInput: e.target.value,
-                }))
-              }
-            />
-            <Button
-              onClick={() => {
-                refetch();
-              }}
-            >
-              Add Comparison
-            </Button>
-            {newTickerQueryIsError && (
-              <span className="text-red-500">
-                {newTickerQueryError.message}
-              </span>
-            )}
-            {comparisonState.verifiedTickers.length ? (
-              <Button
-                onClick={() =>
-                  setComparisonState((prev) => ({
-                    ...prev,
-                    verifiedTickers: [],
-                  }))
-                }
-              >
-                Clear All
-              </Button>
-            ) : (
-              <></>
-            )}
-          </div>
+          <DateRangeTabs userInput={userInput} setUserInput={setUserInput} />
+          <ChartGroup userInput={userInput} />
         </div>
         {/* <StockChart data={isSuccess ? data : []} className="basis-1/2" /> */}
         <DataCard data={isSuccess ? data : []} className="basis-1/3" />

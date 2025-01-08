@@ -11,6 +11,15 @@ import {
   YAxis,
   Tooltip,
 } from "recharts";
+import { XIcon } from "lucide-react";
+
+import {
+  dcaDataInputType,
+  useGetMultipleDcaData,
+  dcaDataOutputType,
+} from "@/features/get-dca-data";
+import { calculateProfitDetails } from "@/lib/utils";
+
 import { Button } from "@/components/ui/button";
 import {
   ChartConfig,
@@ -20,89 +29,6 @@ import {
   ChartLegend,
   ChartLegendContent,
 } from "@/components/ui/chart";
-import {
-  dcaDataInputType,
-  useGetMultipleDcaData,
-  dcaDataOutputType,
-} from "@/features/get-dca-data";
-import { calculateProfitDetails } from "@/lib/utils";
-
-const investmentChartConfig = {
-  total_val: {
-    label: "Investment Value",
-    color: "#22c55e",
-  },
-  contribution: {
-    label: "Contribution",
-    color: "#2563eb",
-  },
-} satisfies ChartConfig;
-
-type ChartProps = {
-  data: dcaDataOutputType;
-  className?: string;
-};
-
-export function InvestmentChart({ data, className }: ChartProps) {
-  return (
-    <ChartContainer config={investmentChartConfig}>
-      {/* recharts component */}
-      <AreaChart data={data}>
-        <defs>
-          <linearGradient id="fillTotalVal" x1="0" y1="0" x2="0" y2="1">
-            <stop
-              offset="5%"
-              stopColor="var(--color-total_val)"
-              stopOpacity={0.8}
-            />
-            <stop
-              offset="75%"
-              stopColor="var(--color-total_val)"
-              stopOpacity={0}
-            />
-          </linearGradient>
-
-          <linearGradient id="fillContribution" x1="0" y1="0" x2="0" y2="1">
-            <stop
-              offset="5%"
-              stopColor="var(--color-contribution)"
-              stopOpacity={0.8}
-            />
-            <stop
-              offset="75%"
-              stopColor="var(--color-contribution)"
-              stopOpacity={0}
-            />
-          </linearGradient>
-        </defs>
-
-        <Area
-          fillOpacity={0.3}
-          dataKey="total_val"
-          stroke="var(--color-total_val)"
-          fill="url(#fillTotalVal)"
-        />
-        <Area
-          fillOpacity={0.3}
-          dataKey="contribution"
-          stroke="var(--color-contribution)"
-          fill="url(#fillContribution)"
-        />
-
-        <CartesianGrid vertical={false} />
-        <XAxis dataKey="date" />
-        <YAxis
-          tickLine={false}
-          axisLine={false}
-          tickMargin={10}
-          tickCount={8}
-        />
-        <ChartTooltip content={<ChartTooltipContent />} />
-        <ChartLegend content={<ChartLegendContent />} />
-      </AreaChart>
-    </ChartContainer>
-  );
-}
 
 const lines = ["line1", "line2", "line3", "line4", "line5"];
 
@@ -140,7 +66,7 @@ type MultiInvestmentChartProps = {
   >;
 };
 
-export function MultiInvestmentChart({
+export function DcaComparisonChart({
   userInput,
   verifiedTickers,
   setComparisonState,
@@ -200,7 +126,6 @@ export function MultiInvestmentChart({
 
   return (
     <div>
-      {/* <ResponsiveContainer height={400}> */}
       <ChartContainer config={multiInvestmentChartConfig}>
         <LineChart
           onMouseMove={(state) => {
@@ -252,10 +177,9 @@ export function MultiInvestmentChart({
           <Tooltip />
         </LineChart>
       </ChartContainer>
-      {/* </ResponsiveContainer> */}
 
       {hoverData.map((data) => (
-        <div key={data.ticker} className="flex flex-row py-3 justify-between">
+        <div key={data.ticker} className="flex flex-row py-3 justify-between place-items-center">
           <span>{data.ticker}</span>
           <span>{data.totalVal}</span>
           <div className="flex flex-row gap-x-10 justify-self-end">
@@ -263,8 +187,8 @@ export function MultiInvestmentChart({
             <span>{data.profitPct}</span>
           </div>
           <Button
-            disabled={userInput.ticker == data.ticker}
-            className={`w-5 ${userInput.ticker == data.ticker && "invisible"}`}
+            disabled={userInput.ticker === data.ticker}
+            className={`p-0 ${userInput.ticker === data.ticker && "invisible"}`}
             onClick={() =>
               setComparisonState((prev) => ({
                 ...prev,
@@ -273,8 +197,10 @@ export function MultiInvestmentChart({
                 ),
               }))
             }
+            variant="ghost"
+            asChild
           >
-            X
+            <XIcon className="cursor-pointer text-gray-600" size={30} />
           </Button>
         </div>
       ))}
