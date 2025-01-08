@@ -31,6 +31,8 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
                 "contribution": None,
                 "shares_owned": None,
                 "total_val": None,  # total value of investment
+                "profit": None,
+                "profitPct": None,
             }
         )
 
@@ -42,6 +44,8 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
             "contribution": round(contri * (i + 1), 2),
             "shares_owned": 0,
             "total_val": 0,  # total value of investment
+            "profit": 0,
+            "profitPct": 0,
         }
 
         shares_owned += data["shares_bought"]
@@ -52,10 +56,12 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
         for row in table:
             if row["stock_price"] is None:
                 continue
-            # P/L for that month = current price / price for that month * contribution
+            # P/L for that month = current price / price for that month * monthly contribution value
             total_val += contri * (history["Open"].iloc[i] / row["stock_price"])
 
         data["total_val"] = round(total_val, 2)
+        data["profit"] = round(data["total_val"] - data["contribution"], 2)
+        data["profitPct"] = round(data["profit"] / data["contribution"] * 100, 2)
 
         table.append(data)
 

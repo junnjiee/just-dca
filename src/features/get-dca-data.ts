@@ -24,6 +24,8 @@ const dcaDataOutputRowSchema = z.object({
   contribution: z.number().nullable(),
   shares_owned: z.number().nullable(),
   total_val: z.number().nullable(),
+  profit: z.number().nullable(),
+  profitPct: z.number().nullable(),
 });
 
 export type dcaDataOutputRowType = z.infer<typeof dcaDataOutputRowSchema>;

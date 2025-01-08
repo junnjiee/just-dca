@@ -18,49 +18,26 @@ type TickerInfoCardProps = {
   className?: string;
 };
 
+type DataCardProps = {
+  data: dcaDataOutputType;
+  className?: string;
+};
+
 export function DataCard({ data, className }: DataCardProps) {
   const avgSharePrice = () =>
     (
       data.reduce(
-        (accumulator, currentRow) => accumulator + currentRow.stock_price,
+        (accumulator, currentRow) =>
+          accumulator +
+          (currentRow.stock_price === null ? 0 : currentRow.stock_price),
         0
       ) / data.length
     ).toFixed(2);
-
-  const profitData = calculateProfitDetails(
-    data.at(-1)?.total_val!,
-    data.at(-1)?.contribution!
-  );
-
-  const color = { positive: "green", negative: "red", neutral: "grey" };
-  const arrowIcon = {
-    positive: <ArrowUpRight />,
-    negative: <ArrowDownRight />,
-    neutral: <></>,
-  };
 
   return (
     <Card className={className}>
       <CardHeader></CardHeader>
       <CardContent className="grid grid-cols-1 divide-y">
-        <div className="flex flex-row justify-between py-4">
-          <div>Profit/Loss</div>
-          {data.length ? (
-            <div
-              className={`flex flex-row gap-x-2 text-${
-                color[profitData.trend]
-              }-500 `}
-            >
-              <span>{profitData.profitStr}</span>
-              <span className="flex flex-row">
-                {arrowIcon[profitData.trend]}
-                {profitData.profitPct}
-              </span>
-            </div>
-          ) : (
-            <></>
-          )}
-        </div>
         <div className="flex flex-row justify-between py-4">
           <div>Total Value</div>
           <div>{data.at(-1)?.total_val}</div>

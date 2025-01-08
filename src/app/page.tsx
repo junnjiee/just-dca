@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { toast } from "react-toastify";
+import { ArrowUpRight, ArrowDownRight, TextCursor } from "lucide-react";
 
 import {
   dcaDataInputType,
@@ -10,7 +11,7 @@ import {
   useGetDcaData,
 } from "@/features/get-dca-data";
 import { useGetStockInfo } from "@/features/get-stock-info";
-import { createDate } from "@/lib/utils";
+import { cn, createDate } from "@/lib/utils";
 
 import { DashboardForm } from "./_components/DashboardForm";
 import { ChartGroup } from "./_components/ChartGroup";
@@ -25,6 +26,8 @@ const tableColumns: ColumnDef<dcaDataOutputRowType>[] = [
   { accessorKey: "shares_owned", header: "Shares Owned" },
   { accessorKey: "contribution", header: "Contribution" },
   { accessorKey: "total_val", header: "Total Value" },
+  { accessorKey: "profit", header: "Profit" },
+  { accessorKey: "profitPct", header: "Profit (%)" },
 ];
 
 // NOTE: check how to create fallback components
@@ -44,6 +47,35 @@ export default function DashboardPage() {
   const { data: stockData, isSuccess: stockDataIsSuccess } = useGetStockInfo(
     userInput.ticker
   );
+
+  const isNullOrUndefined = (variable: string | number | null | undefined) => {
+    return variable === null || variable === undefined;
+  };
+
+  type trendType = "positive" | "negative" | "neutral";
+  let trend: trendType;
+  if (isSuccess && !isNullOrUndefined(data.at(-1)?.profit)) {
+    trend =
+      data.at(-1)!.profit! > 0
+        ? "positive"
+        : data.at(-1)!.profit! < 0
+        ? "negative"
+        : "neutral";
+  } else {
+    trend = "neutral";
+  }
+
+  const trendColorBg = {
+    positive: "bg-green-100",
+    negative: "bg-red-100",
+    neutral: "bg-grey-500",
+  };
+
+  const trendColorText = {
+    positive: "text-green-800",
+    negative: "text-red-800",
+    neutral: "text-grey-500",
+  };
 
   // needed for toast
   // NOTE: toast is buggy
@@ -87,7 +119,7 @@ export default function DashboardPage() {
       <div className="border-b pb-3 space-y-0.5 mb-3">
         {stockDataIsSuccess ? (
           <>
-            <div className="text-xl">{stockData.longName}</div>
+            <div className="text-2xl">{stockData.longName}</div>
             {/* <div className="text-xs">
                   {data.underlyingSymbol} &bull; {data.quoteType}
                 </div> */}
@@ -96,19 +128,46 @@ export default function DashboardPage() {
           <></>
         )}
       </div>
-      <div className="flex flex-row gap-x-4 mb-3">
+      <div className="flex flex-row mb-3 gap-x-5">
         <div className="basis-2/3">
           <div className="pb-2">
-            <span>Net Investment Value &bull; (USD)</span>
-            <div className="flex flex-row">
-              <span className="text-4xl">${data?.at(-1)?.total_val}</span>
+            <p>Net Investment Value &bull; (USD)</p>
+            <div className="flex flex-row gap-x-6">
+              <p className="text-4xl">${data?.at(-1)?.total_val}</p>
+              <div className="flex flex-row gap-x-3 text-xl place-items-center">
+                <div
+                  className={cn(
+                    "flex flex-row p-1 rounded-lg place-items-center",
+                    trendColorBg[trend],
+                    trendColorText[trend]
+                  )}
+                >
+                  {trend === "positive" ? (
+                    <ArrowUpRight />
+                  ) : trend === "negative" ? (
+                    <ArrowDownRight />
+                  ) : (
+                    <></>
+                  )}
+                  {isSuccess && !isNullOrUndefined(data.at(-1)?.profitPct)
+                    ? Math.abs(data.at(-1)!.profitPct!)
+                    : ""}
+                  %
+                </div>
+                <p className={trendColorText[trend]}>
+                  {trend === "positive" && "+"}
+                  {isSuccess && !isNullOrUndefined(data.at(-1)?.profit)
+                    ? data.at(-1)!.profit
+                    : ""}
+                </p>
+              </div>
             </div>
           </div>
           <DateRangeTabs userInput={userInput} setUserInput={setUserInput} />
           <ChartGroup userInput={userInput} />
         </div>
         {/* <StockChart data={isSuccess ? data : []} className="basis-1/2" /> */}
-        <DataCard data={isSuccess ? data : []} className="basis-1/3" />
+        <DataCard data={isSuccess ? data : []} className="basis-1/3 h-fit" />
       </div>
       {/* NOTE: export to excel? */}
       <DataTable columns={tableColumns} data={isSuccess ? data : []} />
