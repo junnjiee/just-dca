@@ -51,7 +51,7 @@ export function DataCard({ data, className }: DataCardProps) {
           <div>{data.at(-1)?.shares_owned}</div>
         </div>
         <div className="flex flex-row justify-between py-4">
-          <div>Average Share Price</div>
+          <div>Avg Share Price</div>
           <div>{data.length ? avgSharePrice() : ""}</div>
         </div>
       </CardContent>
