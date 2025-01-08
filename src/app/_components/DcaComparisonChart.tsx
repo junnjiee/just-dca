@@ -117,11 +117,11 @@ export function DcaComparisonChart({
   useEffect(() => {
     setHoverData(defaultHoverData);
   }, [
-    allQueriesReady,
-    userInput.start,
-    userInput.end,
-    userInput.contri,
-    verifiedTickers.length,
+    allQueriesReady, // ensure that is updated value
+    // userInput.start,
+    // userInput.end,
+    // userInput.contri,
+    // verifiedTickers.length,
   ]);
 
   return (

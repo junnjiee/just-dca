@@ -26,15 +26,6 @@ export function ChartGroup({ userInput }: ChartGroupProps) {
   });
   console.log(comparisonState);
 
-  // reset comparisonState everytime userInput ticker changes
-  useEffect(() => {
-    console.log("CHANGE DETECTED");
-    setComparisonState({
-      currInput: "",
-      verifiedTickers: [],
-    });
-  }, [userInput.ticker]);
-
   return (
     <>
       {comparisonState.verifiedTickers.length ? (
@@ -42,6 +33,7 @@ export function ChartGroup({ userInput }: ChartGroupProps) {
           userInput={userInput}
           verifiedTickers={comparisonState.verifiedTickers}
           setComparisonState={setComparisonState}
+          key={`${userInput.start}${userInput.end}${userInput.contri}${comparisonState.verifiedTickers.length}`}
         />
       ) : (
         <DcaPerformanceChart userInput={userInput} />

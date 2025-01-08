@@ -164,7 +164,8 @@ export default function DashboardPage() {
             </div>
           </div>
           <DateRangeTabs userInput={userInput} setUserInput={setUserInput} />
-          <ChartGroup userInput={userInput} />
+          {/* https://react.dev/learn/you-might-not-need-an-effect#resetting-all-state-when-a-prop-changes */}
+          <ChartGroup userInput={userInput} key={userInput.ticker} />
         </div>
         {/* <StockChart data={isSuccess ? data : []} className="basis-1/2" /> */}
         <DataCard data={isSuccess ? data : []} className="basis-1/3 h-fit" />
