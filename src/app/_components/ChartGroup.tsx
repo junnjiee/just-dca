@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react";
 import { SearchIcon, PlusIcon, Loader2, XIcon } from "lucide-react";
 
+import { cn } from "@/lib/utils";
 import { dcaDataInputType, useGetDcaData } from "@/features/get-dca-data";
 
-import { DcaPerformanceChart } from "./DcaPerformanceChart";
-import { DcaComparisonChart } from "./DcaComparisonChart";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { DcaPerformanceChart } from "./DcaPerformanceChart";
+import { DcaComparisonChart } from "./DcaComparisonChart";
 
 type ChartGroupProps = {
   userInput: dcaDataInputType;
@@ -24,7 +25,6 @@ export function ChartGroup({ userInput }: ChartGroupProps) {
     currInput: "",
     verifiedTickers: [],
   });
-  console.log(comparisonState);
 
   return (
     <>
@@ -169,7 +169,7 @@ function ComparisonInputButton({
           <></>
         )}
       </div>
-      <p className={`text-red-500 ${!isError && "invisible"}`}>
+      <p className={cn("text-red-500", !isError && "invisible")}>
         Error: {error?.message}
       </p>
     </>

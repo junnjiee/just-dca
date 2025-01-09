@@ -1,6 +1,9 @@
 "use client";
 
 import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from "recharts";
+
+import { dcaDataInputType, useGetDcaData } from "@/features/get-dca-data";
+
 import {
   ChartConfig,
   ChartContainer,
@@ -9,7 +12,6 @@ import {
   ChartLegend,
   ChartLegendContent,
 } from "@/components/ui/chart";
-import { dcaDataInputType, useGetDcaData } from "@/features/get-dca-data";
 
 const dcaPerformanceChartConfig = {
   total_val: {

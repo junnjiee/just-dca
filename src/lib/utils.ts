@@ -18,20 +18,3 @@ export const createDate = (monthsToSubtract: number) => {
   );
 };
 
-export const calculateProfitDetails = (
-  totalVal: number,
-  contri: number
-): {
-  profit: number;
-  profitStr: string;
-  profitPct: string;
-  trend: "positive" | "negative" | "neutral";
-} => {
-  const profit = totalVal - contri;
-  return {
-    profit: profit,
-    profitStr: `${profit > 0 ? "+" : ""}${profit.toFixed(2)}`,
-    profitPct: `${((Math.abs(profit) / contri) * 100).toFixed(2)}%`,
-    trend: profit > 0 ? "positive" : profit < 0 ? "negative" : "neutral",
-  };
-};

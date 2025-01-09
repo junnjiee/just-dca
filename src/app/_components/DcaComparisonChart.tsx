@@ -3,8 +3,6 @@
 import { useState } from "react";
 import {
   CartesianGrid,
-  Area,
-  AreaChart,
   Line,
   LineChart,
   XAxis,
@@ -13,44 +11,31 @@ import {
 } from "recharts";
 import { XIcon } from "lucide-react";
 
+import { cn } from "@/lib/utils";
 import {
   dcaDataInputType,
   useGetMultipleDcaData,
-  dcaDataOutputType,
 } from "@/features/get-dca-data";
-import { calculateProfitDetails } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent,
-} from "@/components/ui/chart";
+import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 
 const lines = ["line1", "line2", "line3", "line4", "line5"];
 
 const multiInvestmentChartConfig = {
   line1: {
-    label: "",
     color: "#a855f7",
   },
   line2: {
-    label: "",
     color: "#f59e0b",
   },
   line3: {
-    label: "",
     color: "#0ea5e9",
   },
   line4: {
-    label: "",
     color: "#1e3a8a",
   },
   line5: {
-    label: "",
     color: "#ea580c",
   },
 } satisfies ChartConfig;
@@ -79,7 +64,6 @@ export function DcaComparisonChart({
       ticker: ticker,
     }))
   );
-  const allQueriesReady = queryResults.every((query) => query.isSuccess);
 
   type HoverDataType = {
     ticker: string;
@@ -130,7 +114,7 @@ export function DcaComparisonChart({
           onMouseLeave={() => setHoverData(null)}
         >
           <CartesianGrid vertical={false} />
-          {/* <ChartTooltip cursor={false} content={<ChartTooltipContent />} /> */}
+
           {queryResults.map((query, idx) => (
             <Line
               dataKey="total_val"
@@ -166,7 +150,10 @@ export function DcaComparisonChart({
           </div>
           <Button
             disabled={userInput.ticker === data.ticker}
-            className={`p-0 ${userInput.ticker === data.ticker && "invisible"}`}
+            className={cn(
+              "p-0",
+              userInput.ticker === data.ticker && "invisible"
+            )}
             onClick={() =>
               setComparisonState((prev) => ({
                 ...prev,

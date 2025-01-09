@@ -2,14 +2,17 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+
 import {
   useGetDcaData,
   dcaDataInputSchema,
   dcaDataInputType,
 } from "@/features/get-dca-data";
+
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 type DashboardFormProps = {
   userInput: dcaDataInputType;
@@ -27,7 +30,7 @@ export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
     defaultValues: userInput,
   });
 
-  const { isLoading } = useGetDcaData(userInput);
+  const { isLoading, isError } = useGetDcaData(userInput);
 
   function onSubmit(data: dcaDataInputType) {
     setUserInput(data);
@@ -56,7 +59,6 @@ export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
         id="contribution"
         type="number"
         placeholder="USD"
-        // step=".01"
         {...register("contri", {
           valueAsNumber: true,
         })}
@@ -88,7 +90,9 @@ export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
       </div>
 
       <div className="row-span-3 place-self-center justify-self-start">
-        <Button type="submit">{isLoading ? "Loading" : "Generate"}</Button>
+        <Button type="submit" disabled={isLoading || isError}>
+          {isLoading ? <Loader2 className="animate-spin" /> : "Generate"}
+        </Button>
       </div>
     </form>
   );

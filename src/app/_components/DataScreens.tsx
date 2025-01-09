@@ -1,9 +1,7 @@
 "use client";
 
-import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { dcaDataOutputType } from "@/features/get-dca-data";
-import { useGetStockInfo } from "@/features/get-stock-info";
-import { cn, calculateProfitDetails } from "@/lib/utils";
+
 import {
   Card,
   CardContent,
@@ -12,11 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
-type TickerInfoCardProps = {
-  ticker: string;
-  className?: string;
-};
 
 type DataCardProps = {
   data: dcaDataOutputType;

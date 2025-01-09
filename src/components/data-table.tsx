@@ -9,10 +9,10 @@ import {
   useReactTable,
   PaginationState,
 } from "@tanstack/react-table";
+
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -24,7 +24,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";

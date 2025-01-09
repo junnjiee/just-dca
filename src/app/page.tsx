@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { toast } from "react-toastify";
-import { ArrowUpRight, ArrowDownRight, TextCursor } from "lucide-react";
+import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 
 import {
   dcaDataInputType,
@@ -17,7 +17,7 @@ import { DashboardForm } from "./_components/DashboardForm";
 import { ChartGroup } from "./_components/ChartGroup";
 import { DataCard } from "./_components/DataScreens";
 import { DataTable } from "@/components/data-table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const tableColumns: ColumnDef<dcaDataOutputRowType>[] = [
   { accessorKey: "date", header: "Date" },
@@ -118,12 +118,7 @@ export default function DashboardPage() {
       </div>
       <div className="border-b pb-3 space-y-0.5 mb-3">
         {stockDataIsSuccess ? (
-          <>
-            <div className="text-2xl">{stockData.longName}</div>
-            {/* <div className="text-xs">
-                  {data.underlyingSymbol} &bull; {data.quoteType}
-                </div> */}
-          </>
+          <div className="text-2xl">{stockData.longName}</div>
         ) : (
           <></>
         )}
@@ -142,13 +137,8 @@ export default function DashboardPage() {
                     trendColorText[trend]
                   )}
                 >
-                  {trend === "positive" ? (
-                    <ArrowUpRight />
-                  ) : trend === "negative" ? (
-                    <ArrowDownRight />
-                  ) : (
-                    <></>
-                  )}
+                  {trend === "positive" && <ArrowUpRight />}
+                  {trend === "negative" && <ArrowDownRight />}
                   {isSuccess && !isNullOrUndefined(data.at(-1)?.profitPct)
                     ? Math.abs(data.at(-1)!.profitPct!)
                     : ""}
@@ -167,7 +157,6 @@ export default function DashboardPage() {
           {/* https://react.dev/learn/you-might-not-need-an-effect#resetting-all-state-when-a-prop-changes */}
           <ChartGroup userInput={userInput} key={userInput.ticker} />
         </div>
-        {/* <StockChart data={isSuccess ? data : []} className="basis-1/2" /> */}
         <DataCard data={isSuccess ? data : []} className="basis-1/3 h-fit" />
       </div>
       {/* NOTE: export to excel? */}
