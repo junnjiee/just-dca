@@ -79,37 +79,37 @@ export default function DashboardPage() {
 
   // needed for toast
   // NOTE: toast is buggy
-  useEffect(() => {
-    if (isLoading) {
-      // hacky way to ensure that toast transitions are smooth if user submits another form
-      // when the toast is still shown
-      // NOTE: toast does not load when submit is immediately clicked during disappearing animation
-      console.log("LOAD");
-      toast.update(1, {
-        render: "Generating Dashboard",
-        isLoading: true,
-      });
-      toast.loading("Generating Dashboard", {
-        position: "top-center",
-        toastId: 1,
-      });
-    } else if (isSuccess) {
-      console.log("GOOD");
-      toast.update(1, {
-        render: "Generated",
-        type: "success",
-        autoClose: 5000,
-        isLoading: false,
-      });
-    } else if (isError) {
-      toast.update(1, {
-        render: error.message,
-        type: "error",
-        autoClose: 5000,
-        isLoading: false,
-      });
-    }
-  }, [isLoading]);
+  // useEffect(() => {
+  //   if (isLoading) {
+  //     // hacky way to ensure that toast transitions are smooth if user submits another form
+  //     // when the toast is still shown
+  //     // NOTE: toast does not load when submit is immediately clicked during disappearing animation
+  //     console.log("LOAD");
+  //     toast.update(1, {
+  //       render: "Generating Dashboard",
+  //       isLoading: true,
+  //     });
+  //     toast.loading("Generating Dashboard", {
+  //       position: "top-center",
+  //       toastId: 1,
+  //     });
+  //   } else if (isSuccess) {
+  //     console.log("GOOD");
+  //     toast.update(1, {
+  //       render: "Generated",
+  //       type: "success",
+  //       autoClose: 5000,
+  //       isLoading: false,
+  //     });
+  //   } else if (isError) {
+  //     toast.update(1, {
+  //       render: error.message,
+  //       type: "error",
+  //       autoClose: 5000,
+  //       isLoading: false,
+  //     });
+  //   }
+  // }, [isLoading]);
 
   return (
     <>
