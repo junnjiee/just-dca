@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { toast } from "react-toastify";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
