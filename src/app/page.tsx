@@ -13,11 +13,11 @@ import {
 import { useGetStockInfo } from "@/features/get-stock-info";
 import { cn, createDate } from "@/lib/utils";
 
+import { DateRangeTabs } from "./_components/DateRangeTabs";
 import { DashboardForm } from "./_components/DashboardForm";
 import { ChartGroup } from "./_components/ChartGroup";
 import { DataCard } from "./_components/DataScreens";
 import { DataTable } from "@/components/data-table";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const tableColumns: ColumnDef<dcaDataOutputRowType>[] = [
   { accessorKey: "date", header: "Date" },
@@ -29,6 +29,19 @@ const tableColumns: ColumnDef<dcaDataOutputRowType>[] = [
   { accessorKey: "profit", header: "Profit" },
   { accessorKey: "profitPct", header: "Profit (%)" },
 ];
+
+const trendColorBg = {
+  positive: "bg-green-100",
+  negative: "bg-red-100",
+  neutral: "bg-grey-500",
+};
+
+const trendColorText = {
+  positive: "text-green-800",
+  negative: "text-red-800",
+  neutral: "text-grey-500",
+};
+type trendType = "positive" | "negative" | "neutral";
 
 // NOTE: check how to create fallback components
 // NOTE: show error page if error occur in backend when retrieving data
@@ -52,7 +65,6 @@ export default function DashboardPage() {
     return variable === null || variable === undefined;
   };
 
-  type trendType = "positive" | "negative" | "neutral";
   let trend: trendType;
   if (isSuccess && !isNullOrUndefined(data.at(-1)?.profit)) {
     trend =
@@ -64,18 +76,6 @@ export default function DashboardPage() {
   } else {
     trend = "neutral";
   }
-
-  const trendColorBg = {
-    positive: "bg-green-100",
-    negative: "bg-red-100",
-    neutral: "bg-grey-500",
-  };
-
-  const trendColorText = {
-    positive: "text-green-800",
-    negative: "text-red-800",
-    neutral: "text-grey-500",
-  };
 
   // needed for toast
   // NOTE: toast is buggy
@@ -123,38 +123,10 @@ export default function DashboardPage() {
           <></>
         )}
       </div>
+      {/* <SummaryCard trend={trend} total_val={data[data.length -1] } /> */}
       <div className="flex flex-row mb-3 gap-x-5">
         <div className="basis-2/3">
-          <div className="pb-2">
-            <p>Net Investment Value &bull; (USD)</p>
-            <div className="flex flex-row gap-x-6">
-              <p className="text-4xl">${data?.at(-1)?.total_val}</p>
-              <div className="flex flex-row gap-x-3 text-xl place-items-center">
-                <div
-                  className={cn(
-                    "flex flex-row p-1 rounded-lg place-items-center",
-                    trendColorBg[trend],
-                    trendColorText[trend]
-                  )}
-                >
-                  {trend === "positive" && <ArrowUpRight />}
-                  {trend === "negative" && <ArrowDownRight />}
-                  {isSuccess && !isNullOrUndefined(data.at(-1)?.profitPct)
-                    ? Math.abs(data.at(-1)!.profitPct!)
-                    : ""}
-                  %
-                </div>
-                <p className={trendColorText[trend]}>
-                  {trend === "positive" && "+"}
-                  {isSuccess && !isNullOrUndefined(data.at(-1)?.profit)
-                    ? data.at(-1)!.profit
-                    : ""}
-                </p>
-              </div>
-            </div>
-          </div>
           <DateRangeTabs userInput={userInput} setUserInput={setUserInput} />
-          {/* https://react.dev/learn/you-might-not-need-an-effect#resetting-all-state-when-a-prop-changes */}
           <ChartGroup userInput={userInput} key={userInput.ticker} />
         </div>
         <DataCard data={isSuccess ? data : []} className="basis-1/3 h-fit" />
@@ -165,50 +137,42 @@ export default function DashboardPage() {
   );
 }
 
-type DateRangeTabsProps = {
-  userInput: dcaDataInputType;
-  setUserInput: React.Dispatch<React.SetStateAction<dcaDataInputType>>;
+type SummaryCardProps = {
+  trend: trendType;
+  total_val: number;
+  profit: number;
+  profitPct: number;
 };
 
-function DateRangeTabs({ userInput, setUserInput }: DateRangeTabsProps) {
-  // NOTE: can memoize this
-  const datePresets = [
-    { dateRange: "3M", start: createDate(3), end: createDate(0) },
-    { dateRange: "6M", start: createDate(6), end: createDate(0) },
-    { dateRange: "YTD", start: createDate(12), end: createDate(0) },
-    { dateRange: "3Y", start: createDate(36), end: createDate(0) },
-    { dateRange: "5Y", start: createDate(60), end: createDate(0) },
-    { dateRange: "10Y", start: createDate(120), end: createDate(0) },
-  ];
-
-  // if date chosen matches preset, select that tab
-  const chosenPreset = () => {
-    const preset = datePresets.find(
-      (preset) => userInput.start == preset.start && userInput.end == preset.end
-    )?.dateRange;
-
-    return preset ? preset : "";
-  };
-
+function SummaryCard({
+  trend,
+  total_val,
+  profit,
+  profitPct,
+}: SummaryCardProps) {
   return (
-    <Tabs value={chosenPreset()}>
-      <TabsList>
-        {datePresets.map((preset) => (
-          <TabsTrigger
-            key={preset.dateRange}
-            value={preset.dateRange}
-            onClick={() =>
-              setUserInput((prev) => ({
-                ...prev,
-                start: preset.start,
-                end: preset.end,
-              }))
-            }
+    <div className="pb-2">
+      <p>Net Investment Value &bull; (USD)</p>
+      <div className="flex flex-row gap-x-6">
+        <p className="text-4xl">${total_val}</p>
+        <div className="flex flex-row gap-x-3 text-xl place-items-center">
+          <div
+            className={cn(
+              "flex flex-row p-1 rounded-lg place-items-center",
+              trendColorBg[trend],
+              trendColorText[trend]
+            )}
           >
-            {preset.dateRange}
-          </TabsTrigger>
-        ))}
-      </TabsList>
-    </Tabs>
+            {trend === "positive" && <ArrowUpRight />}
+            {trend === "negative" && <ArrowDownRight />}
+            {profitPct ? Math.abs(profitPct!) : ""}%
+          </div>
+          <p className={trendColorText[trend]}>
+            {trend === "positive" && "+"}
+            {profit ? profit : ""}
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }
