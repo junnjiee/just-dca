@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   CartesianGrid,
   Area,
@@ -81,48 +81,23 @@ export function DcaComparisonChart({
   );
   const allQueriesReady = queryResults.every((query) => query.isSuccess);
 
-  // default hoverData state is built using queryResults
-  // hoverData state during tooltip hover is built using chart payload
-
-  // during hover, state will be set to track payload data depending on hover position
-  // when mouse leaves chart, state will be set to default data
-
-  // during chart payload change, need to preserve all ticker data in the case payload does not contain all tickers
-  const defaultHoverData = queryResults.map((query, idx) => {
-    const profitDetails = calculateProfitDetails(
-      // zod parse ensures these keys exist
-      query.data?.at(-1)?.total_val!,
-      query.data?.at(-1)?.contribution!
-    );
-    return {
-      ticker: allTickers[idx],
-      totalVal: query.data?.at(-1)?.total_val,
-      profit: profitDetails.profitStr,
-      profitPct: profitDetails.profitPct,
-      trend: profitDetails.trend,
-    };
-  });
-
   type HoverDataType = {
     ticker: string;
-    totalVal: number | null | undefined;
+    totalVal: string;
     profit: string;
     profitPct: string;
-    trend: "positive" | "negative" | "neutral";
   }[];
-  const [hoverData, setHoverData] = useState<HoverDataType>(defaultHoverData);
 
-  // immediately render the default data if any of these dependencies change
-  // NOTE: try make main page use useQueries hook to cache on first success
-  useEffect(() => {
-    setHoverData(defaultHoverData);
-  }, [
-    allQueriesReady, // ensure that is updated value
-    // userInput.start,
-    // userInput.end,
-    // userInput.contri,
-    // verifiedTickers.length,
-  ]);
+  const [hoverData, setHoverData] = useState<HoverDataType | null>(null);
+
+  const defaultHoverData = queryResults.map((query, idx) => ({
+    ticker: allTickers[idx],
+    totalVal: query.data?.at(-1)?.total_val,
+    profit: query.data?.at(-1)?.profit,
+    profitPct: query.data?.at(-1)?.profitPct,
+  }));
+
+  const hoverDataToRender = hoverData === null ? defaultHoverData : hoverData;
 
   return (
     <div>
@@ -132,27 +107,27 @@ export function DcaComparisonChart({
             console.log(state);
             if (state.activePayload) {
               const newHoverData = state.activePayload.map((payloadData) => {
-                const { profitStr, profitPct, trend } = calculateProfitDetails(
-                  payloadData.payload.total_val,
-                  payloadData.payload.contribution
-                );
-
                 return {
                   ticker: payloadData.name,
                   totalVal:
                     payloadData.value === null
                       ? 0
                       : payloadData.payload.total_val,
-                  profit: payloadData.value === null ? "--" : profitStr,
-                  profitPct: payloadData.value === null ? "0.00%" : profitPct,
-                  trend: payloadData.value === null ? "neutral" : trend,
+                  profit:
+                    payloadData.value === null
+                      ? "--"
+                      : payloadData.payload.profit,
+                  profitPct:
+                    payloadData.value === null
+                      ? "0.00%"
+                      : payloadData.payload.profitPct,
                 };
               });
 
               setHoverData(newHoverData);
             }
           }}
-          onMouseLeave={() => setHoverData(defaultHoverData)}
+          onMouseLeave={() => setHoverData(null)}
         >
           <CartesianGrid vertical={false} />
           {/* <ChartTooltip cursor={false} content={<ChartTooltipContent />} /> */}
@@ -178,8 +153,11 @@ export function DcaComparisonChart({
         </LineChart>
       </ChartContainer>
 
-      {hoverData.map((data) => (
-        <div key={data.ticker} className="flex flex-row py-3 justify-between place-items-center">
+      {hoverDataToRender.map((data) => (
+        <div
+          key={data.ticker}
+          className="flex flex-row py-3 justify-between place-items-center"
+        >
           <span>{data.ticker}</span>
           <span>{data.totalVal}</span>
           <div className="flex flex-row gap-x-10 justify-self-end">
