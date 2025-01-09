@@ -42,28 +42,21 @@ const multiInvestmentChartConfig = {
 
 type MultiInvestmentChartProps = {
   userInput: dcaDataInputType;
-  verifiedTickers: string[];
-  setComparisonState: React.Dispatch<
-    React.SetStateAction<{
-      currInput: string;
-      verifiedTickers: string[];
-    }>
-  >;
+  tickers: string[];
+  setTickers: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 export function DcaComparisonChart({
   userInput,
-  verifiedTickers,
-  setComparisonState,
+  tickers,
+  setTickers,
 }: MultiInvestmentChartProps) {
-  const allTickers = [userInput.ticker, ...verifiedTickers];
-
   const queryResults = useGetMultipleDcaData(
-    allTickers.map((ticker) => ({
+    tickers.map((ticker) => ({
       ...userInput,
       ticker: ticker,
     }))
-  );
+  ).slice(0, 5);
 
   type HoverDataType = {
     ticker: string;
@@ -75,7 +68,7 @@ export function DcaComparisonChart({
   const [hoverData, setHoverData] = useState<HoverDataType | null>(null);
 
   const defaultHoverData = queryResults.map((query, idx) => ({
-    ticker: allTickers[idx],
+    ticker: tickers[idx],
     totalVal: query.data?.at(-1)?.total_val,
     profit: query.data?.at(-1)?.profit,
     profitPct: query.data?.at(-1)?.profitPct,
@@ -119,8 +112,8 @@ export function DcaComparisonChart({
             <Line
               dataKey="total_val"
               data={query.data}
-              name={allTickers[idx]}
-              key={allTickers[idx]}
+              name={tickers[idx]}
+              key={tickers[idx]}
               type="monotone"
               stroke={`var(--color-${lines[idx]})`}
               strokeWidth={2}
@@ -155,12 +148,9 @@ export function DcaComparisonChart({
               userInput.ticker === data.ticker && "invisible"
             )}
             onClick={() =>
-              setComparisonState((prev) => ({
-                ...prev,
-                verifiedTickers: prev.verifiedTickers.filter(
-                  (ticker) => ticker !== data.ticker
-                ),
-              }))
+              setTickers((prev) =>
+                prev.filter((ticker) => ticker !== data.ticker)
+              )
             }
             variant="ghost"
             asChild

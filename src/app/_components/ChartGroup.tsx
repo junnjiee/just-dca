@@ -11,37 +11,64 @@ import { Button } from "@/components/ui/button";
 import { DcaPerformanceChart } from "./DcaPerformanceChart";
 import { DcaComparisonChart } from "./DcaComparisonChart";
 
+// TEMP
+import { useGetMultipleDcaData } from "@/features/get-dca-data";
+
 type ChartGroupProps = {
   userInput: dcaDataInputType;
 };
 
-type ComparisonType = {
-  currInput: string;
-  verifiedTickers: string[];
-};
-
 export function ChartGroup({ userInput }: ChartGroupProps) {
-  const [comparisonState, setComparisonState] = useState<ComparisonType>({
-    currInput: "",
-    verifiedTickers: [],
-  });
+  const [tempInput, setTempInput] = useState("");
+  const [tickers, setTickers] = useState([userInput.ticker]);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  let arr: dcaDataInputType[];
+  if (tempInput === "") {
+    arr = [];
+  } else {
+    arr = [{ ...userInput, ticker: tempInput }];
+  }
+  const queryResults = useGetMultipleDcaData(arr);
+
+  if (queryResults.length) {
+    if (queryResults[0].isError) {
+      setErrorMsg(queryResults[queryResults.length - 1].error?.message!);
+      setTempInput("");
+    }
+    if (queryResults[0].isSuccess) {
+      if (tickers.length >= 5) {
+        setTickers((prev) =>
+          prev.map((val, idx) => (idx === 4 ? tempInput : val))
+        );
+      } else {
+        setTickers((prev) => [...prev, tempInput]);
+      }
+      setTempInput("");
+    }
+  }
+  console.log(tickers);
 
   return (
     <>
-      {comparisonState.verifiedTickers.length ? (
+      {tickers.length > 1 ? (
         <DcaComparisonChart
           userInput={userInput}
-          verifiedTickers={comparisonState.verifiedTickers}
-          setComparisonState={setComparisonState}
-          key={`${userInput.start}${userInput.end}${userInput.contri}${comparisonState.verifiedTickers.length}`}
+          tickers={tickers}
+          setTickers={setTickers}
+          key={`${userInput.start}${userInput.end}${userInput.contri}${tickers.length}`}
         />
       ) : (
         <DcaPerformanceChart userInput={userInput} />
       )}
       <ComparisonInputButton
         userInput={userInput}
-        comparisonState={comparisonState}
-        setComparisonState={setComparisonState}
+        tickers={tickers}
+        setTickers={setTickers}
+        errorMsg={errorMsg}
+        setErrorMsg={setErrorMsg}
+        tempInput={tempInput}
+        setTempInput={setTempInput}
       />
     </>
   );
@@ -49,57 +76,35 @@ export function ChartGroup({ userInput }: ChartGroupProps) {
 
 type ComparisonInputButtonProps = {
   userInput: dcaDataInputType;
-  comparisonState: ComparisonType;
-  setComparisonState: React.Dispatch<React.SetStateAction<ComparisonType>>;
+  tickers: string[];
+  setTickers: React.Dispatch<React.SetStateAction<string[]>>;
+  errorMsg: string;
+  setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
+  tempInput: string;
+  setTempInput: React.Dispatch<React.SetStateAction<string>>;
 };
 
 function ComparisonInputButton({
   userInput,
-  comparisonState,
-  setComparisonState,
+  tickers,
+  setTickers,
+  errorMsg,
+  setErrorMsg,
+  tempInput,
+  setTempInput,
 }: ComparisonInputButtonProps) {
+  const [tickerInput, setTickerInput] = useState("");
   const [openInput, setOpenInput] = useState(false);
 
-  // cached results are returned, even when auto refetching is disabled, so success/error
-  // booleans will be activated when the cached keys matches input
-  const { error, fetchStatus, isLoading, isSuccess, isError, refetch } =
-    useGetDcaData(
-      {
-        ...userInput,
-        ticker: comparisonState.currInput,
-      },
-      false
-    );
+  let arr: dcaDataInputType[];
+  if (tempInput === "") {
+    arr = [];
+  } else {
+    arr = [{ ...userInput, ticker: tempInput }];
+  }
 
-  // for updating verifiedTickers array in comparisonState
-  useEffect(() => {
-    console.log("ACTIVATE");
-    // checks done
-    // 1. successful query 2. ticker not in verified array 3. input ticker is not main ticker
-    if (
-      isSuccess &&
-      comparisonState.verifiedTickers.find(
-        (element) => element === comparisonState.currInput.toUpperCase()
-      ) === undefined &&
-      comparisonState.currInput.toUpperCase() !== userInput.ticker
-    ) {
-      console.log("SUCCESS");
-
-      // max 4 tickers only
-      setComparisonState((prev) => ({
-        verifiedTickers:
-          prev.verifiedTickers.length < 4
-            ? [...prev.verifiedTickers, prev.currInput.toUpperCase()]
-            : [
-                ...prev.verifiedTickers.slice(0, 3),
-                prev.currInput.toUpperCase(),
-              ],
-        currInput: "",
-      }));
-
-      setOpenInput(false);
-    }
-  }, [fetchStatus]);
+  const queryResults = useGetMultipleDcaData(arr);
+  const loading = queryResults.length ? queryResults[0].isLoading : false;
 
   return (
     <>
@@ -107,23 +112,20 @@ function ComparisonInputButton({
         {openInput ? (
           <div className="flex flex-row gap-x-3">
             <Input
-              value={comparisonState.currInput}
-              onChange={(e) =>
-                setComparisonState((prev) => ({
-                  ...prev,
-                  currInput: e.target.value,
-                }))
-              }
+              value={tickerInput}
+              onChange={(e) => setTickerInput(e.target.value)}
             />
             <Button
-              disabled={
-                !comparisonState.currInput.length || isError || isLoading
-              }
+              disabled={!tickerInput.length || loading}
               onClick={() => {
-                refetch();
+                if (tickers.includes(tickerInput)) {
+                  setErrorMsg("Ticker already shown");
+                } else {
+                  setTempInput(tickerInput);
+                }
               }}
             >
-              {isLoading ? <Loader2 className="animate-spin" /> : "Add"}
+              {loading ? <Loader2 className="animate-spin" /> : "Add"}
             </Button>
             <Button
               variant="ghost"
@@ -131,7 +133,7 @@ function ComparisonInputButton({
               asChild
               onClick={() => {
                 setOpenInput(false);
-                setComparisonState((prev) => ({ ...prev, currInput: "" }));
+                setTickerInput("");
               }}
             >
               <XIcon className="cursor-pointer text-gray-600" size={45} />
@@ -139,7 +141,7 @@ function ComparisonInputButton({
           </div>
         ) : (
           <Button variant="ghost" onClick={() => setOpenInput(true)}>
-            {comparisonState.verifiedTickers.length ? (
+            {tickers.length ? (
               <>
                 <PlusIcon />
                 Add Comparison
@@ -153,15 +155,10 @@ function ComparisonInputButton({
           </Button>
         )}
 
-        {comparisonState.verifiedTickers.length ? (
+        {tickers.length ? (
           <Button
             variant="ghost"
-            onClick={() =>
-              setComparisonState((prev) => ({
-                ...prev,
-                verifiedTickers: [],
-              }))
-            }
+            onClick={() => setTickers((prev) => [prev[0]])}
           >
             Clear All
           </Button>
@@ -169,9 +166,7 @@ function ComparisonInputButton({
           <></>
         )}
       </div>
-      <p className={cn("text-red-500", !isError && "invisible")}>
-        Error: {error?.message}
-      </p>
+      <p className={cn("text-red-500")}>{errorMsg}</p>
     </>
   );
 }
