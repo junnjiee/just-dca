@@ -18,14 +18,15 @@ export const dcaDataInputSchema = z.object({
 export type dcaDataInputType = z.infer<typeof dcaDataInputSchema>;
 
 const dcaDataOutputRowSchema = z.object({
+  padded_row: z.boolean(),
   date: z.string(),
-  stock_price: z.number().nullable(),
-  shares_bought: z.number().nullable(),
-  contribution: z.number().nullable(),
-  shares_owned: z.number().nullable(),
-  total_val: z.number().nullable(),
-  profit: z.number().nullable(),
-  profitPct: z.number().nullable(),
+  stock_price: z.number(),
+  shares_bought: z.number(),
+  contribution: z.number(),
+  shares_owned: z.number(),
+  total_val: z.number(),
+  profit: z.number(),
+  profitPct: z.number(),
 });
 
 export type dcaDataOutputRowType = z.infer<typeof dcaDataOutputRowSchema>;

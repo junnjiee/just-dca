@@ -6,6 +6,18 @@ from api.lib.utils import check_ticker_validity, check_history_validity
 
 router = APIRouter()
 
+dict_keys = (
+    "padded_row",
+    "date",
+    "stock_price",
+    "shares_bought",
+    "contribution",
+    "shares_owned",
+    "total_val",
+    "profit",
+    "profitPct",
+)
+
 
 @router.get("/returns", status_code=status.HTTP_200_OK)
 def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
@@ -23,30 +35,19 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
     ipo_date = stock.history(period="max").index[0].strftime("%d %b %Y")
     dates = pd.date_range(start, ipo_date, freq="MS")
     for date in dates:
-        table.append(
-            {
-                "date": date.strftime("%d %b %Y"),
-                "stock_price": None,
-                "shares_bought": None,
-                "contribution": None,
-                "shares_owned": None,
-                "total_val": None,  # total value of investment
-                "profit": None,
-                "profitPct": None,
-            }
-        )
+        data = dict.fromkeys(dict_keys, 0)
+        data["padded_row"] = True
+        data["date"] = date.strftime("%d %b %Y")
+        table.append(data)
 
     for i in range(0, history.shape[0]):
-        data = {
-            "date": history.index[i].strftime("%d %b %Y"),
-            "stock_price": history["Open"].iloc[i].round(2),
-            "shares_bought": (contri / history["Open"].iloc[i]).round(2),
-            "contribution": round(contri * (i + 1), 2),
-            "shares_owned": 0,
-            "total_val": 0,  # total value of investment
-            "profit": 0,
-            "profitPct": 0,
-        }
+        data = dict.fromkeys(dict_keys, 0)
+
+        data["padded_row"] = False
+        data["date"] = history.index[i].strftime("%d %b %Y")
+        data["stock_price"] = history["Open"].iloc[i].round(2)
+        data["shares_bought"] = (contri / history["Open"].iloc[i]).round(2)
+        data["contribution"] = round(contri * (i + 1), 2)
 
         shares_owned += data["shares_bought"]
         data["shares_owned"] = round(shares_owned, 2)
@@ -54,7 +55,7 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
         # profit varies by which month stock is bought
         total_val = contri
         for row in table:
-            if row["stock_price"] is None:
+            if row["padded_row"]:
                 continue
             # P/L for that month = current price / price for that month * monthly contribution value
             total_val += contri * (history["Open"].iloc[i] / row["stock_price"])
@@ -66,16 +67,3 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
         table.append(data)
 
     return table
-
-
-# # For querying a list in URL params
-# # https://fastapi.tiangolo.com/tutorial/query-params-str-validations/#query-parameter-list-multiple-values
-# @router.get("/compare", status_code=status.HTTP_200_OK)
-# def compare_dca_returns(
-#     ticker: str,
-#     contri: float,
-#     start: str,
-#     end: str,
-#     comparisons: Annotated[list[str] | None, Query()],
-# ):
-#     return comparisons
