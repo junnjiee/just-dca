@@ -35,8 +35,9 @@ export function ChartGroup({ userInput }: ChartGroupProps) {
     setErrorMsg("");
   };
 
-  const arr = newTicker === "" ? [] : [{ ...userInput, ticker: newTicker }];
-  const newTickerTestQuery = useGetMultipleDcaReturns(arr);
+  const queryArr =
+    newTicker === "" ? [] : [{ ...userInput, ticker: newTicker }];
+  const newTickerTestQuery = useGetMultipleDcaReturns(queryArr);
   const newTickerQueryLoading =
     newTickerTestQuery.map((query) => query.isLoading).length > 0;
 
