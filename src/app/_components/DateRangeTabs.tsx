@@ -1,17 +1,15 @@
 "use client";
 
 import { createDate } from "@/lib/utils";
-
-import { DcaReturnsQueryInput } from "@/types/financialQueries";
+import { useUserInputStore } from "@/lib/stores";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-type DateRangeTabsProps = {
-  userInput: DcaReturnsQueryInput;
-  setUserInput: React.Dispatch<React.SetStateAction<DcaReturnsQueryInput>>;
-};
+export function DateRangeTabs() {
+  const currStart = useUserInputStore((state) => state.start);
+  const currEnd = useUserInputStore((state) => state.end);
+  const setDates = useUserInputStore((state) => state.updateDates);
 
-export function DateRangeTabs({ userInput, setUserInput }: DateRangeTabsProps) {
   // NOTE: can memoize this
   const datePresets = [
     { dateRange: "3M", start: createDate(3), end: createDate(0) },
@@ -25,7 +23,7 @@ export function DateRangeTabs({ userInput, setUserInput }: DateRangeTabsProps) {
   // if date chosen matches preset, select that tab
   const chosenPreset = () => {
     const preset = datePresets.find(
-      (preset) => userInput.start == preset.start && userInput.end == preset.end
+      (preset) => currStart == preset.start && currEnd == preset.end
     )?.dateRange;
 
     return preset ? preset : "";
@@ -38,13 +36,7 @@ export function DateRangeTabs({ userInput, setUserInput }: DateRangeTabsProps) {
           <TabsTrigger
             key={preset.dateRange}
             value={preset.dateRange}
-            onClick={() =>
-              setUserInput((prev) => ({
-                ...prev,
-                start: preset.start,
-                end: preset.end,
-              }))
-            }
+            onClick={() => setDates(preset.start, preset.end)}
           >
             {preset.dateRange}
           </TabsTrigger>

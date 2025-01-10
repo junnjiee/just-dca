@@ -4,22 +4,19 @@ import { useState, useReducer } from "react";
 import { SearchIcon, PlusIcon, Loader2, XIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { tickersReducer } from "@/reducers/reducers";
+import { useUserInputStore } from "@/lib/stores";
+import { tickersReducer } from "@/lib/reducers";
 
 import { useGetMultipleDcaReturns } from "@/queries/dcaReturns";
-
-import { DcaReturnsQueryInput } from "@/types/financialQueries";
+import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DcaPerformanceChart } from "./DcaPerformanceChart";
 import { DcaComparisonChart } from "./DcaComparisonChart";
 
-type ChartGroupProps = {
-  userInput: DcaReturnsQueryInput;
-};
-
-export function ChartGroup({ userInput }: ChartGroupProps) {
+export function ChartGroup() {
+  const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
   const [newTicker, setNewTicker] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -59,13 +56,12 @@ export function ChartGroup({ userInput }: ChartGroupProps) {
     <>
       {tickers.length > 1 ? (
         <DcaComparisonChart
-          userInput={userInput}
           tickers={tickers}
           removeTicker={removeTicker}
-          key={`${userInput.start}${userInput.end}${userInput.contri}${tickers.length}`}
+          key={`${userInput.start}${userInput.end}${userInput.contri}`}
         />
       ) : (
-        <DcaPerformanceChart userInput={userInput} />
+        <DcaPerformanceChart />
       )}
       <ComparisonInputButton
         tickers={tickers}

@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 
+import { useUserInputStore } from "@/lib/stores";
+
 import { useGetDcaReturns } from "@/queries/dcaReturns";
 
 import { DcaReturnsQueryInput } from "@/types/financialQueries";
@@ -13,12 +15,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
-type DashboardFormProps = {
-  userInput: DcaReturnsQueryInput;
-  setUserInput: React.Dispatch<React.SetStateAction<DcaReturnsQueryInput>>;
-};
+export function DashboardForm() {
+  const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
+  const setUserInput = useUserInputStore((state) => state.update);
 
-export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
   const {
     register,
     handleSubmit,

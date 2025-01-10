@@ -1,18 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 
-import { cn, createDate } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { useUserInputStore } from "@/lib/stores";
 
 import { useGetDcaReturns } from "@/queries/dcaReturns";
 import { useGetStockInfo } from "@/queries/stockInfo";
 
-import {
-  DcaReturnsQueryInput,
-  DcaReturnsQueryOutputRow,
-} from "@/types/financialQueries";
+import { DcaReturnsQueryOutputRow } from "@/types/financialQueries";
+import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
 
 import { DataTable } from "@/components/data-table";
 import { DateRangeTabs } from "./_components/DateRangeTabs";
@@ -47,20 +45,14 @@ type trendType = "positive" | "negative" | "neutral";
 // NOTE: check how to create fallback components
 // NOTE: show error page if error occur in backend when retrieving data
 export default function DashboardPage() {
-  // NOTE: ensure start date < end date
-  const [userInput, setUserInput] = useState<DcaReturnsQueryInput>({
-    ticker: "RDDT",
-    contri: 50,
-    start: createDate(12),
-    end: createDate(0),
-  });
+  const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
+  const ticker = useUserInputStore((state) => state.ticker);
 
   const { data, error, isError, isLoading, isSuccess } =
     useGetDcaReturns(userInput);
 
-  const { data: stockData, isSuccess: stockDataIsSuccess } = useGetStockInfo(
-    userInput.ticker
-  );
+  const { data: stockData, isSuccess: stockDataIsSuccess } =
+    useGetStockInfo(ticker);
 
   const isNullOrUndefined = (variable: string | number | null | undefined) => {
     return variable === null || variable === undefined;
@@ -81,7 +73,7 @@ export default function DashboardPage() {
   return (
     <>
       <div className="my-5">
-        <DashboardForm userInput={userInput} setUserInput={setUserInput} />
+        <DashboardForm />
       </div>
       <div className="border-b pb-3 space-y-0.5 mb-3">
         {stockDataIsSuccess ? (
@@ -93,8 +85,8 @@ export default function DashboardPage() {
       {/* <SummaryCard trend={trend} total_val={data[data.length -1] } /> */}
       <div className="flex flex-row mb-3 gap-x-5">
         <div className="basis-2/3">
-          <DateRangeTabs userInput={userInput} setUserInput={setUserInput} />
-          <ChartGroup userInput={userInput} key={userInput.ticker} />
+          <DateRangeTabs />
+          <ChartGroup key={userInput.ticker} />
         </div>
         <DataCard data={isSuccess ? data : []} className="basis-1/3 h-fit" />
       </div>

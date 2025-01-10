@@ -12,10 +12,10 @@ import {
 import { XIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useUserInputStore } from "@/lib/stores";
 
+import { ComparisonChartExternalTooltip } from "@/types/chart";
 import { useGetMultipleDcaReturns } from "@/queries/dcaReturns";
-
-import { DcaReturnsQueryInput } from "@/types/financialQueries";
 
 import { Button } from "@/components/ui/button";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
@@ -41,31 +41,29 @@ const multiInvestmentChartConfig = {
 } satisfies ChartConfig;
 
 type MultiInvestmentChartProps = {
-  userInput: DcaReturnsQueryInput;
   tickers: string[];
   removeTicker: (ticker: string) => void;
 };
 
 export function DcaComparisonChart({
-  userInput,
   tickers,
   removeTicker,
 }: MultiInvestmentChartProps) {
+  const mainTicker = useUserInputStore((state) => state.ticker);
+  const incompleteUserInput = {
+    contri: useUserInputStore((state) => state.contri),
+    start: useUserInputStore((state) => state.start),
+    end: useUserInputStore((state) => state.end),
+  };
   const queryResults = useGetMultipleDcaReturns(
     tickers.map((ticker) => ({
-      ...userInput,
+      ...incompleteUserInput,
       ticker: ticker,
     }))
-  ).slice(0, 5);
+  );
 
-  type HoverDataType = {
-    ticker: string;
-    totalVal: string;
-    profit: string;
-    profitPct: string;
-  }[];
-
-  const [hoverData, setHoverData] = useState<HoverDataType | null>(null);
+  const [hoverData, setHoverData] =
+    useState<ComparisonChartExternalTooltip | null>(null);
 
   const defaultHoverData = queryResults.map((query, idx) => ({
     ticker: tickers[idx],
@@ -73,7 +71,6 @@ export function DcaComparisonChart({
     profit: query.data?.at(-1)?.profit,
     profitPct: query.data?.at(-1)?.profitPct,
   }));
-
   const hoverDataToRender = hoverData === null ? defaultHoverData : hoverData;
 
   return (
@@ -142,11 +139,8 @@ export function DcaComparisonChart({
             <span>{data.profitPct}</span>
           </div>
           <Button
-            disabled={userInput.ticker === data.ticker}
-            className={cn(
-              "p-0",
-              userInput.ticker === data.ticker && "invisible"
-            )}
+            disabled={mainTicker === data.ticker}
+            className={cn("p-0", mainTicker === data.ticker && "invisible")}
             onClick={() => {
               removeTicker(data.ticker);
             }}
