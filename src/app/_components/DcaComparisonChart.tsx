@@ -43,13 +43,13 @@ const multiInvestmentChartConfig = {
 type MultiInvestmentChartProps = {
   userInput: DcaReturnsQueryInput;
   tickers: string[];
-  setTickers: React.Dispatch<React.SetStateAction<string[]>>;
+  removeTicker: (ticker: string) => void;
 };
 
 export function DcaComparisonChart({
   userInput,
   tickers,
-  setTickers,
+  removeTicker,
 }: MultiInvestmentChartProps) {
   const queryResults = useGetMultipleDcaReturns(
     tickers.map((ticker) => ({
@@ -147,11 +147,9 @@ export function DcaComparisonChart({
               "p-0",
               userInput.ticker === data.ticker && "invisible"
             )}
-            onClick={() =>
-              setTickers((prev) =>
-                prev.filter((ticker) => ticker !== data.ticker)
-              )
-            }
+            onClick={() => {
+              removeTicker(data.ticker);
+            }}
             variant="ghost"
             asChild
           >

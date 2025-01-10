@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useReducer } from "react";
 import { SearchIcon, PlusIcon, Loader2, XIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { tickersReducer } from "@/reducers/index";
 
 import { useGetMultipleDcaReturns } from "@/queries/dcaReturns";
 
@@ -19,32 +20,36 @@ type ChartGroupProps = {
 };
 
 export function ChartGroup({ userInput }: ChartGroupProps) {
-  const [tempInput, setTempInput] = useState("");
-  const [tickers, setTickers] = useState([userInput.ticker]);
+  const [newTicker, setNewTicker] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
-  let arr: DcaReturnsQueryInput[];
-  if (tempInput === "") {
-    arr = [];
-  } else {
-    arr = [{ ...userInput, ticker: tempInput }];
-  }
-  const queryResults = useGetMultipleDcaReturns(arr);
+  const [tickers, dispatchTickers] = useReducer(tickersReducer, [
+    userInput.ticker,
+  ]);
+  const removeTicker = (ticker: string) => {
+    dispatchTickers({ type: "remove", ticker: ticker });
+    setErrorMsg("");
+  };
+  const clearTickers = () => {
+    dispatchTickers({ type: "clear" });
+    setErrorMsg("");
+  };
 
-  if (queryResults.length) {
-    if (queryResults[0].isError) {
-      setErrorMsg(queryResults[queryResults.length - 1].error?.message!);
-      setTempInput("");
+  const arr = newTicker === "" ? [] : [{ ...userInput, ticker: newTicker }];
+  const newTickerTestQuery = useGetMultipleDcaReturns(arr);
+  const newTickerQueryLoading =
+    newTickerTestQuery.map((query) => query.isLoading).length > 0;
+
+  if (newTickerTestQuery.length) {
+    // wait for query to resolve before resetting newTicker state
+    if (newTickerTestQuery[0].isError) {
+      setErrorMsg(newTickerTestQuery[0].error?.message!);
+      setNewTicker("");
     }
-    if (queryResults[0].isSuccess) {
-      if (tickers.length >= 5) {
-        setTickers((prev) =>
-          prev.map((val, idx) => (idx === 4 ? tempInput : val))
-        );
-      } else {
-        setTickers((prev) => [...prev, tempInput]);
-      }
-      setTempInput("");
+    if (newTickerTestQuery[0].isSuccess) {
+      dispatchTickers({ type: "add", ticker: newTicker.toUpperCase() });
+      setErrorMsg("");
+      setNewTicker("");
     }
   }
   console.log(tickers);
@@ -55,56 +60,58 @@ export function ChartGroup({ userInput }: ChartGroupProps) {
         <DcaComparisonChart
           userInput={userInput}
           tickers={tickers}
-          setTickers={setTickers}
+          removeTicker={removeTicker}
           key={`${userInput.start}${userInput.end}${userInput.contri}${tickers.length}`}
         />
       ) : (
         <DcaPerformanceChart userInput={userInput} />
       )}
       <ComparisonInputButton
-        userInput={userInput}
         tickers={tickers}
-        setTickers={setTickers}
+        clearTickers={clearTickers}
         errorMsg={errorMsg}
         setErrorMsg={setErrorMsg}
-        tempInput={tempInput}
-        setTempInput={setTempInput}
+        newTickerQueryLoading={newTickerQueryLoading}
+        setNewTicker={setNewTicker}
+        key={tickers.join()}
       />
     </>
   );
 }
 
 type ComparisonInputButtonProps = {
-  userInput: DcaReturnsQueryInput;
   tickers: string[];
-  setTickers: React.Dispatch<React.SetStateAction<string[]>>;
+  clearTickers: () => void;
   errorMsg: string;
   setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
-  tempInput: string;
-  setTempInput: React.Dispatch<React.SetStateAction<string>>;
+  newTickerQueryLoading: boolean;
+  setNewTicker: React.Dispatch<React.SetStateAction<string>>;
 };
 
 function ComparisonInputButton({
-  userInput,
   tickers,
-  setTickers,
+  clearTickers,
   errorMsg,
   setErrorMsg,
-  tempInput,
-  setTempInput,
+  newTickerQueryLoading,
+  setNewTicker,
 }: ComparisonInputButtonProps) {
-  const [tickerInput, setTickerInput] = useState("");
   const [openInput, setOpenInput] = useState(false);
+  const [input, setInput] = useState("");
 
-  let arr: DcaReturnsQueryInput[];
-  if (tempInput === "") {
-    arr = [];
-  } else {
-    arr = [{ ...userInput, ticker: tempInput }];
-  }
+  const handleCloseInput = () => {
+    setOpenInput(false);
+    setInput("");
+    setErrorMsg("");
+  };
 
-  const queryResults = useGetMultipleDcaReturns(arr);
-  const loading = queryResults.length ? queryResults[0].isLoading : false;
+  const handleSubmit = () => {
+    if (tickers.includes(input.toUpperCase())) {
+      setErrorMsg("Ticker already shown");
+    } else {
+      setNewTicker(input);
+    }
+  };
 
   return (
     <>
@@ -112,29 +119,25 @@ function ComparisonInputButton({
         {openInput ? (
           <div className="flex flex-row gap-x-3">
             <Input
-              value={tickerInput}
-              onChange={(e) => setTickerInput(e.target.value)}
+              placeholder="Enter ticker (e.g. AAPL)"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
             />
             <Button
-              disabled={!tickerInput.length || loading}
-              onClick={() => {
-                if (tickers.includes(tickerInput)) {
-                  setErrorMsg("Ticker already shown");
-                } else {
-                  setTempInput(tickerInput);
-                }
-              }}
+              disabled={!input.length || newTickerQueryLoading}
+              onClick={handleSubmit}
             >
-              {loading ? <Loader2 className="animate-spin" /> : "Add"}
+              {newTickerQueryLoading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                "Add"
+              )}
             </Button>
             <Button
               variant="ghost"
               className="p-0"
               asChild
-              onClick={() => {
-                setOpenInput(false);
-                setTickerInput("");
-              }}
+              onClick={handleCloseInput}
             >
               <XIcon className="cursor-pointer text-gray-600" size={45} />
             </Button>
@@ -155,18 +158,15 @@ function ComparisonInputButton({
           </Button>
         )}
 
-        {tickers.length ? (
-          <Button
-            variant="ghost"
-            onClick={() => setTickers((prev) => [prev[0]])}
-          >
+        {tickers.length && (
+          <Button variant="ghost" onClick={clearTickers}>
             Clear All
           </Button>
-        ) : (
-          <></>
         )}
       </div>
-      <p className={cn("text-red-500")}>{errorMsg}</p>
+      <p className={cn("text-red-500", !errorMsg.length && "invisible")}>
+        Error: {errorMsg}
+      </p>
     </>
   );
 }
