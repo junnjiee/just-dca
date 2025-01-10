@@ -31,7 +31,7 @@ const dcaPerformanceChartConfig = {
 export function DcaPerformanceChart() {
   const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
   const { data: queryData, isSuccess } = useGetDcaReturns(userInput);
-  const data = isSuccess ? queryData : [];
+  const data = isSuccess ? queryData.filter((row) => !row.padded_row) : [];
 
   return (
     <ChartContainer config={dcaPerformanceChartConfig}>
