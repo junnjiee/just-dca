@@ -1,6 +1,11 @@
 "use client";
 
+import { useUserInputStore } from "@/lib/stores";
+
 import { DcaReturnsQueryOutput } from "@/types/financialQueries";
+import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
+
+import { useGetDcaReturns } from "@/queries/dcaReturns";
 
 import {
   Card,
@@ -12,20 +17,24 @@ import {
 } from "@/components/ui/card";
 
 type DataCardProps = {
-  data: DcaReturnsQueryOutput;
   className?: string;
 };
 
-export function DataCard({ data, className }: DataCardProps) {
-  const avgSharePrice = () =>
-    (
-      data.reduce(
-        (accumulator, currentRow) =>
-          accumulator +
-          (currentRow.stock_price === null ? 0 : currentRow.stock_price),
-        0
-      ) / data.length
-    ).toFixed(2);
+export function DataCard({ className }: DataCardProps) {
+  const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
+
+  const { data: queryData, isSuccess } = useGetDcaReturns(userInput);
+  const data: DcaReturnsQueryOutput = isSuccess ? queryData : [];
+
+  const avgSharePrice = data.length
+    ? (
+        data.reduce(
+          (accumulator, currentRow) =>
+            accumulator + (currentRow.padded_row ? 0 : currentRow.stock_price),
+          0
+        ) / data.filter((row) => !row.padded_row).length
+      ).toFixed(2)
+    : "";
 
   return (
     <Card className={className}>
@@ -45,7 +54,7 @@ export function DataCard({ data, className }: DataCardProps) {
         </div>
         <div className="flex flex-row justify-between py-4">
           <div>Avg Share Price</div>
-          <div>{data.length ? avgSharePrice() : ""}</div>
+          <div>{avgSharePrice}</div>
         </div>
       </CardContent>
       {/* <CardFooter>

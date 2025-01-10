@@ -9,7 +9,7 @@ import { useGetDcaReturns } from "@/queries/dcaReturns";
 
 import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
 
-export function SummaryBar() {
+export function ReturnsSummary() {
   const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
   const { data, isSuccess } = useGetDcaReturns(userInput);
 

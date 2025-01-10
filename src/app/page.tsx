@@ -2,15 +2,15 @@
 
 import { useUserInputStore } from "@/lib/stores";
 
-import { useGetDcaReturns } from "@/queries/dcaReturns";
+// import { useGetDcaReturns } from "@/queries/dcaReturns";
 import { useGetStockInfo } from "@/queries/stockInfo";
 
 import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
 
 import { DashboardForm } from "./_components/DashboardForm";
-import { SummaryBar } from "./_components/SummaryBar";
+import { ReturnsSummary } from "./_components/ReturnsSummary";
 import { DateRangeTabs } from "./_components/DateRangeTabs";
-import { DataCard } from "./_components/DataScreens";
+import { DataCard } from "./_components/DataCard";
 import { ChartGroup } from "./_components/ChartGroup";
 import { DcaReturnsTable } from "./_components/DcaReturnsTable";
 
@@ -19,8 +19,8 @@ import { DcaReturnsTable } from "./_components/DcaReturnsTable";
 export default function DashboardPage() {
   const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
 
-  const { data, error, isError, isLoading, isSuccess } =
-    useGetDcaReturns(userInput);
+  // const { data, error, isError, isLoading, isSuccess } =
+  //   useGetDcaReturns(userInput);
 
   const { data: stockData, isSuccess: stockDataIsSuccess } = useGetStockInfo(
     userInput.ticker
@@ -36,13 +36,13 @@ export default function DashboardPage() {
           <div className="text-2xl">{stockData.longName}</div>
         )}
       </div>
-      <SummaryBar />
+      <ReturnsSummary />
       <div className="flex flex-row mb-3 gap-x-5">
         <div className="basis-2/3">
           <DateRangeTabs />
           <ChartGroup key={userInput.ticker} />
         </div>
-        <DataCard data={isSuccess ? data : []} className="basis-1/3 h-fit" />
+        <DataCard className="basis-1/3 h-fit" />
       </div>
       {/* NOTE: export to excel? */}
       <DcaReturnsTable />
