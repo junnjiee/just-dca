@@ -4,19 +4,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 
-import {
-  useGetDcaData,
-  dcaDataInputSchema,
-  dcaDataInputType,
-} from "@/features/get-dca-data";
+import { useGetDcaReturns } from "@/queries/dcaReturns";
+
+import { DcaReturnsQueryInput } from "@/types/financialQueries";
+import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 type DashboardFormProps = {
-  userInput: dcaDataInputType;
-  setUserInput: React.Dispatch<React.SetStateAction<dcaDataInputType>>;
+  userInput: DcaReturnsQueryInput;
+  setUserInput: React.Dispatch<React.SetStateAction<DcaReturnsQueryInput>>;
 };
 
 export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
@@ -26,13 +25,13 @@ export function DashboardForm({ userInput, setUserInput }: DashboardFormProps) {
     setValue,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(dcaDataInputSchema),
+    resolver: zodResolver(DcaReturnsQueryInputSchema),
     defaultValues: userInput,
   });
 
-  const { isLoading, isError } = useGetDcaData(userInput);
+  const { isLoading, isError } = useGetDcaReturns(userInput);
 
-  function onSubmit(data: dcaDataInputType) {
+  function onSubmit(data: DcaReturnsQueryInput) {
     setUserInput(data);
   }
 

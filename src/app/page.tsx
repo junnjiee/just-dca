@@ -2,24 +2,25 @@
 
 import { useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { toast } from "react-toastify";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 
-import {
-  dcaDataInputType,
-  dcaDataOutputRowType,
-  useGetDcaData,
-} from "@/features/get-dca-data";
-import { useGetStockInfo } from "@/features/get-stock-info";
 import { cn, createDate } from "@/lib/utils";
 
+import { useGetDcaReturns } from "@/queries/dcaReturns";
+import { useGetStockInfo } from "@/queries/stockInfo";
+
+import {
+  DcaReturnsQueryInput,
+  DcaReturnsQueryOutputRow,
+} from "@/types/financialQueries";
+
+import { DataTable } from "@/components/data-table";
 import { DateRangeTabs } from "./_components/DateRangeTabs";
 import { DashboardForm } from "./_components/DashboardForm";
 import { ChartGroup } from "./_components/ChartGroup";
 import { DataCard } from "./_components/DataScreens";
-import { DataTable } from "@/components/data-table";
 
-const tableColumns: ColumnDef<dcaDataOutputRowType>[] = [
+const tableColumns: ColumnDef<DcaReturnsQueryOutputRow>[] = [
   { accessorKey: "date", header: "Date" },
   { accessorKey: "stock_price", header: "Stock Price" },
   { accessorKey: "shares_bought", header: "Shares Bought" },
@@ -47,7 +48,7 @@ type trendType = "positive" | "negative" | "neutral";
 // NOTE: show error page if error occur in backend when retrieving data
 export default function DashboardPage() {
   // NOTE: ensure start date < end date
-  const [userInput, setUserInput] = useState<dcaDataInputType>({
+  const [userInput, setUserInput] = useState<DcaReturnsQueryInput>({
     ticker: "RDDT",
     contri: 50,
     start: createDate(12),
@@ -55,7 +56,7 @@ export default function DashboardPage() {
   });
 
   const { data, error, isError, isLoading, isSuccess } =
-    useGetDcaData(userInput);
+    useGetDcaReturns(userInput);
 
   const { data: stockData, isSuccess: stockDataIsSuccess } = useGetStockInfo(
     userInput.ticker
@@ -76,40 +77,6 @@ export default function DashboardPage() {
   } else {
     trend = "neutral";
   }
-
-  // needed for toast
-  // NOTE: toast is buggy
-  // useEffect(() => {
-  //   if (isLoading) {
-  //     // hacky way to ensure that toast transitions are smooth if user submits another form
-  //     // when the toast is still shown
-  //     // NOTE: toast does not load when submit is immediately clicked during disappearing animation
-  //     console.log("LOAD");
-  //     toast.update(1, {
-  //       render: "Generating Dashboard",
-  //       isLoading: true,
-  //     });
-  //     toast.loading("Generating Dashboard", {
-  //       position: "top-center",
-  //       toastId: 1,
-  //     });
-  //   } else if (isSuccess) {
-  //     console.log("GOOD");
-  //     toast.update(1, {
-  //       render: "Generated",
-  //       type: "success",
-  //       autoClose: 5000,
-  //       isLoading: false,
-  //     });
-  //   } else if (isError) {
-  //     toast.update(1, {
-  //       render: error.message,
-  //       type: "error",
-  //       autoClose: 5000,
-  //       isLoading: false,
-  //     });
-  //   }
-  // }, [isLoading]);
 
   return (
     <>

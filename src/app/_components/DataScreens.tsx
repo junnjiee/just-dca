@@ -1,6 +1,6 @@
 "use client";
 
-import { dcaDataOutputType } from "@/features/get-dca-data";
+import { DcaReturnsQueryOutput } from "@/types/financialQueries";
 
 import {
   Card,
@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 
 type DataCardProps = {
-  data: dcaDataOutputType;
+  data: DcaReturnsQueryOutput;
   className?: string;
 };
 

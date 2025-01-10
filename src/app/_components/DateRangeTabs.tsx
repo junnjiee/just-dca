@@ -1,13 +1,14 @@
 "use client";
 
 import { createDate } from "@/lib/utils";
-import { dcaDataInputType } from "@/features/get-dca-data";
+
+import { DcaReturnsQueryInput } from "@/types/financialQueries";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type DateRangeTabsProps = {
-  userInput: dcaDataInputType;
-  setUserInput: React.Dispatch<React.SetStateAction<dcaDataInputType>>;
+  userInput: DcaReturnsQueryInput;
+  setUserInput: React.Dispatch<React.SetStateAction<DcaReturnsQueryInput>>;
 };
 
 export function DateRangeTabs({ userInput, setUserInput }: DateRangeTabsProps) {

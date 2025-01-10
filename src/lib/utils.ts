@@ -18,3 +18,18 @@ export const createDate = (monthsToSubtract: number) => {
   );
 };
 
+export function buildUrlWithParamsObj(
+  url: string,
+  params: Record<string, string | number | boolean | undefined | null>
+) {
+  let newUrl = url.concat("?");
+  let paramsArr: string[] = [];
+
+  for (const [key, val] of Object.entries(params)) {
+    if (val) {
+      paramsArr = [...paramsArr, `${key}=${val.toString()}`];
+    }
+  }
+
+  return newUrl.concat(paramsArr.join("&"));
+}

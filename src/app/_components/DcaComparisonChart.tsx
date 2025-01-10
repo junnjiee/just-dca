@@ -12,10 +12,10 @@ import {
 import { XIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import {
-  dcaDataInputType,
-  useGetMultipleDcaData,
-} from "@/features/get-dca-data";
+
+import { useGetMultipleDcaReturns } from "@/queries/dcaReturns";
+
+import { DcaReturnsQueryInput } from "@/types/financialQueries";
 
 import { Button } from "@/components/ui/button";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
@@ -41,7 +41,7 @@ const multiInvestmentChartConfig = {
 } satisfies ChartConfig;
 
 type MultiInvestmentChartProps = {
-  userInput: dcaDataInputType;
+  userInput: DcaReturnsQueryInput;
   tickers: string[];
   setTickers: React.Dispatch<React.SetStateAction<string[]>>;
 };
@@ -51,7 +51,7 @@ export function DcaComparisonChart({
   tickers,
   setTickers,
 }: MultiInvestmentChartProps) {
-  const queryResults = useGetMultipleDcaData(
+  const queryResults = useGetMultipleDcaReturns(
     tickers.map((ticker) => ({
       ...userInput,
       ticker: ticker,

@@ -2,7 +2,9 @@
 
 import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from "recharts";
 
-import { dcaDataInputType, useGetDcaData } from "@/features/get-dca-data";
+import { useGetDcaReturns } from "@/queries/dcaReturns";
+
+import { DcaReturnsQueryInput } from "@/types/financialQueries";
 
 import {
   ChartConfig,
@@ -25,11 +27,11 @@ const dcaPerformanceChartConfig = {
 } satisfies ChartConfig;
 
 type ChartProps = {
-  userInput: dcaDataInputType;
+  userInput: DcaReturnsQueryInput;
 };
 
 export function DcaPerformanceChart({ userInput }: ChartProps) {
-  const { data: queryData, isSuccess } = useGetDcaData(userInput);
+  const { data: queryData, isSuccess } = useGetDcaReturns(userInput);
   const data = isSuccess ? queryData : [];
 
   return (
