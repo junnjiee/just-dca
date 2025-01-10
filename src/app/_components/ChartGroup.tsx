@@ -4,7 +4,7 @@ import { useState, useReducer } from "react";
 import { SearchIcon, PlusIcon, Loader2, XIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { tickersReducer } from "@/reducers/index";
+import { tickersReducer } from "@/reducers/reducers";
 
 import { useGetMultipleDcaReturns } from "@/queries/dcaReturns";
 
@@ -85,8 +85,8 @@ type ComparisonInputButtonProps = {
   clearTickers: () => void;
   errorMsg: string;
   setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
-  newTickerQueryLoading: boolean;
   setNewTicker: React.Dispatch<React.SetStateAction<string>>;
+  newTickerQueryLoading: boolean;
 };
 
 function ComparisonInputButton({
@@ -94,8 +94,8 @@ function ComparisonInputButton({
   clearTickers,
   errorMsg,
   setErrorMsg,
-  newTickerQueryLoading,
   setNewTicker,
+  newTickerQueryLoading,
 }: ComparisonInputButtonProps) {
   const [openInput, setOpenInput] = useState(false);
   const [input, setInput] = useState("");
