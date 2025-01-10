@@ -62,14 +62,22 @@ export function DcaComparisonChart({
     }))
   );
 
+  const filteredQueryData = queryResults.map((query) =>
+    query.isSuccess
+      ? query.data.map((row) =>
+          row.padded_row ? { ...row, total_val: null } : row
+        )
+      : []
+  );
+
   const [hoverData, setHoverData] =
     useState<ComparisonChartExternalTooltip | null>(null);
 
-  const defaultHoverData = queryResults.map((query, idx) => ({
+  const defaultHoverData = filteredQueryData.map((data, idx) => ({
     ticker: tickers[idx],
-    totalVal: query.data?.at(-1)?.total_val,
-    profit: query.data?.at(-1)?.profit,
-    profitPct: query.data?.at(-1)?.profitPct,
+    totalVal: data.at(-1)?.total_val,
+    profit: data.at(-1)?.profit,
+    profitPct: data.at(-1)?.profitPct,
   }));
   const hoverDataToRender = hoverData === null ? defaultHoverData : hoverData;
 
@@ -105,10 +113,10 @@ export function DcaComparisonChart({
         >
           <CartesianGrid vertical={false} />
 
-          {queryResults.map((query, idx) => (
+          {filteredQueryData.map((data, idx) => (
             <Line
               dataKey="total_val"
-              data={query.data}
+              data={data}
               name={tickers[idx]}
               key={tickers[idx]}
               type="monotone"
