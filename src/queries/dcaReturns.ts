@@ -33,14 +33,10 @@ async function fetchDcaReturns(params: DcaReturnsQueryInput) {
   }
 }
 
-export const useGetDcaReturns = (
-  params: DcaReturnsQueryInput,
-  enabled = true
-) =>
+export const useGetDcaReturns = (params: DcaReturnsQueryInput) =>
   useQuery({
     queryKey: [API_ROUTE, params],
     queryFn: () => fetchDcaReturns(params),
-    enabled: enabled,
   });
 
 export const useGetMultipleDcaReturns = (paramsArr: DcaReturnsQueryInput[]) =>

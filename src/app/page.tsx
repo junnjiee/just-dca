@@ -1,6 +1,5 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -9,25 +8,13 @@ import { useUserInputStore } from "@/lib/stores";
 import { useGetDcaReturns } from "@/queries/dcaReturns";
 import { useGetStockInfo } from "@/queries/stockInfo";
 
-import { DcaReturnsQueryOutputRow } from "@/types/financialQueries";
 import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
 
-import { DataTable } from "@/components/data-table";
 import { DateRangeTabs } from "./_components/DateRangeTabs";
 import { DashboardForm } from "./_components/DashboardForm";
 import { ChartGroup } from "./_components/ChartGroup";
 import { DataCard } from "./_components/DataScreens";
-
-const tableColumns: ColumnDef<DcaReturnsQueryOutputRow>[] = [
-  { accessorKey: "date", header: "Date" },
-  { accessorKey: "stock_price", header: "Stock Price" },
-  { accessorKey: "shares_bought", header: "Shares Bought" },
-  { accessorKey: "shares_owned", header: "Shares Owned" },
-  { accessorKey: "contribution", header: "Contribution" },
-  { accessorKey: "total_val", header: "Total Value" },
-  { accessorKey: "profit", header: "Profit" },
-  { accessorKey: "profitPct", header: "Profit (%)" },
-];
+import { DcaReturnsTable } from "./_components/DcaReturnsTable";
 
 const trendColorBg = {
   positive: "bg-green-100",
@@ -91,7 +78,7 @@ export default function DashboardPage() {
         <DataCard data={isSuccess ? data : []} className="basis-1/3 h-fit" />
       </div>
       {/* NOTE: export to excel? */}
-      <DataTable columns={tableColumns} data={isSuccess ? data : []} />
+      <DcaReturnsTable />
     </>
   );
 }
