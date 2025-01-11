@@ -37,12 +37,12 @@ export default function DashboardPage() {
         )}
       </div>
       <ReturnsSummary />
-      <div className="flex flex-row mb-3 gap-x-5">
-        <div className="basis-2/3">
+      <div className="flex flex-col md:flex-row mb-3 gap-x-5">
+        <div className="flex flex-col gap-y-5 md:basis-2/3">
           <DateRangeTabs />
           <ChartGroup key={userInput.ticker} />
         </div>
-        <DataCard className="basis-1/3 h-fit" />
+        <DataCard className="md:basis-1/3 h-fit" />
       </div>
       {/* NOTE: export to excel? */}
       <DcaReturnsTable />

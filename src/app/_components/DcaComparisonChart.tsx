@@ -130,7 +130,12 @@ export function DcaComparisonChart({
             type="category"
             allowDuplicatedCategory={false}
           />
-          <YAxis dataKey="total_val" axisLine={false} tickLine={false} />
+          <YAxis
+            dataKey="total_val"
+            axisLine={false}
+            tickLine={false}
+            dx={-10}
+          />
           <Tooltip />
         </LineChart>
       </ChartContainer>

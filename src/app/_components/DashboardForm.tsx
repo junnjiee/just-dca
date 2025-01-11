@@ -41,7 +41,7 @@ export function DashboardForm() {
 
   return (
     <form
-      className="grid grid-rows-3 grid-flow-col items-end gap-x-2 gap-y-0.5"
+      className="grid grid-cols-1 md:grid-rows-3 md:grid-flow-col items-end gap-x-2 gap-y-0.5"
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
@@ -53,7 +53,9 @@ export function DashboardForm() {
         )}
       </div>
 
-      <Label htmlFor="contribution">Monthly Contribution</Label>
+      <Label htmlFor="contribution" className="mt-3">
+        Monthly Contribution
+      </Label>
       <Input
         id="contribution"
         type="number"
@@ -68,7 +70,9 @@ export function DashboardForm() {
         )}
       </div>
 
-      <Label htmlFor="start">From</Label>
+      <Label htmlFor="start" className="mt-3">
+        From
+      </Label>
       <Input
         id="start"
         type="date"
@@ -80,7 +84,9 @@ export function DashboardForm() {
         )}
       </div>
 
-      <Label htmlFor="end">To</Label>
+      <Label htmlFor="end" className="mt-3">
+        To
+      </Label>
       <Input id="end" type="date" {...register("end", { required: true })} />
       <div className="place-self-start">
         {errors.end && (

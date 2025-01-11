@@ -5,7 +5,11 @@ import { useUserInputStore } from "@/lib/stores";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export function DateRangeTabs() {
+type DateRangeTabsProps = {
+  className?: string;
+};
+
+export function DateRangeTabs({ className }: DateRangeTabsProps) {
   const currStart = useUserInputStore((state) => state.start);
   const currEnd = useUserInputStore((state) => state.end);
   const setDates = useUserInputStore((state) => state.updateDates);
@@ -30,10 +34,11 @@ export function DateRangeTabs() {
   };
 
   return (
-    <Tabs value={chosenPreset()}>
-      <TabsList>
+    <Tabs value={chosenPreset()} className={className}>
+      <TabsList className="w-full md:w-2/3 lg:w-1/2">
         {datePresets.map((preset) => (
           <TabsTrigger
+            className="w-full"
             key={preset.dateRange}
             value={preset.dateRange}
             onClick={() => setDates(preset.start, preset.end)}

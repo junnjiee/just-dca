@@ -53,7 +53,7 @@ export function ChartGroup() {
   console.log(tickers);
 
   return (
-    <>
+    <div>
       {tickers.length > 1 ? (
         <DcaComparisonChart
           tickers={tickers}
@@ -72,7 +72,7 @@ export function ChartGroup() {
         setNewTicker={setNewTicker}
         key={tickers.join()}
       />
-    </>
+    </div>
   );
 }
 

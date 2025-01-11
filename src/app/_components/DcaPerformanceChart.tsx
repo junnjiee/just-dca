@@ -80,12 +80,7 @@ export function DcaPerformanceChart() {
 
         <CartesianGrid vertical={false} />
         <XAxis dataKey="date" />
-        <YAxis
-          tickLine={false}
-          axisLine={false}
-          tickMargin={10}
-          tickCount={8}
-        />
+        <YAxis tickLine={false} axisLine={false} dx={-10} />
         <ChartTooltip content={<ChartTooltipContent />} />
         <ChartLegend content={<ChartLegendContent />} />
       </AreaChart>

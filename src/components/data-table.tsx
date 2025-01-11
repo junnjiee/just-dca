@@ -40,7 +40,7 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const defaultPageSize = 10;
-  const pageSizeOptions = ["10", "20", "30", "40", "50"];
+  const pageSizeOptions = ["5", "10", "20", "30", "40", "50"];
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -102,12 +102,12 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <div className="flex flex-row justify-between items-center py-4">
+      <div className="flex flex-col gap-y-2 md:flex-row md:justify-between md:items-center py-4">
         <div className="text-sm text-gray-600">
           Showing pages {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
         </div>
-        <div className="flex flex-row space-x-2">
+        <div className="flex flex-col gap-y-2 md:flex-row md:gap-x-2">
           <Select
             onValueChange={(e) => {
               table.setPageSize(Number(e));
@@ -127,22 +127,24 @@ export function DataTable<TData, TValue>({
               </SelectGroup>
             </SelectContent>
           </Select>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
+          <div className="space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next
+            </Button>
+          </div>
         </div>
       </div>
     </div>
