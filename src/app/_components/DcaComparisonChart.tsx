@@ -27,6 +27,14 @@ import {
 
 const lines = ["line1", "line2", "line3", "line4", "line5"];
 
+const lineColors = [
+  "bg-[#a855f7]",
+  "bg-[#f59e0b]",
+  "bg-[#0ea5e9]",
+  "bg-[#1e3a8a]",
+  "bg-[#ea580c]",
+];
+
 const multiInvestmentChartConfig = {
   line1: {
     color: "#a855f7",
@@ -142,21 +150,31 @@ export function DcaComparisonChart({
         </LineChart>
       </ChartContainer>
 
-      {hoverDataToRender.map((data) => {
+      {hoverDataToRender.map((data, idx) => {
         const trend: TickerTrend =
           data.profit > 0
             ? "positive"
             : data.profit < 0
             ? "negative"
             : "neutral";
-        console.log(trend);
+
         return (
           <div
             key={data.ticker}
             className="flex flex-row py-3 justify-between place-items-center border-b"
           >
-            <span className="bg-grey-500">{data.ticker}</span>
-            <span>{data.totalVal === null ? "--" : data.totalVal}</span>
+            <div className="flex flex-row gap-x-2">
+              <div
+                className={cn(
+                  "block w-1.5 h-100 rounded-lg bg-red-500 ",
+                  lineColors[idx]
+                )}
+              >
+                {" "}
+              </div>
+              <p>{data.ticker}</p>
+            </div>
+            <p>{data.totalVal === null ? "--" : data.totalVal}</p>
             <div className="flex flex-row gap-x-7 place-items-center">
               <ProfitLossColored
                 profitStr={
@@ -178,7 +196,10 @@ export function DcaComparisonChart({
                 variant="ghost"
                 asChild
               >
-                <XIcon className="cursor-pointer text-gray-600" size={30} />
+                <XIcon
+                  className="cursor-pointer text-gray-600 rounded-full"
+                  size={30}
+                />
               </Button>
             </div>
           </div>
