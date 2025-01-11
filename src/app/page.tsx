@@ -42,7 +42,7 @@ export default function DashboardPage() {
           <DateRangeTabs />
           <ChartGroup key={userInput.ticker} />
         </div>
-        <DataCard className="md:basis-1/3 h-fit" />
+        <DataCard className="h-fit md:basis-1/3" />
       </div>
       {/* NOTE: export to excel? */}
       <DcaReturnsTable />

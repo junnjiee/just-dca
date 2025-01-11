@@ -14,11 +14,16 @@ import { XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUserInputStore } from "@/lib/stores";
 
+import { TickerTrend } from "@/types/ticker";
 import { ComparisonChartExternalTooltip } from "@/types/chart";
 import { useGetMultipleDcaReturns } from "@/queries/dcaReturns";
 
 import { Button } from "@/components/ui/button";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
+import {
+  TrendBadge,
+  ProfitLossColored,
+} from "@/components/generic/profit-markers";
 
 const lines = ["line1", "line2", "line3", "line4", "line5"];
 
@@ -61,25 +66,30 @@ export function DcaComparisonChart({
       ticker: ticker,
     }))
   );
+  const allSuccess = queryResults.every((query) => query.isSuccess);
 
-  const filteredQueryData = queryResults.map((query) =>
-    query.isSuccess
-      ? query.data.map((row) =>
+  const filteredQueryData = allSuccess
+    ? queryResults.map((query) =>
+        query.data.map((row) =>
           row.padded_row ? { ...row, total_val: null } : row
         )
-      : []
-  );
+      )
+    : [];
+
+  const defaultHoverData: ComparisonChartExternalTooltip = allSuccess
+    ? filteredQueryData.map((data, idx) => ({
+        ticker: tickers[idx],
+        totalVal: data[data.length - 1].total_val,
+        profit: data[data.length - 1].profit,
+        profitPct: data[data.length - 1].profitPct,
+      }))
+    : [];
 
   const [hoverData, setHoverData] =
     useState<ComparisonChartExternalTooltip | null>(null);
 
-  const defaultHoverData = filteredQueryData.map((data, idx) => ({
-    ticker: tickers[idx],
-    totalVal: data.at(-1)?.total_val,
-    profit: data.at(-1)?.profit,
-    profitPct: data.at(-1)?.profitPct,
-  }));
-  const hoverDataToRender = hoverData === null ? defaultHoverData : hoverData;
+  const hoverDataToRender: ComparisonChartExternalTooltip =
+    hoverData === null ? defaultHoverData : hoverData;
 
   return (
     <div>
@@ -88,23 +98,15 @@ export function DcaComparisonChart({
           onMouseMove={(state) => {
             console.log(state);
             if (state.activePayload) {
-              const newHoverData = state.activePayload.map((payloadData) => {
-                return {
-                  ticker: payloadData.name,
-                  totalVal:
-                    payloadData.value === null
-                      ? 0
-                      : payloadData.payload.total_val,
-                  profit:
-                    payloadData.value === null
-                      ? "--"
-                      : payloadData.payload.profit,
-                  profitPct:
-                    payloadData.value === null
-                      ? "0.00%"
-                      : payloadData.payload.profitPct,
-                };
-              });
+              const newHoverData: ComparisonChartExternalTooltip =
+                state.activePayload.map((payloadData) => {
+                  return {
+                    ticker: payloadData.name,
+                    totalVal: payloadData.payload.total_val,
+                    profit: payloadData.payload.profit,
+                    profitPct: payloadData.payload.profitPct,
+                  };
+                });
 
               setHoverData(newHoverData);
             }
@@ -140,30 +142,48 @@ export function DcaComparisonChart({
         </LineChart>
       </ChartContainer>
 
-      {hoverDataToRender.map((data) => (
-        <div
-          key={data.ticker}
-          className="flex flex-row py-3 justify-between place-items-center"
-        >
-          <span>{data.ticker}</span>
-          <span>{data.totalVal}</span>
-          <div className="flex flex-row gap-x-10 justify-self-end">
-            <span>{data.profit}</span>
-            <span>{data.profitPct}</span>
-          </div>
-          <Button
-            disabled={mainTicker === data.ticker}
-            className={cn("p-0", mainTicker === data.ticker && "invisible")}
-            onClick={() => {
-              removeTicker(data.ticker);
-            }}
-            variant="ghost"
-            asChild
+      {hoverDataToRender.map((data) => {
+        const trend: TickerTrend =
+          data.profit > 0
+            ? "positive"
+            : data.profit < 0
+            ? "negative"
+            : "neutral";
+        console.log(trend);
+        return (
+          <div
+            key={data.ticker}
+            className="flex flex-row py-3 justify-between place-items-center border-b"
           >
-            <XIcon className="cursor-pointer text-gray-600" size={30} />
-          </Button>
-        </div>
-      ))}
+            <span className="bg-grey-500">{data.ticker}</span>
+            <span>{data.totalVal === null ? "--" : data.totalVal}</span>
+            <div className="flex flex-row gap-x-7 place-items-center">
+              <ProfitLossColored
+                profitStr={
+                  data.totalVal === null ? "--" : data.profit.toFixed(2)
+                }
+                trend={trend}
+                className="hidden md:block"
+              />
+              <TrendBadge
+                profitPct={Math.abs(data.profitPct).toFixed(2) + "%"}
+                trend={trend}
+              />
+              <Button
+                disabled={mainTicker === data.ticker}
+                className={cn("p-0", mainTicker === data.ticker && "invisible")}
+                onClick={() => {
+                  removeTicker(data.ticker);
+                }}
+                variant="ghost"
+                asChild
+              >
+                <XIcon className="cursor-pointer text-gray-600" size={30} />
+              </Button>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

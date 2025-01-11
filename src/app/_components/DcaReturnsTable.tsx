@@ -7,7 +7,7 @@ import { useGetDcaReturns } from "@/queries/dcaReturns";
 import { DcaReturnsQueryOutputRow } from "@/types/financialQueries";
 import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
 
-import { DataTable } from "@/components/data-table";
+import { DataTable } from "@/components/generic/data-table";
 
 const tableColumns: ColumnDef<DcaReturnsQueryOutputRow>[] = [
   { accessorKey: "date", header: "Date" },

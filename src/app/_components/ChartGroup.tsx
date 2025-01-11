@@ -53,7 +53,7 @@ export function ChartGroup() {
   console.log(tickers);
 
   return (
-    <div>
+    <div className="space-y-3">
       {tickers.length > 1 ? (
         <DcaComparisonChart
           tickers={tickers}
