@@ -1,8 +1,5 @@
-"use client";
-
-import { ToastContainer, Zoom } from "react-toastify";
-import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/queries/config";
+import { QueryClientProvider } from "@tanstack/react-query";
 
 type AppProviderProps = {
   children: React.ReactNode;
@@ -10,9 +7,6 @@ type AppProviderProps = {
 
 export function AppProvider({ children }: AppProviderProps) {
   return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-      <ToastContainer pauseOnFocusLoss={false} transition={Zoom} />
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 }
