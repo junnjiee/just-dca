@@ -5,7 +5,7 @@ import { useUserInputStore } from "@/lib/stores";
 import { DcaReturnsQueryOutput } from "@/types/financialQueries";
 import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
 
-import { useGetDcaReturns } from "@/queries/dcaReturns";
+import { useGetDcaReturns } from "@/queries/dcaReturnsQuery";
 
 import {
   Card,

@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 
 import { useUserInputStore } from "@/lib/stores";
 
-import { useGetDcaReturns } from "@/queries/dcaReturns";
+import { useGetDcaReturns } from "@/queries/dcaReturnsQuery";
 
 import { DcaReturnsQueryInput } from "@/types/financialQueries";
 import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";

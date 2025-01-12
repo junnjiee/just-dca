@@ -3,7 +3,7 @@
 import { useUserInputStore } from "@/lib/stores";
 
 // import { useGetDcaReturns } from "@/queries/dcaReturns";
-import { useGetStockInfo } from "@/queries/stockInfo";
+import { useGetStockInfo } from "@/queries/stockInfoQuery";
 
 import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
 

@@ -16,7 +16,7 @@ import { useUserInputStore } from "@/lib/stores";
 
 import { TickerTrend } from "@/types/ticker";
 import { ComparisonChartExternalTooltip } from "@/types/chart";
-import { useGetMultipleDcaReturns } from "@/queries/dcaReturns";
+import { useGetMultipleDcaReturns } from "@/queries/dcaReturnsQuery";
 
 import { Button } from "@/components/ui/button";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";

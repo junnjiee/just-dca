@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { useUserInputStore } from "@/lib/stores";
 import { tickersReducer } from "@/lib/reducers";
 
-import { useGetMultipleDcaReturns } from "@/queries/dcaReturns";
+import { useGetMultipleDcaReturns } from "@/queries/dcaReturnsQuery";
 import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
 
 import { Input } from "@/components/ui/input";

@@ -2,7 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { useUserInputStore } from "@/lib/stores";
 
-import { useGetDcaReturns } from "@/queries/dcaReturns";
+import { useGetDcaReturns } from "@/queries/dcaReturnsQuery";
 
 import { DcaReturnsQueryOutputRow } from "@/types/financialQueries";
 import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
