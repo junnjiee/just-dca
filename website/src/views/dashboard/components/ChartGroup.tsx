@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useReducer } from "react";
 import { SearchIcon, PlusIcon, Loader2, XIcon } from "lucide-react";
 
@@ -14,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DcaPerformanceChart } from "./DcaPerformanceChart";
 import { DcaComparisonChart } from "./DcaComparisonChart";
+import { DateRangeTabs } from "./DateRangeTabs";
 
 export function ChartGroup() {
   const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
@@ -54,6 +53,7 @@ export function ChartGroup() {
 
   return (
     <div className="space-y-3">
+      <DateRangeTabs />
       {tickers.length > 1 ? (
         <DcaComparisonChart
           tickers={tickers}

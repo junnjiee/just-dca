@@ -1,5 +1,3 @@
-"use client";
-
 import { createDate } from "@/lib/utils";
 import { useUserInputStore } from "@/lib/stores";
 

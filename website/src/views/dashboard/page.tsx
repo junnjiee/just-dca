@@ -1,5 +1,3 @@
-"use client";
-
 import { useUserInputStore } from "@/lib/stores";
 
 // import { useGetDcaReturns } from "@/queries/dcaReturns";
@@ -7,16 +5,15 @@ import { useGetStockInfo } from "@/queries/stockInfoQuery";
 
 import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
 
-import { DashboardForm } from "./_components/DashboardForm";
-import { ReturnsSummary } from "./_components/ReturnsSummary";
-import { DateRangeTabs } from "./_components/DateRangeTabs";
-import { DataCard } from "./_components/DataCard";
-import { ChartGroup } from "./_components/ChartGroup";
-import { DcaReturnsTable } from "./_components/DcaReturnsTable";
+import { DashboardForm } from "./components/DashboardForm";
+import { ReturnsSummary } from "./components/ReturnsSummary";
+import { DataCard } from "./components/DataCard";
+import { ChartGroup } from "./components/ChartGroup";
+import { DcaReturnsTable } from "./components/DcaReturnsTable";
 
 // NOTE: check how to create fallback components
 // NOTE: show error page if error occur in backend when retrieving data
-export default function DashboardPage() {
+export function DashboardPage() {
   const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
 
   // const { data, error, isError, isLoading, isSuccess } =
@@ -39,7 +36,6 @@ export default function DashboardPage() {
       <ReturnsSummary />
       <div className="flex flex-col mb-8 md:flex-row md:mb-3 gap-x-5">
         <div className="flex flex-col gap-y-5 md:basis-2/3">
-          <DateRangeTabs />
           <ChartGroup key={userInput.ticker} />
         </div>
         <DataCard className="h-fit md:basis-1/3" />

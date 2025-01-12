@@ -10,7 +10,7 @@ const API_ROUTE = "/api/dca/returns";
 
 async function fetchDcaReturns(params: DcaReturnsQueryInput) {
   const newUrl = buildUrlWithParamsObj(
-    `${process.env.NEXT_PUBLIC_URL!}${API_ROUTE}`,
+    `${import.meta.env.VITE_BACKEND_URL!}${API_ROUTE}`,
     params
   );
   try {
