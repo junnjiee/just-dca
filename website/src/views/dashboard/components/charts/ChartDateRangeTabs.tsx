@@ -3,11 +3,11 @@ import { useUserInputStore } from "@/lib/stores";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-type DateRangeTabsProps = {
+type ChartDateRangeTabsProps = {
   className?: string;
 };
 
-export function DateRangeTabs({ className }: DateRangeTabsProps) {
+export function ChartDateRangeTabs({ className }: ChartDateRangeTabsProps) {
   const currStart = useUserInputStore((state) => state.start);
   const currEnd = useUserInputStore((state) => state.end);
   const setDates = useUserInputStore((state) => state.updateDates);

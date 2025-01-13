@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DcaPerformanceChart } from "./DcaPerformanceChart";
 import { DcaComparisonChart } from "./DcaComparisonChart";
-import { DateRangeTabs } from "./DateRangeTabs";
+import { ChartDateRangeTabs } from "./ChartDateRangeTabs";
 
 export function ChartGroup() {
   const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
@@ -53,7 +53,7 @@ export function ChartGroup() {
 
   return (
     <div className="space-y-3">
-      <DateRangeTabs />
+      <ChartDateRangeTabs />
       {tickers.length > 1 ? (
         <DcaComparisonChart
           tickers={tickers}

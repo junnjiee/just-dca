@@ -8,7 +8,7 @@ import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
 import { DashboardForm } from "./components/DashboardForm";
 import { ReturnsSummary } from "./components/ReturnsSummary";
 import { DataCard } from "./components/DataCard";
-import { ChartGroup } from "./components/ChartGroup";
+import { ChartGroup } from "./components/charts/ChartGroup";
 import { DcaReturnsTable } from "./components/DcaReturnsTable";
 
 // NOTE: check how to create fallback components
