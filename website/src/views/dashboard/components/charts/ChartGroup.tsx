@@ -1,12 +1,12 @@
 import { useState, useReducer } from "react";
 import { SearchIcon, PlusIcon, Loader2, XIcon } from "lucide-react";
 
+import { useUserInput } from "@/contexts/user-input";
+
 import { cn } from "@/lib/utils";
-import { useUserInputStore } from "@/lib/stores";
 import { tickersReducer } from "@/lib/reducers";
 
 import { useGetMultipleDcaReturns } from "@/queries/dca-returns";
-import { DcaReturnsQueryInputSchema } from "@/schemas/financial-queries";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ import { DcaComparisonChart } from "./DcaComparisonChart";
 import { ChartDateRangeTabs } from "./ChartDateRangeTabs";
 
 export function ChartGroup() {
-  const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
+  const userInput = useUserInput();
   const [newTicker, setNewTicker] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 

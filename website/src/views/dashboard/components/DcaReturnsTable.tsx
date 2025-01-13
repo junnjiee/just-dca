@@ -1,11 +1,10 @@
 import { ColumnDef } from "@tanstack/react-table";
 
-import { useUserInputStore } from "@/lib/stores";
+import { useUserInput } from "@/contexts/user-input";
 
 import { useGetDcaReturns } from "@/queries/dca-returns";
 
 import { DcaReturnsQueryOutputRow } from "@/types/financial-queries";
-import { DcaReturnsQueryInputSchema } from "@/schemas/financial-queries";
 
 import { DataTable } from "@/components/generic/data-table";
 
@@ -21,7 +20,7 @@ const tableColumns: ColumnDef<DcaReturnsQueryOutputRow>[] = [
 ];
 
 export function DcaReturnsTable() {
-  const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
+  const userInput = useUserInput();
   const { data: queryData, isSuccess } = useGetDcaReturns(userInput);
 
   const data = isSuccess ? queryData.filter((row) => !row.padded_row) : [];

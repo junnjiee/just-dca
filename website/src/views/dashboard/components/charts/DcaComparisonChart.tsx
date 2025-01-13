@@ -12,7 +12,6 @@ import {
 import { XIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { useUserInputStore } from "@/lib/stores";
 
 import { TickerTrend } from "@/types/ticker";
 import { ComparisonChartExternalTooltip } from "@/types/chart";
@@ -24,6 +23,7 @@ import {
   TrendBadge,
   ProfitLossColored,
 } from "@/components/generic/profit-markers";
+import { useUserInput } from "@/contexts/user-input";
 
 const lines = ["line1", "line2", "line3", "line4", "line5"];
 
@@ -62,15 +62,12 @@ export function DcaComparisonChart({
   tickers,
   removeTicker,
 }: MultiInvestmentChartProps) {
-  const mainTicker = useUserInputStore((state) => state.ticker);
-  const incompleteUserInput = {
-    contri: useUserInputStore((state) => state.contri),
-    start: useUserInputStore((state) => state.start),
-    end: useUserInputStore((state) => state.end),
-  };
+  const userInput = useUserInput();
+  const mainTicker = userInput.ticker;
+
   const queryResults = useGetMultipleDcaReturns(
     tickers.map((ticker) => ({
-      ...incompleteUserInput,
+      ...userInput,
       ticker: ticker,
     }))
   );
@@ -104,7 +101,6 @@ export function DcaComparisonChart({
       <ChartContainer config={multiInvestmentChartConfig}>
         <LineChart
           onMouseMove={(state) => {
-            console.log(state);
             if (state.activePayload) {
               const newHoverData: ComparisonChartExternalTooltip =
                 state.activePayload.map((payloadData) => {
@@ -155,8 +151,8 @@ export function DcaComparisonChart({
           data.profit > 0
             ? "positive"
             : data.profit < 0
-            ? "negative"
-            : "neutral";
+              ? "negative"
+              : "neutral";
 
         return (
           <div

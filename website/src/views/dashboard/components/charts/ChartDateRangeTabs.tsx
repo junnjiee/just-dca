@@ -1,5 +1,6 @@
+import { useUserInput, useUserInputDispatch } from "@/contexts/user-input";
+
 import { createDate } from "@/lib/utils";
-import { useUserInputStore } from "@/lib/stores";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -8,9 +9,8 @@ type ChartDateRangeTabsProps = {
 };
 
 export function ChartDateRangeTabs({ className }: ChartDateRangeTabsProps) {
-  const currStart = useUserInputStore((state) => state.start);
-  const currEnd = useUserInputStore((state) => state.end);
-  const setDates = useUserInputStore((state) => state.updateDates);
+  const userInput = useUserInput();
+  const userInputDispatch = useUserInputDispatch();
 
   // NOTE: can memoize this
   const datePresets = [
@@ -25,7 +25,7 @@ export function ChartDateRangeTabs({ className }: ChartDateRangeTabsProps) {
   // if date chosen matches preset, select that tab
   const chosenPreset = () => {
     const preset = datePresets.find(
-      (preset) => currStart == preset.start && currEnd == preset.end
+      (preset) => userInput.start == preset.start && userInput.end == preset.end
     )?.dateRange;
 
     return preset ? preset : "";
@@ -39,7 +39,12 @@ export function ChartDateRangeTabs({ className }: ChartDateRangeTabsProps) {
             className="w-full"
             key={preset.dateRange}
             value={preset.dateRange}
-            onClick={() => setDates(preset.start, preset.end)}
+            onClick={() =>
+              userInputDispatch({
+                type: "updateDates",
+                dates: { start: preset.start, end: preset.end },
+              })
+            }
           >
             {preset.dateRange}
           </TabsTrigger>
