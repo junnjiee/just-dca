@@ -1,4 +1,4 @@
-import { useQuery, useQueries } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery, useQueries } from "@tanstack/react-query";
 
 import { DcaReturnsQueryInput } from "@/types/financialQueries";
 import { DcaReturnsQueryOutputSchema } from "@/schemas/financialQueries";
@@ -45,4 +45,11 @@ export const useGetMultipleDcaReturns = (paramsArr: DcaReturnsQueryInput[]) =>
       queryKey: [API_ROUTE, params],
       queryFn: () => fetchDcaReturns(params),
     })),
+  });
+
+// EXPERIMENTAL
+export const useGetSuspendedDcaReturns = (params: DcaReturnsQueryInput) =>
+  useSuspenseQuery({
+    queryKey: [API_ROUTE, params],
+    queryFn: () => fetchDcaReturns(params),
   });

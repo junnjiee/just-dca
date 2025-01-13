@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import { useUserInputStore } from "@/lib/stores";
 
 // import { useGetDcaReturns } from "@/queries/dcaReturns";
@@ -38,10 +40,16 @@ export function DashboardPage() {
         <div className="flex flex-col gap-y-5 md:basis-2/3">
           <ChartGroup key={userInput.ticker} />
         </div>
-        <DataCard className="h-fit md:basis-1/3" />
+        <Suspense fallback={<Loading />}>
+          <DataCard className="h-fit md:basis-1/3" />
+        </Suspense>
       </div>
       {/* NOTE: export to excel? */}
       <DcaReturnsTable />
     </>
   );
+}
+
+function Loading() {
+  return <div>Loading</div>;
 }

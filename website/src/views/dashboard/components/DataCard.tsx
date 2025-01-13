@@ -1,11 +1,12 @@
-"use client";
-
 import { useUserInputStore } from "@/lib/stores";
 
 import { DcaReturnsQueryOutput } from "@/types/financialQueries";
 import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
 
-import { useGetDcaReturns } from "@/queries/dcaReturnsQuery";
+import {
+  useGetDcaReturns,
+  useGetSuspendedDcaReturns,
+} from "@/queries/dcaReturnsQuery";
 
 import {
   Card,
@@ -23,18 +24,17 @@ type DataCardProps = {
 export function DataCard({ className }: DataCardProps) {
   const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
 
-  const { data: queryData, isSuccess } = useGetDcaReturns(userInput);
-  const data: DcaReturnsQueryOutput = isSuccess ? queryData : [];
+  // const { data: queryData, isSuccess } = useGetDcaReturns(userInput);
+  // const data: DcaReturnsQueryOutput = isSuccess ? queryData : [];
+  const { data } = useGetSuspendedDcaReturns(userInput);
 
-  const avgSharePrice = data.length
-    ? (
-        data.reduce(
-          (accumulator, currentRow) =>
-            accumulator + (currentRow.padded_row ? 0 : currentRow.stock_price),
-          0
-        ) / data.filter((row) => !row.padded_row).length
-      ).toFixed(2)
-    : "";
+  const avgSharePrice = (
+    data.reduce(
+      (accumulator, currentRow) =>
+        accumulator + (currentRow.padded_row ? 0 : currentRow.stock_price),
+      0
+    ) / data.filter((row) => !row.padded_row).length
+  ).toFixed(2);
 
   return (
     <Card className={className}>
