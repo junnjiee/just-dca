@@ -19,15 +19,15 @@ export function ChartGroup() {
   const [newTicker, setNewTicker] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
-  const [tickers, dispatchTickers] = useReducer(tickersReducer, [
+  const [tickers, tickerDispatch] = useReducer(tickersReducer, [
     userInput.ticker,
   ]);
   const removeTicker = (ticker: string) => {
-    dispatchTickers({ type: "remove", ticker: ticker });
+    tickerDispatch({ type: "remove", ticker: ticker });
     setErrorMsg("");
   };
   const clearTickers = () => {
-    dispatchTickers({ type: "clear" });
+    tickerDispatch({ type: "clear" });
     setErrorMsg("");
   };
 
@@ -44,7 +44,7 @@ export function ChartGroup() {
       setNewTicker("");
     }
     if (newTickerTestQuery[0].isSuccess) {
-      dispatchTickers({ type: "add", ticker: newTicker.toUpperCase() });
+      tickerDispatch({ type: "add", ticker: newTicker.toUpperCase() });
       setErrorMsg("");
       setNewTicker("");
     }
