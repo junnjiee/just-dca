@@ -6,10 +6,10 @@ import { Loader2 } from "lucide-react";
 
 import { useUserInputStore } from "@/lib/stores";
 
-import { useGetDcaReturns } from "@/queries/dcaReturnsQuery";
+import { useGetDcaReturns } from "@/queries/dca-returns";
 
-import { DcaReturnsQueryInput } from "@/types/financialQueries";
-import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
+import { DcaReturnsQueryInput } from "@/types/financial-queries";
+import { DcaReturnsQueryInputSchema } from "@/schemas/financial-queries";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

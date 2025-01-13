@@ -1,12 +1,12 @@
 import { useUserInputStore } from "@/lib/stores";
 
-import { DcaReturnsQueryOutput } from "@/types/financialQueries";
-import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
+import { DcaReturnsQueryOutput } from "@/types/financial-queries";
+import { DcaReturnsQueryInputSchema } from "@/schemas/financial-queries";
 
 import {
   useGetDcaReturns,
   useGetSuspendedDcaReturns,
-} from "@/queries/dcaReturnsQuery";
+} from "@/queries/dca-returns";
 
 import {
   Card,

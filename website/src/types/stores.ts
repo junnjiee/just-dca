@@ -1,4 +1,4 @@
-import { DcaReturnsQueryInput } from "@/types/financialQueries";
+import { DcaReturnsQueryInput } from "@/types/financial-queries";
 
 export type UserInputStoreState = DcaReturnsQueryInput;
 

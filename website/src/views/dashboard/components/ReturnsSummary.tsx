@@ -1,9 +1,9 @@
 import { useUserInputStore } from "@/lib/stores";
 
 import { TickerTrend } from "@/types/ticker";
-import { useGetDcaReturns } from "@/queries/dcaReturnsQuery";
+import { useGetDcaReturns } from "@/queries/dca-returns";
 
-import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
+import { DcaReturnsQueryInputSchema } from "@/schemas/financial-queries";
 
 import {
   TrendBadge,

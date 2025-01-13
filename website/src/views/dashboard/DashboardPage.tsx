@@ -3,9 +3,9 @@ import { Suspense } from "react";
 import { useUserInputStore } from "@/lib/stores";
 
 // import { useGetDcaReturns } from "@/queries/dcaReturns";
-import { useGetStockInfo } from "@/queries/stockInfoQuery";
+import { useGetStockInfo } from "@/queries/stock-info";
 
-import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
+import { DcaReturnsQueryInputSchema } from "@/schemas/financial-queries";
 
 import { DashboardForm } from "./components/DashboardForm";
 import { ReturnsSummary } from "./components/ReturnsSummary";

@@ -20,6 +20,8 @@ export const tickersReducer: TickersReducer = (state, action) => {
     case "clear": {
       return state.slice(0, 1);
     }
+    default: {
+      throw Error("Unknown action type: " + action.type);
+    }
   }
-  throw Error("Unknown action type: " + action.type);
 };

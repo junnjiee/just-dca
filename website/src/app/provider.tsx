@@ -1,4 +1,4 @@
-import { queryClient } from "@/queries/config";
+import { queryClient } from "@/queries/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router";
 

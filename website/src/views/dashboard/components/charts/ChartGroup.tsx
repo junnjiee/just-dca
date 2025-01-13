@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 import { useUserInputStore } from "@/lib/stores";
 import { tickersReducer } from "@/lib/reducers";
 
-import { useGetMultipleDcaReturns } from "@/queries/dcaReturnsQuery";
-import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
+import { useGetMultipleDcaReturns } from "@/queries/dca-returns";
+import { DcaReturnsQueryInputSchema } from "@/schemas/financial-queries";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -63,7 +63,7 @@ export function ChartGroup() {
       ) : (
         <DcaPerformanceChart />
       )}
-      <ComparisonInputButton
+      <ComparisonInputButtonGroup
         tickers={tickers}
         clearTickers={clearTickers}
         errorMsg={errorMsg}
@@ -76,7 +76,7 @@ export function ChartGroup() {
   );
 }
 
-type ComparisonInputButtonProps = {
+type ComparisonInputButtonGroupProps = {
   tickers: string[];
   clearTickers: () => void;
   errorMsg: string;
@@ -85,14 +85,14 @@ type ComparisonInputButtonProps = {
   newTickerQueryLoading: boolean;
 };
 
-function ComparisonInputButton({
+function ComparisonInputButtonGroup({
   tickers,
   clearTickers,
   errorMsg,
   setErrorMsg,
   setNewTicker,
   newTickerQueryLoading,
-}: ComparisonInputButtonProps) {
+}: ComparisonInputButtonGroupProps) {
   const [openInput, setOpenInput] = useState(false);
   const [input, setInput] = useState("");
 

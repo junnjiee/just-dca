@@ -1,7 +1,7 @@
 import { useQuery, useSuspenseQuery, useQueries } from "@tanstack/react-query";
 
-import { DcaReturnsQueryInput } from "@/types/financialQueries";
-import { DcaReturnsQueryOutputSchema } from "@/schemas/financialQueries";
+import { DcaReturnsQueryInput } from "@/types/financial-queries";
+import { DcaReturnsQueryOutputSchema } from "@/schemas/financial-queries";
 import { FastApiErrorSchema } from "@/schemas/error";
 
 import { buildUrlWithParamsObj } from "@/lib/utils";

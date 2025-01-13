@@ -5,7 +5,7 @@ import {
   DcaReturnsQueryOutputSchema,
   // StockInfoQueryInputSchema,
   StockInfoQueryOutputSchema,
-} from "@/schemas/financialQueries";
+} from "@/schemas/financial-queries";
 
 import { InferArrayType } from "./utils";
 

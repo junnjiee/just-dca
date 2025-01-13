@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { StockInfoQueryInput } from "@/types/financialQueries";
-import { StockInfoQueryOutputSchema } from "@/schemas/financialQueries";
+import { StockInfoQueryInput } from "@/types/financial-queries";
+import { StockInfoQueryOutputSchema } from "@/schemas/financial-queries";
 import { FastApiErrorSchema } from "@/schemas/error";
 
 import { buildUrlWithParamsObj } from "@/lib/utils";

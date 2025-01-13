@@ -4,9 +4,9 @@ import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from "recharts";
 
 import { useUserInputStore } from "@/lib/stores";
 
-import { useGetDcaReturns } from "@/queries/dcaReturnsQuery";
+import { useGetDcaReturns } from "@/queries/dca-returns";
 
-import { DcaReturnsQueryInputSchema } from "@/schemas/financialQueries";
+import { DcaReturnsQueryInputSchema } from "@/schemas/financial-queries";
 
 import {
   ChartConfig,
