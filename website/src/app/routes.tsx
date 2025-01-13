@@ -1,10 +1,18 @@
 import { Routes, Route } from "react-router";
-import { DashboardPage } from "@/views/dashboard/page";
+import { DashboardPage } from "@/views/dashboard/DashboardPage";
+import { RootLayout } from "@/views/root-layout/RootLayout";
 
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<DashboardPage />} />
+      <Route
+        path="/"
+        element={
+          <RootLayout>
+            <DashboardPage />
+          </RootLayout>
+        }
+      />
     </Routes>
   );
 }
