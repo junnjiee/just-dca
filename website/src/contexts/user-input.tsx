@@ -18,11 +18,15 @@ const UserInputDispatchContext =
   createContext<React.Dispatch<UserInputReducerAction> | null>(null);
 
 export function useUserInput() {
-  return useContext(UserInputContext);
+  const context = useContext(UserInputContext);
+  if (context === null) throw Error("context is null");
+  return context;
 }
 
 export function useUserInputDispatch() {
-  return useContext(UserInputDispatchContext);
+  const context = useContext(UserInputDispatchContext);
+  if (context === null) throw Error("context is null");
+  return context;
 }
 
 type UserInputProviderProps = {

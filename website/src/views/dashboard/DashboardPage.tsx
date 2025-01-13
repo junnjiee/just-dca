@@ -1,11 +1,8 @@
 import { Suspense } from "react";
 
-import { useUserInputStore } from "@/lib/stores";
+import { useUserInput } from "@/contexts/user-input";
 
-// import { useGetDcaReturns } from "@/queries/dcaReturns";
 import { useGetStockInfo } from "@/queries/stock-info";
-
-import { DcaReturnsQueryInputSchema } from "@/schemas/financial-queries";
 
 import { DashboardForm } from "./components/DashboardForm";
 import { ReturnsSummary } from "./components/ReturnsSummary";
@@ -16,10 +13,7 @@ import { DcaReturnsTable } from "./components/DcaReturnsTable";
 // NOTE: check how to create fallback components
 // NOTE: show error page if error occur in backend when retrieving data
 export function DashboardPage() {
-  const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
-
-  // const { data, error, isError, isLoading, isSuccess } =
-  //   useGetDcaReturns(userInput);
+  const userInput = useUserInput();
 
   const { data: stockData, isSuccess: stockDataIsSuccess } = useGetStockInfo(
     userInput.ticker

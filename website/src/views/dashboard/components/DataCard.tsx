@@ -1,12 +1,6 @@
-import { useUserInputStore } from "@/lib/stores";
+import { useUserInput } from "@/contexts/user-input";
 
-import { DcaReturnsQueryOutput } from "@/types/financial-queries";
-import { DcaReturnsQueryInputSchema } from "@/schemas/financial-queries";
-
-import {
-  useGetDcaReturns,
-  useGetSuspendedDcaReturns,
-} from "@/queries/dca-returns";
+import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
 
 import {
   Card,
@@ -22,7 +16,7 @@ type DataCardProps = {
 };
 
 export function DataCard({ className }: DataCardProps) {
-  const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
+  const userInput = useUserInput();
 
   // const { data: queryData, isSuccess } = useGetDcaReturns(userInput);
   // const data: DcaReturnsQueryOutput = isSuccess ? queryData : [];

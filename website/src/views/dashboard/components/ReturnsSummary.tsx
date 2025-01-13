@@ -1,9 +1,7 @@
-import { useUserInputStore } from "@/lib/stores";
+import { useUserInput } from "@/contexts/user-input";
 
 import { TickerTrend } from "@/types/ticker";
 import { useGetDcaReturns } from "@/queries/dca-returns";
-
-import { DcaReturnsQueryInputSchema } from "@/schemas/financial-queries";
 
 import {
   TrendBadge,
@@ -11,7 +9,7 @@ import {
 } from "@/components/generic/profit-markers";
 
 export function ReturnsSummary() {
-  const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
+  const userInput = useUserInput();
   const { data, isSuccess } = useGetDcaReturns(userInput);
 
   const finalTotalVal = isSuccess ? "$" + data[data.length - 1].total_val : "";
@@ -26,8 +24,8 @@ export function ReturnsSummary() {
       data.at(-1)!.profit! > 0
         ? "positive"
         : data.at(-1)!.profit! < 0
-        ? "negative"
-        : "neutral";
+          ? "negative"
+          : "neutral";
   }
 
   return (

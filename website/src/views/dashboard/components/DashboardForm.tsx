@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 
-import { useUserInputStore } from "@/lib/stores";
+import { useUserInput, useUserInputDispatch } from "@/contexts/user-input";
 
 import { useGetDcaReturns } from "@/queries/dca-returns";
 
@@ -16,8 +16,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 export function DashboardForm() {
-  const userInput = DcaReturnsQueryInputSchema.parse(useUserInputStore());
-  const setUserInput = useUserInputStore((state) => state.update);
+  const userInput = useUserInput();
+  const userInputDispatch = useUserInputDispatch();
 
   const {
     register,
@@ -32,7 +32,7 @@ export function DashboardForm() {
   const { isLoading, isError } = useGetDcaReturns(userInput);
 
   function onSubmit(data: DcaReturnsQueryInput) {
-    setUserInput(data);
+    userInputDispatch({ type: "update", input: data });
   }
 
   // programatically show updated date in the input boxes if user clicks on the preset date ranges
