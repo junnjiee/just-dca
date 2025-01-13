@@ -1,5 +1,3 @@
-"use client";
-
 import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from "recharts";
 
 import { useUserInput } from "@/contexts/user-input";
