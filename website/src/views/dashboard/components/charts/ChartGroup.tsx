@@ -145,7 +145,7 @@ function ComparisonInputButtonGroup({
           </div>
         ) : (
           <Button variant="ghost" onClick={() => setOpenInput(true)}>
-            {tickers.length ? (
+            {tickers.length > 1 ? (
               <>
                 <PlusIcon />
                 Add Comparison
@@ -159,7 +159,7 @@ function ComparisonInputButtonGroup({
           </Button>
         )}
 
-        {tickers.length && (
+        {tickers.length > 1 && (
           <Button variant="ghost" onClick={clearTickers}>
             Clear All
           </Button>
