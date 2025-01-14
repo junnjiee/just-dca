@@ -15,8 +15,8 @@ import {
 
 const dcaPerformanceChartConfig = {
   total_val: {
-    label: "Investment Value",
-    color: "#22c55e",
+    label: "Total Value",
+    // color: "#22c55e",
   },
   contribution: {
     label: "Contribution",
@@ -29,22 +29,21 @@ export function DcaPerformanceChart() {
   const { data } = useGetSuspendedDcaReturns(userInput);
   const filteredData = data.filter((row) => !row.padded_row);
 
+  const totalValColor =
+    filteredData[filteredData.length - 1].profit > 0
+      ? "#22c55e"
+      : filteredData[filteredData.length - 1].profit < 0
+        ? "#ef4444"
+        : "#a1a1aa";
+
   return (
     <ChartContainer config={dcaPerformanceChartConfig}>
       {/* recharts component */}
       <AreaChart data={filteredData}>
         <defs>
           <linearGradient id="fillTotalVal" x1="0" y1="0" x2="0" y2="1">
-            <stop
-              offset="5%"
-              stopColor="var(--color-total_val)"
-              stopOpacity={0.8}
-            />
-            <stop
-              offset="75%"
-              stopColor="var(--color-total_val)"
-              stopOpacity={0}
-            />
+            <stop offset="5%" stopColor={totalValColor} stopOpacity={0.8} />
+            <stop offset="75%" stopColor={totalValColor} stopOpacity={0} />
           </linearGradient>
 
           <linearGradient id="fillContribution" x1="0" y1="0" x2="0" y2="1">
@@ -64,7 +63,7 @@ export function DcaPerformanceChart() {
         <Area
           fillOpacity={0.3}
           dataKey="total_val"
-          stroke="var(--color-total_val)"
+          stroke={totalValColor}
           fill="url(#fillTotalVal)"
         />
         <Area

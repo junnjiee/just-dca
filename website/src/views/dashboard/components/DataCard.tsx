@@ -23,7 +23,7 @@ export function DataCard({ className }: DataCardProps) {
   return (
     <Card className={className}>
       <CardHeader></CardHeader>
-      <CardContent className="grid grid-cols-1 divide-y">
+      <CardContent className="grid grid-cols-1 divide-y text-sm">
         <div className="flex flex-row justify-between py-4">
           <div>Total Value</div>
           <div>{data.at(-1)?.total_val}</div>

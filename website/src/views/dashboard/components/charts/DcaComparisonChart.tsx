@@ -11,15 +11,14 @@ import { XIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-import { TickerTrend } from "@/types/ticker";
 import { ComparisonChartExternalTooltip } from "@/types/chart";
 import { useGetMultipleSuspendedDcaReturns } from "@/queries/dca-returns";
 
 import { Button } from "@/components/ui/button";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import {
-  TrendBadge,
-  ProfitLossColored,
+  ProfitPctBadge,
+  ProfitAmtColored,
 } from "@/components/generic/profit-markers";
 import { useUserInput } from "@/contexts/user-input";
 
@@ -141,13 +140,6 @@ export function DcaComparisonChart({
       </ChartContainer>
 
       {hoverDataToRender.map((data, idx) => {
-        const trend: TickerTrend =
-          data.profit > 0
-            ? "positive"
-            : data.profit < 0
-              ? "negative"
-              : "neutral";
-
         return (
           <div
             key={data.ticker}
@@ -166,17 +158,11 @@ export function DcaComparisonChart({
             </div>
             <p>{data.totalVal === null ? "--" : data.totalVal}</p>
             <div className="flex flex-row gap-x-7 place-items-center">
-              <ProfitLossColored
-                profitStr={
-                  data.totalVal === null ? "--" : data.profit.toFixed(2)
-                }
-                trend={trend}
+              <ProfitAmtColored
+                profit={data.profit}
                 className="hidden md:block"
               />
-              <TrendBadge
-                profitPct={Math.abs(data.profitPct).toFixed(2) + "%"}
-                trend={trend}
-              />
+              <ProfitPctBadge profitPct={data.profitPct} />
               <Button
                 disabled={mainTicker === data.ticker}
                 className={cn("p-0", mainTicker === data.ticker && "invisible")}
