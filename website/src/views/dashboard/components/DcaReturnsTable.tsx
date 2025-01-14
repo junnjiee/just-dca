@@ -33,7 +33,7 @@ const tableColumns: ColumnDef<InferArrayType<DcaReturnsQueryOutput>>[] = [
       return <ProfitPctBadge profitPct={profitPct} />;
     },
   },
-  { accessorKey: "stock_price", header: "Stock Price ($)" },
+  { accessorKey: "stock_price", header: "Share Price ($)" },
   { accessorKey: "shares_bought", header: "Shares Bought" },
   { accessorKey: "shares_owned", header: "Shares Owned" },
 ];

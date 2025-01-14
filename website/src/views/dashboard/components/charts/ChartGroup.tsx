@@ -120,7 +120,7 @@ function ComparisonInputButtonGroup({
         {openInput ? (
           <div className="flex flex-row gap-x-3">
             <Input
-              placeholder="Enter ticker (e.g. AAPL)"
+              placeholder="Enter ticker (e.g. META)"
               value={input}
               onChange={(e) => setInput(e.target.value)}
             />

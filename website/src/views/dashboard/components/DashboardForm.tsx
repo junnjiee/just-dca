@@ -42,7 +42,7 @@ export function DashboardForm() {
       noValidate
     >
       <Label htmlFor="ticker">Ticker</Label>
-      <Input id="ticker" placeholder="Ticker" {...register("ticker")} />
+      <Input id="ticker" placeholder="e.g. AAPL" {...register("ticker")} />
       <div className="place-self-start">
         {errors.ticker && (
           <span className="text-red-600 text-sm">{errors.ticker.message}</span>
