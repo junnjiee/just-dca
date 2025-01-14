@@ -1,4 +1,4 @@
-import { useState, useReducer } from "react";
+import { useState, useReducer, useDeferredValue } from "react";
 import { SearchIcon, PlusIcon, Loader2, XIcon } from "lucide-react";
 
 import { useUserInput } from "@/contexts/user-input";
@@ -22,6 +22,8 @@ export function ChartGroup() {
   const [tickers, tickerDispatch] = useReducer(tickersReducer, [
     userInput.ticker,
   ]);
+  const deferredTickers = useDeferredValue(tickers);
+
   const removeTicker = (ticker: string) => {
     tickerDispatch({ type: "remove", ticker: ticker });
     setErrorMsg("");
@@ -55,11 +57,13 @@ export function ChartGroup() {
     <div className="space-y-3">
       <ChartDateRangeTabs />
       {tickers.length > 1 ? (
-        <DcaComparisonChart
-          tickers={tickers}
-          removeTicker={removeTicker}
-          key={`${userInput.start}${userInput.end}${userInput.contri}`}
-        />
+        <div className={cn(tickers !== deferredTickers && "opacity-50")}>
+          <DcaComparisonChart
+            tickers={deferredTickers}
+            removeTicker={removeTicker}
+            key={`${userInput.start}${userInput.end}${userInput.contri}`}
+          />
+        </div>
       ) : (
         <DcaPerformanceChart />
       )}

@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 
 import { TickerTrend } from "@/types/ticker";
 import { ComparisonChartExternalTooltip } from "@/types/chart";
-import { useGetMultipleDcaReturns } from "@/queries/dca-returns";
+import { useGetMultipleSuspendedDcaReturns } from "@/queries/dca-returns";
 
 import { Button } from "@/components/ui/button";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
@@ -63,30 +63,26 @@ export function DcaComparisonChart({
   const userInput = useUserInput();
   const mainTicker = userInput.ticker;
 
-  const queryResults = useGetMultipleDcaReturns(
+  const queryResults = useGetMultipleSuspendedDcaReturns(
     tickers.map((ticker) => ({
       ...userInput,
       ticker: ticker,
     }))
   );
-  const allSuccess = queryResults.every((query) => query.isSuccess);
 
-  const filteredQueryData = allSuccess
-    ? queryResults.map((query) =>
-        query.data.map((row) =>
-          row.padded_row ? { ...row, total_val: null } : row
-        )
-      )
-    : [];
+  const filteredQueryData = queryResults.map((query) =>
+    query.data.map((row) =>
+      row.padded_row ? { ...row, total_val: null } : row
+    )
+  );
 
-  const defaultHoverData: ComparisonChartExternalTooltip = allSuccess
-    ? filteredQueryData.map((data, idx) => ({
-        ticker: tickers[idx],
-        totalVal: data[data.length - 1].total_val,
-        profit: data[data.length - 1].profit,
-        profitPct: data[data.length - 1].profitPct,
-      }))
-    : [];
+  const defaultHoverData: ComparisonChartExternalTooltip =
+    filteredQueryData.map((data, idx) => ({
+      ticker: tickers[idx],
+      totalVal: data[data.length - 1].total_val,
+      profit: data[data.length - 1].profit,
+      profitPct: data[data.length - 1].profitPct,
+    }));
 
   const [hoverData, setHoverData] =
     useState<ComparisonChartExternalTooltip | null>(null);
