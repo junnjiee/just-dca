@@ -2,7 +2,7 @@ import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from "recharts";
 
 import { useUserInput } from "@/contexts/user-input";
 
-import { useGetDcaReturns } from "@/queries/dca-returns";
+import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
 
 import {
   ChartConfig,
@@ -26,13 +26,13 @@ const dcaPerformanceChartConfig = {
 
 export function DcaPerformanceChart() {
   const userInput = useUserInput();
-  const { data: queryData, isSuccess } = useGetDcaReturns(userInput);
-  const data = isSuccess ? queryData.filter((row) => !row.padded_row) : [];
+  const { data } = useGetSuspendedDcaReturns(userInput);
+  const filteredData = data.filter((row) => !row.padded_row);
 
   return (
     <ChartContainer config={dcaPerformanceChartConfig}>
       {/* recharts component */}
-      <AreaChart data={data}>
+      <AreaChart data={filteredData}>
         <defs>
           <linearGradient id="fillTotalVal" x1="0" y1="0" x2="0" y2="1">
             <stop
