@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { useUserInput } from "@/contexts/user-input";
@@ -25,23 +26,25 @@ export function DashboardPage() {
         <DashboardForm />
       </div>
       <ErrorBoundary
-        fallback={<div>errorrr</div>}
-        key={JSON.stringify(userInput)}
+        fallback={<>error</>}
+        resetKeys={[userInput.ticker, userInput.start, userInput.end]}
       >
-        <div className="border-b pb-3 space-y-0.5 mb-3">
-          {stockDataIsSuccess && (
-            <div className="text-2xl">{stockData.longName}</div>
-          )}
-        </div>
-        <div className="flex flex-col mb-8 md:flex-row md:mb-3 gap-x-5">
-          <div className="md:basis-2/3">
-            <ReturnsSummary />
-            <ChartGroup key={userInput.ticker} />
+        <Suspense fallback={<>loadin</>}>
+          <div className="border-b pb-3 space-y-0.5 mb-3">
+            {stockDataIsSuccess && (
+              <div className="text-2xl">{stockData.longName}</div>
+            )}
           </div>
-          <DataCard className="h-fit md:basis-1/3" />
-        </div>
-        {/* NOTE: export to excel? */}
-        <DcaReturnsTable />
+          <div className="flex flex-col mb-8 md:flex-row md:mb-3 gap-x-5">
+            <div className="md:basis-2/3">
+              <ReturnsSummary />
+              <ChartGroup key={userInput.ticker} />
+            </div>
+            <DataCard className="h-fit md:basis-1/3" />
+          </div>
+          {/* NOTE: export to excel? */}
+          <DcaReturnsTable />
+        </Suspense>
       </ErrorBoundary>
     </>
   );
