@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 
 import { StockInfoQueryInput } from "@/types/financial-queries";
 import { StockInfoQueryOutputSchema } from "@/schemas/financial-queries";
@@ -35,6 +35,13 @@ async function fetchStockInfo(ticker: StockInfoQueryInput) {
 
 export function useGetStockInfo(ticker: StockInfoQueryInput) {
   return useQuery({
+    queryKey: [API_ROUTE, ticker],
+    queryFn: () => fetchStockInfo(ticker),
+  });
+}
+
+export function useGetSuspendedStockInfo(ticker: StockInfoQueryInput) {
+  return useSuspenseQuery({
     queryKey: [API_ROUTE, ticker],
     queryFn: () => fetchStockInfo(ticker),
   });
