@@ -5,14 +5,15 @@ import { useUserInput } from "@/contexts/user-input";
 
 import { useGetSuspendedStockInfo } from "@/queries/stock-info";
 
+import { ErrorFallback } from "@/views/fallbacks/error";
+import { LoadingFallback } from "@/views/fallbacks/loading";
+
 import { DashboardForm } from "./components/DashboardForm";
 import { ReturnsSummary } from "./components/ReturnsSummary";
 import { DataCard } from "./components/DataCard";
 import { ChartGroup } from "./components/charts/ChartGroup";
 import { DcaReturnsTable } from "./components/DcaReturnsTable";
 
-// NOTE: check how to create fallback components
-// NOTE: show error page if error occur in backend when retrieving data
 export function DashboardPage() {
   const userInput = useUserInput();
 
@@ -22,10 +23,10 @@ export function DashboardPage() {
         <DashboardForm />
       </div>
       <ErrorBoundary
-        fallback={<>error</>}
+        FallbackComponent={ErrorFallback}
         resetKeys={[userInput.ticker, userInput.start, userInput.end]}
       >
-        <Suspense fallback={<>loadin</>}>
+        <Suspense fallback={<LoadingFallback />}>
           <NameBar ticker={userInput.ticker} />
           <div className="flex flex-col mb-8 md:flex-row md:mb-3 gap-x-5">
             <div className="md:basis-2/3">
