@@ -1,3 +1,6 @@
+import { useTransition } from "react";
+import { Loader2 } from "lucide-react";
+
 import { useUserInput, useUserInputDispatch } from "@/contexts/user-input";
 
 import { createDate } from "@/lib/utils";
@@ -11,6 +14,7 @@ type ChartDateRangeTabsProps = {
 export function ChartDateRangeTabs({ className }: ChartDateRangeTabsProps) {
   const userInput = useUserInput();
   const userInputDispatch = useUserInputDispatch();
+  const [isPending, startTransition] = useTransition();
 
   // NOTE: can memoize this
   const datePresets = [
@@ -22,6 +26,16 @@ export function ChartDateRangeTabs({ className }: ChartDateRangeTabsProps) {
     { dateRange: "10Y", start: createDate(120), end: createDate(0) },
   ];
 
+  // use useTransition instead to show pending state
+  const handleDateChange = (start: string, end: string) => {
+    startTransition(() =>
+      userInputDispatch({
+        type: "updateDates",
+        dates: { start: start, end: end },
+      })
+    );
+  };
+
   // if date chosen matches preset, select that tab
   const chosenPreset = () => {
     const preset = datePresets.find(
@@ -32,24 +46,22 @@ export function ChartDateRangeTabs({ className }: ChartDateRangeTabsProps) {
   };
 
   return (
-    <Tabs value={chosenPreset()} className={className}>
-      <TabsList className="w-full md:w-2/3 lg:w-1/2">
-        {datePresets.map((preset) => (
-          <TabsTrigger
-            className="w-full"
-            key={preset.dateRange}
-            value={preset.dateRange}
-            onClick={() =>
-              userInputDispatch({
-                type: "updateDates",
-                dates: { start: preset.start, end: preset.end },
-              })
-            }
-          >
-            {preset.dateRange}
-          </TabsTrigger>
-        ))}
-      </TabsList>
-    </Tabs>
+    <>
+      <Tabs value={chosenPreset()} className={className}>
+        <TabsList className="w-full md:w-2/3 lg:w-1/2">
+          {datePresets.map((preset) => (
+            <TabsTrigger
+              className="w-full"
+              key={preset.dateRange}
+              value={preset.dateRange}
+              onClick={() => handleDateChange(preset.start, preset.end)}
+            >
+              {preset.dateRange}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+      {isPending ? <Loader2 className="animate-spin" /> : <></>}
+    </>
   );
 }

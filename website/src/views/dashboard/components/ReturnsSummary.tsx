@@ -1,7 +1,7 @@
 import { useUserInput } from "@/contexts/user-input";
 
 import { TickerTrend } from "@/types/ticker";
-import { useGetDcaReturns } from "@/queries/dca-returns";
+import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
 
 import {
   TrendBadge,
@@ -10,23 +10,20 @@ import {
 
 export function ReturnsSummary() {
   const userInput = useUserInput();
-  const { data, isSuccess } = useGetDcaReturns(userInput);
+  const { data } = useGetSuspendedDcaReturns(userInput);
 
-  const finalTotalVal = isSuccess ? "$" + data[data.length - 1].total_val : "";
-  const finalProfit = isSuccess ? data[data.length - 1].profit.toFixed(2) : "";
-  const finalProfitPct = isSuccess
-    ? Math.abs(data[data.length - 1].profitPct).toFixed(2) + "%"
-    : "";
+  const finalTotalVal = "$" + data[data.length - 1].total_val;
+  const finalProfit = data[data.length - 1].profit.toFixed(2);
+  const finalProfitPct =
+    Math.abs(data[data.length - 1].profitPct).toFixed(2) + "%";
 
   let trend: TickerTrend = "neutral";
-  if (isSuccess && data.at(-1)?.profit) {
-    trend =
-      data.at(-1)!.profit! > 0
-        ? "positive"
-        : data.at(-1)!.profit! < 0
-          ? "negative"
-          : "neutral";
-  }
+  trend =
+    data[data.length - 1].profit > 0
+      ? "positive"
+      : data[data.length - 1].profit < 0
+        ? "negative"
+        : "neutral";
 
   return (
     <div className="pb-2">

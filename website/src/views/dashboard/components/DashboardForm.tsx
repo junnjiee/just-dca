@@ -1,10 +1,10 @@
+import { useTransition } from "react";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 
 import { useUserInput, useUserInputDispatch } from "@/contexts/user-input";
-
-import { useGetDcaReturns } from "@/queries/dca-returns";
 
 import { DcaReturnsQueryInput } from "@/types/financial-queries";
 import { DcaReturnsQueryInputSchema } from "@/schemas/financial-queries";
@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 export function DashboardForm() {
   const userInput = useUserInput();
   const userInputDispatch = useUserInputDispatch();
+  const [isPending, startTransition] = useTransition();
 
   const {
     register,
@@ -27,10 +28,8 @@ export function DashboardForm() {
     defaultValues: userInput,
   });
 
-  const { isLoading, isError } = useGetDcaReturns(userInput);
-
   function onSubmit(data: DcaReturnsQueryInput) {
-    userInputDispatch({ type: "update", input: data });
+    startTransition(() => userInputDispatch({ type: "update", input: data }));
   }
 
   // programatically show updated date in the input boxes if user clicks on the preset date ranges
@@ -93,8 +92,8 @@ export function DashboardForm() {
       </div>
 
       <div className="row-span-3 place-self-center justify-self-start">
-        <Button type="submit" disabled={isLoading || isError}>
-          {isLoading ? <Loader2 className="animate-spin" /> : "Generate"}
+        <Button type="submit" disabled={isPending}>
+          {isPending ? <Loader2 className="animate-spin" /> : "Generate"}
         </Button>
       </div>
     </form>

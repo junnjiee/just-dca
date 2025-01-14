@@ -2,13 +2,14 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { useUserInput } from "@/contexts/user-input";
 
-import { useGetDcaReturns } from "@/queries/dca-returns";
+import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
 
-import { DcaReturnsQueryOutputRow } from "@/types/financial-queries";
+import { InferArrayType } from "@/types/utils";
+import { DcaReturnsQueryOutput } from "@/types/financial-queries";
 
 import { DataTable } from "@/components/generic/data-table";
 
-const tableColumns: ColumnDef<DcaReturnsQueryOutputRow>[] = [
+const tableColumns: ColumnDef<InferArrayType<DcaReturnsQueryOutput>>[] = [
   { accessorKey: "date", header: "Date" },
   { accessorKey: "stock_price", header: "Stock Price" },
   { accessorKey: "shares_bought", header: "Shares Bought" },
@@ -21,9 +22,9 @@ const tableColumns: ColumnDef<DcaReturnsQueryOutputRow>[] = [
 
 export function DcaReturnsTable() {
   const userInput = useUserInput();
-  const { data: queryData, isSuccess } = useGetDcaReturns(userInput);
+  const { data } = useGetSuspendedDcaReturns(userInput);
 
-  const data = isSuccess ? queryData.filter((row) => !row.padded_row) : [];
+  const filteredData = data.filter((row) => !row.padded_row);
 
-  return <DataTable columns={tableColumns} data={data} />;
+  return <DataTable columns={tableColumns} data={filteredData} />;
 }

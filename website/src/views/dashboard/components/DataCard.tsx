@@ -2,14 +2,7 @@ import { useUserInput } from "@/contexts/user-input";
 
 import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 type DataCardProps = {
   className?: string;
@@ -17,9 +10,6 @@ type DataCardProps = {
 
 export function DataCard({ className }: DataCardProps) {
   const userInput = useUserInput();
-
-  // const { data: queryData, isSuccess } = useGetDcaReturns(userInput);
-  // const data: DcaReturnsQueryOutput = isSuccess ? queryData : [];
   const { data } = useGetSuspendedDcaReturns(userInput);
 
   const avgSharePrice = (
@@ -52,8 +42,8 @@ export function DataCard({ className }: DataCardProps) {
         </div>
       </CardContent>
       {/* <CardFooter>
-          <p>Card Footer</p>
-        </CardFooter> */}
+        <p>Card Footer</p>
+      </CardFooter> */}
     </Card>
   );
 }

@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 import { useUserInput } from "@/contexts/user-input";
 
@@ -24,26 +24,25 @@ export function DashboardPage() {
       <div className="my-5">
         <DashboardForm />
       </div>
-      <div className="border-b pb-3 space-y-0.5 mb-3">
-        {stockDataIsSuccess && (
-          <div className="text-2xl">{stockData.longName}</div>
-        )}
-      </div>
-      <ReturnsSummary />
-      <div className="flex flex-col mb-8 md:flex-row md:mb-3 gap-x-5">
-        <div className="flex flex-col gap-y-5 md:basis-2/3">
-          <ChartGroup key={userInput.ticker} />
+      <ErrorBoundary
+        fallback={<div>errorrr</div>}
+        key={JSON.stringify(userInput)}
+      >
+        <div className="border-b pb-3 space-y-0.5 mb-3">
+          {stockDataIsSuccess && (
+            <div className="text-2xl">{stockData.longName}</div>
+          )}
         </div>
-        <Suspense fallback={<Loading />}>
+        <div className="flex flex-col mb-8 md:flex-row md:mb-3 gap-x-5">
+          <div className="md:basis-2/3">
+            <ReturnsSummary />
+            <ChartGroup key={userInput.ticker} />
+          </div>
           <DataCard className="h-fit md:basis-1/3" />
-        </Suspense>
-      </div>
-      {/* NOTE: export to excel? */}
-      <DcaReturnsTable />
+        </div>
+        {/* NOTE: export to excel? */}
+        <DcaReturnsTable />
+      </ErrorBoundary>
     </>
   );
-}
-
-function Loading() {
-  return <div>Loading</div>;
 }
