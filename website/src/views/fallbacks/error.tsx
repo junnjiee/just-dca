@@ -4,7 +4,7 @@ type ErrorFallbackProps = {
 
 export function ErrorFallback({ error }: ErrorFallbackProps) {
   return (
-    <div className="flex flex-row divide-x gap-x-4 justify-center">
+    <div className="flex flex-row divide-x gap-x-4 justify-center mt-10">
       <p className="text-4xl font-bold self-center text-nowrap">404 &#x2602;</p>
 
       <div className="ps-4">
@@ -30,6 +30,18 @@ export function ErrorFallback({ error }: ErrorFallbackProps) {
             <b className="font-medium">VWRA.L</b> instead)
           </p>
         </div>
+      </div>
+    </div>
+  );
+}
+
+export function PageNotFound() {
+  return (
+    <div className="h-screen flex flex-row justify-center items-center divide-x gap-x-4">
+      <p className="text-4xl font-bold self-center text-nowrap">Uh oh!</p>
+      <div className="ps-4 space-y-3">
+        <p>You just stepped into no man's land.</p>
+        <p>Maybe check your URL again?</p>
       </div>
     </div>
   );

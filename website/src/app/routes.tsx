@@ -1,8 +1,11 @@
 import { Routes, Route } from "react-router";
-import { DashboardPage } from "@/views/dashboard/DashboardPage";
-import { RootLayout } from "@/views/root-layout/RootLayout";
 
 import { UserInputProvider } from "@/contexts/user-input";
+
+import { RootLayout } from "@/views/root-layout/RootLayout";
+import { DashboardPage } from "@/views/dashboard/DashboardPage";
+import { WhatIsDcaPage } from "@/views/static/what-is-dca";
+import { PageNotFound } from "@/views/fallbacks/error";
 
 export function AppRoutes() {
   return (
@@ -14,6 +17,22 @@ export function AppRoutes() {
             <UserInputProvider>
               <DashboardPage />
             </UserInputProvider>
+          </RootLayout>
+        }
+      />
+      <Route
+        path="/what-is-dca"
+        element={
+          <RootLayout>
+            <WhatIsDcaPage />
+          </RootLayout>
+        }
+      />
+      <Route
+        path="*"
+        element={
+          <RootLayout>
+            <PageNotFound />
           </RootLayout>
         }
       />
