@@ -58,6 +58,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
+      <Button className="mb-3">Save as CSV</Button>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
