@@ -40,6 +40,16 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -95,30 +105,11 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="mb-3">
-            <SheetIcon />
-            Export as CSV
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Download CSV</DialogTitle>
-            <DialogDescription>
-              You are about to export the table's data as a csv file.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button onClick={() => exportToCsv()}>Download</Button>
-            </DialogClose>
-            <DialogClose asChild>
-              <Button variant="secondary">Cancel</Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ExportCsvDialogButton
+        exportToCsv={exportToCsv}
+        className="mb-4 hidden md:flex"
+      />
+      <ExportCsvDrawer exportToCsv={exportToCsv} className="mb-4 md:hidden" />
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -207,5 +198,68 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
     </div>
+  );
+}
+
+type ExportCsvComponentProps = {
+  exportToCsv: () => void;
+  className?: string;
+};
+
+function ExportCsvDialogButton({
+  exportToCsv,
+  className,
+}: ExportCsvComponentProps) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button className={className}>
+          <SheetIcon />
+          Export as CSV
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Download CSV</DialogTitle>
+          <DialogDescription>
+            You are about to export the table's data as a csv file.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button onClick={() => exportToCsv()}>Download</Button>
+          </DialogClose>
+          <DialogClose asChild>
+            <Button variant="secondary">Cancel</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function ExportCsvDrawer({ exportToCsv, className }: ExportCsvComponentProps) {
+  return (
+    <Drawer>
+      <DrawerTrigger asChild>
+        <Button className={className}>
+          <SheetIcon />
+          Export as CSV
+        </Button>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>Download CSV</DrawerTitle>
+          <DrawerDescription>
+            You are about to export the table's data as a csv file.
+          </DrawerDescription>
+        </DrawerHeader>
+        <DrawerFooter>
+          <DrawerClose>
+            <Button onClick={() => exportToCsv()}>Download</Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }
