@@ -48,7 +48,10 @@ type ProfitAmtColoredProps = {
 
 export function ProfitAmtColored({ profit, className }: ProfitAmtColoredProps) {
   const trend = getTrend(profit);
-  const profitFormatted = profit.toFixed(2);
+  const profitFormatted = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(profit);
 
   return (
     <p

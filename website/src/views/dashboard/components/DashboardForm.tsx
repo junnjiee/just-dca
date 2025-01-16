@@ -73,6 +73,7 @@ export function DashboardForm() {
         id="start"
         type="date"
         {...register("start", { required: true })}
+        className="dark:[color-scheme:dark]"
       />
       <div className="place-self-start">
         {errors.start && (
@@ -83,7 +84,12 @@ export function DashboardForm() {
       <Label htmlFor="end" className="mt-3">
         To
       </Label>
-      <Input id="end" type="date" {...register("end", { required: true })} />
+      <Input
+        id="end"
+        type="date"
+        {...register("end", { required: true })}
+        className="dark:[color-scheme:dark]"
+      />
       <div className="place-self-start">
         {errors.end && (
           <span className="text-red-600 text-sm">{errors.end.message}</span>

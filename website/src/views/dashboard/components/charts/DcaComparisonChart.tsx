@@ -140,6 +140,13 @@ export function DcaComparisonChart({
       </ChartContainer>
 
       {hoverDataToRender.map((data, idx) => {
+        const totalValFormatted = data.totalVal
+          ? new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+            }).format(data.totalVal)
+          : "--";
+
         return (
           <div
             key={data.ticker}
@@ -156,7 +163,7 @@ export function DcaComparisonChart({
               </div>
               <p>{data.ticker}</p>
             </div>
-            <p>{data.totalVal === null ? "--" : data.totalVal}</p>
+            <p>{totalValFormatted}</p>
             <div className="flex flex-row gap-x-7 place-items-center">
               <ProfitAmtColored
                 profit={data.profit}
