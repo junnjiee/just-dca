@@ -7,6 +7,11 @@ import {
   useReactTable,
   PaginationState,
 } from "@tanstack/react-table";
+import { SheetIcon } from "lucide-react";
+import { saveAs } from "file-saver";
+
+import { DcaReturnsQueryOutput } from "@/types/financial-queries";
+import { InferArrayType } from "@/types/utils";
 
 import {
   Table,
@@ -56,9 +61,34 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const exportToCsv = () => {
+    const headers = table.getAllColumns().map((col) => col.id);
+
+    const commaSeperatedData = data
+      .map((row) => {
+        const assertedRow = row as InferArrayType<DcaReturnsQueryOutput>;
+        return headers
+          .map((header) => {
+            const assertedHeader =
+              header as keyof InferArrayType<DcaReturnsQueryOutput>;
+            return assertedRow[assertedHeader];
+          })
+          .join(",");
+      })
+      .join("\n");
+
+    const csv = headers.join(",").concat("\n" + commaSeperatedData);
+    const csvData = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+
+    saveAs(csvData, "data.csv");
+  };
+
   return (
     <div>
-      <Button className="mb-3">Save as CSV</Button>
+      <Button onClick={() => exportToCsv()} className="mb-3">
+        <SheetIcon />
+        Export as CSV
+      </Button>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
