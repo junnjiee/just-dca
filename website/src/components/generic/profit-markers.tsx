@@ -14,7 +14,10 @@ const getTrend = (amount: number) => {
 export function ProfitPctBadge({ profitPct, className }: ProfitPctBadgeProps) {
   const trend = getTrend(profitPct);
 
-  const profitPctFormatted = Math.abs(profitPct).toFixed(2) + "%";
+  const profitPctFormatted =
+    Math.abs(profitPct).toLocaleString("en-US", {
+      maximumFractionDigits: 2,
+    }) + "%";
 
   return (
     <div

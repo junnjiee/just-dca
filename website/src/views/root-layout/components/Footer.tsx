@@ -3,14 +3,14 @@ export function Footer() {
     <div className="border-t py-7 text-sm">
       <div className="space-y-10 px-3 md:ps-10 md:w-1/2">
         <p>
-          Looking to report a bug or suggest a feature? Check out the{" "}
+          Looking to report a bug or suggest a feature? Open a{" "}
           <a
-            href="https://github.com/junnjiee16/just-dca-lah"
+            href="https://github.com/junnjiee16/just-dca-lah/issues"
             target="_blank"
             rel="noopener noreferrer"
             className="underline"
           >
-            GitHub repo
+            issue
           </a>
           .
         </p>

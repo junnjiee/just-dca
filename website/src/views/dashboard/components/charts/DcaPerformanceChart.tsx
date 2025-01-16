@@ -1,4 +1,7 @@
 import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from "recharts";
+import { TrendingUpIcon, TrendingDownIcon } from "lucide-react";
+
+import { formatDate } from "@/lib/utils";
 
 import { useUserInput } from "@/contexts/user-input";
 
@@ -29,6 +32,8 @@ export function DcaPerformanceChart() {
   const { data } = useGetSuspendedDcaReturns(userInput);
   const filteredData = data.filter((row) => !row.padded_row);
 
+  const finalProfitPct = data[data.length - 1].profitPct;
+
   const totalValColor =
     filteredData[filteredData.length - 1].profit > 0
       ? "#22c55e"
@@ -37,48 +42,80 @@ export function DcaPerformanceChart() {
         : "#a1a1aa";
 
   return (
-    <ChartContainer config={dcaPerformanceChartConfig}>
-      {/* recharts component */}
-      <AreaChart data={filteredData}>
-        <defs>
-          <linearGradient id="fillTotalVal" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor={totalValColor} stopOpacity={0.8} />
-            <stop offset="75%" stopColor={totalValColor} stopOpacity={0} />
-          </linearGradient>
+    <div>
+      <ChartContainer config={dcaPerformanceChartConfig}>
+        {/* recharts component */}
+        <AreaChart data={filteredData}>
+          <defs>
+            <linearGradient id="fillTotalVal" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor={totalValColor} stopOpacity={0.8} />
+              <stop offset="75%" stopColor={totalValColor} stopOpacity={0} />
+            </linearGradient>
 
-          <linearGradient id="fillContribution" x1="0" y1="0" x2="0" y2="1">
-            <stop
-              offset="5%"
-              stopColor="var(--color-contribution)"
-              stopOpacity={0.8}
-            />
-            <stop
-              offset="75%"
-              stopColor="var(--color-contribution)"
-              stopOpacity={0}
-            />
-          </linearGradient>
-        </defs>
+            <linearGradient id="fillContribution" x1="0" y1="0" x2="0" y2="1">
+              <stop
+                offset="5%"
+                stopColor="var(--color-contribution)"
+                stopOpacity={0.8}
+              />
+              <stop
+                offset="75%"
+                stopColor="var(--color-contribution)"
+                stopOpacity={0}
+              />
+            </linearGradient>
+          </defs>
 
-        <Area
-          fillOpacity={0.3}
-          dataKey="total_val"
-          stroke={totalValColor}
-          fill="url(#fillTotalVal)"
-        />
-        <Area
-          fillOpacity={0.3}
-          dataKey="contribution"
-          stroke="var(--color-contribution)"
-          fill="url(#fillContribution)"
-        />
+          <Area
+            fillOpacity={0.3}
+            dataKey="total_val"
+            stroke={totalValColor}
+            fill="url(#fillTotalVal)"
+          />
+          <Area
+            fillOpacity={0.3}
+            dataKey="contribution"
+            stroke="var(--color-contribution)"
+            fill="url(#fillContribution)"
+          />
 
-        <CartesianGrid vertical={false} />
-        <XAxis dataKey="date" />
-        <YAxis tickLine={false} axisLine={false} dx={-10} />
-        <ChartTooltip content={<ChartTooltipContent />} />
-        <ChartLegend content={<ChartLegendContent />} />
-      </AreaChart>
-    </ChartContainer>
+          <CartesianGrid vertical={false} />
+          <XAxis dataKey="date" />
+          <YAxis tickLine={false} axisLine={false} dx={-10} />
+          <ChartTooltip content={<ChartTooltipContent />} />
+          <ChartLegend content={<ChartLegendContent />} />
+        </AreaChart>
+      </ChartContainer>
+      <div className="text-sm ps-5 pt-3 space-y-2">
+        <div className="flex font-medium">
+          Your contributions{" "}
+          {finalProfitPct > 0
+            ? "grew by " +
+              finalProfitPct.toLocaleString("en-US", {
+                maximumFractionDigits: 2,
+              }) +
+              "%"
+            : finalProfitPct < 0
+              ? "dipped by " +
+                Math.abs(finalProfitPct).toLocaleString("en-US", {
+                  maximumFractionDigits: 2,
+                }) +
+                "%"
+              : "stagnated"}
+          {finalProfitPct > 0 ? (
+            <TrendingUpIcon className="ps-1 w-5 h-5" />
+          ) : finalProfitPct < 0 ? (
+            <TrendingDownIcon className="ps-1 w-5 h-5" />
+          ) : (
+            <></>
+          )}
+        </div>
+        <p>
+          By investing ${userInput.contri} each month from{" "}
+          {formatDate(new Date(userInput.start))} to{" "}
+          {formatDate(new Date(userInput.end))}.
+        </p>
+      </div>
+    </div>
   );
 }
