@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router";
+import { Link, useLocation } from "react-router";
 import { SunIcon, MoonIcon, MenuIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -49,19 +49,21 @@ export function Navbar() {
 }
 
 function NavLinks({ className }: { className?: string }) {
+  const location = useLocation();
+
   return (
     <div className={className}>
       {links.map((link) => (
-        <Button variant={"ghost"} key={link.url}>
-          <NavLink
-            to={link.url}
-            end
-            className={({ isActive }) =>
-              cn("font-normal", isActive && "font-medium")
-            }
-          >
-            {link.title}
-          </NavLink>
+        <Button
+          className={cn(
+            "font-normal",
+            location.pathname === link.url && "font-medium"
+          )}
+          variant={"ghost"}
+          key={link.url}
+          asChild
+        >
+          <Link to={link.url}>{link.title}</Link>
         </Button>
       ))}
     </div>
@@ -78,9 +80,7 @@ function NavDrawer({ className }: { className?: string }) {
         <DrawerTitle className="hidden">Navbar</DrawerTitle>
         {links.map((link) => (
           <DrawerClose className="ms-7 pb-4" key={link.url} asChild>
-            <NavLink to={link.url} end>
-              {link.title}
-            </NavLink>
+            <Link to={link.url}>{link.title}</Link>
           </DrawerClose>
         ))}
       </DrawerContent>
