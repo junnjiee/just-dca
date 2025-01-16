@@ -51,7 +51,6 @@ export function ChartGroup() {
       setNewTicker("");
     }
   }
-  console.log(tickers);
 
   return (
     <div className="space-y-3">

@@ -1,12 +1,17 @@
 import { NavLink } from "react-router";
-import { Button } from "@/components/ui/button";
+import { SunIcon, MoonIcon } from "lucide-react";
+import GithubIcon from "@/assets/github-mark.svg";
+import GithubIconDarkMode from "@/assets/github-mark-white.svg";
+
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 export function Navbar() {
   return (
-    <div className="flex flex-row border-b px-2 md:px-7 py-3 justify-between">
-      <div>Logo or smth</div>
+    <div className="flex flex-row border-b px-2 md:px-7 py-3 justify-between items-center">
       <div>
+        Logo or smth
         <Button variant={"link"}>
           <NavLink
             to="/"
@@ -26,6 +31,45 @@ export function Navbar() {
           </NavLink>
         </Button>
       </div>
+      <div className="flex flex-row gap-x-2 items-center">
+        <a
+          className="dark:hidden"
+          href="https://github.com/junnjiee16/just-dca-lah"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src={GithubIcon} alt="Github" className="w-5 h-5" />
+        </a>
+        <a
+          className="hidden dark:block"
+          href="https://github.com/junnjiee16/just-dca-lah"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src={GithubIconDarkMode} alt="Github" className="w-5 h-5" />
+        </a>
+        <ToggleDarkModeButton />
+      </div>
     </div>
+  );
+}
+
+function ToggleDarkModeButton() {
+  const [darkMode, setDarkMode] = useState(false);
+
+  const handleDarkModeChange = () => {
+    const isDarkMode = !darkMode;
+    setDarkMode(isDarkMode);
+    if (isDarkMode) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
+  };
+
+  return (
+    <Button variant={"ghost"} onClick={handleDarkModeChange}>
+      {darkMode ? <SunIcon /> : <MoonIcon />}
+    </Button>
   );
 }

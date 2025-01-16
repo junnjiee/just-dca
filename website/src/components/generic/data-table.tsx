@@ -119,7 +119,6 @@ export function DataTable<TData, TValue>({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
