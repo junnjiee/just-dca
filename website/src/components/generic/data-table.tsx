@@ -30,6 +30,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -85,10 +95,31 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <Button onClick={() => exportToCsv()} className="mb-3">
-        <SheetIcon />
-        Export as CSV
-      </Button>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button className="mb-3">
+            <SheetIcon />
+            Export as CSV
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Download CSV</DialogTitle>
+            <DialogDescription>
+              You are about to export the table's data as a csv file.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button onClick={() => exportToCsv()}>Download</Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button variant="secondary">Cancel</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
