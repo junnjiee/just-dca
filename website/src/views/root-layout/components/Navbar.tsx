@@ -10,8 +10,8 @@ import { useState } from "react";
 export function Navbar() {
   return (
     <div className="flex flex-row border-b px-2 md:px-7 py-3 justify-between items-center">
-      <div>
-        Logo or smth
+      <div className="flex flex-row items-center">
+        <div>Logo</div>
         <Button variant={"link"}>
           <NavLink
             to="/"
@@ -31,22 +31,19 @@ export function Navbar() {
           </NavLink>
         </Button>
       </div>
+
       <div className="flex flex-row gap-x-2 items-center">
         <a
-          className="dark:hidden"
           href="https://github.com/junnjiee16/just-dca-lah"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <img src={GithubIcon} alt="Github" className="w-5 h-5" />
-        </a>
-        <a
-          className="hidden dark:block"
-          href="https://github.com/junnjiee16/just-dca-lah"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src={GithubIconDarkMode} alt="Github" className="w-5 h-5" />
+          <img src={GithubIcon} alt="Github" className="w-5 h-5 dark:hidden" />
+          <img
+            src={GithubIconDarkMode}
+            alt="Github"
+            className="w-5 h-5 hidden dark:block"
+          />
         </a>
         <ToggleDarkModeButton />
       </div>
