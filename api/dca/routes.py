@@ -1,4 +1,3 @@
-from datetime import datetime
 from fastapi import APIRouter, status
 import yfinance as yf
 import pandas as pd
@@ -27,9 +26,7 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
     history = stock.history(start=start, end=end, interval="1mo")
     check_history_validity(history)
 
-    # calculate relevant data points for each month
     table = []
-    shares_owned = 0
 
     # pad dates if ticker IPO date is after input start date
     ipo_date = stock.history(period="max").index[0].strftime("%d %b %Y")
@@ -39,6 +36,8 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
         data["padded_row"] = True
         data["date"] = date.strftime("%d %b %Y")
         table.append(data)
+
+    shares_owned = 0
 
     for i in range(0, history.shape[0]):
         data = dict.fromkeys(dict_keys, 0)
@@ -57,7 +56,8 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
         for row in table:
             if row["padded_row"]:
                 continue
-            # P/L for that month = current price / price for that month * monthly contribution value
+            # revenue for share bought at month x =
+            # current price / price at month x * monthly contribution value
             total_val += contri * (history["Open"].iloc[i] / row["stock_price"])
 
         data["total_val"] = round(total_val, 2)
