@@ -3,7 +3,7 @@ export function Footer() {
     <div className="border-t py-7 text-sm">
       <div className="space-y-10 px-3 md:ps-10 md:w-2/3 lg:w-1/2">
         <p>
-          Looking to report a bug or suggest a feature? Open a{" "}
+          Looking to report a bug or suggest a feature? Open an{" "}
           <a
             href="https://github.com/junnjiee16/just-dca-lah/issues"
             target="_blank"
@@ -35,7 +35,7 @@ export function Footer() {
           >
             Yahoo Finance
           </a>
-          . Past results does not guarantee future returns. Make financial
+          . Past results do not guarantee future returns. Make financial
           decisions at your own risk.
         </p>
       </div>

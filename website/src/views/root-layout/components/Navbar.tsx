@@ -57,7 +57,8 @@ function NavLinks({ className }: { className?: string }) {
         <Button
           className={cn(
             "font-normal",
-            location.pathname === link.url && "font-medium"
+            location.pathname === link.url &&
+              "font-medium text-accent-foreground"
           )}
           variant={"ghost"}
           key={link.url}
@@ -102,7 +103,11 @@ function ToggleDarkModeButton() {
   };
 
   return (
-    <Button variant={"ghost"} onClick={handleDarkModeChange}>
+    <Button
+      variant={"ghost"}
+      className="text-accent-foreground"
+      onClick={handleDarkModeChange}
+    >
       {darkMode ? <SunIcon /> : <MoonIcon />}
     </Button>
   );

@@ -143,7 +143,11 @@ function ComparisonInputButtonGroup({
             </Button>
           </div>
         ) : (
-          <Button variant="ghost" onClick={() => setOpenInput(true)}>
+          <Button
+            className="text-primary"
+            variant="link"
+            onClick={() => setOpenInput(true)}
+          >
             {tickers.length > 1 ? (
               <>
                 <PlusIcon />
@@ -159,7 +163,11 @@ function ComparisonInputButtonGroup({
         )}
 
         {tickers.length > 1 && (
-          <Button variant="ghost" onClick={clearTickers}>
+          <Button
+            className="text-primary"
+            variant="link"
+            onClick={clearTickers}
+          >
             Clear All
           </Button>
         )}

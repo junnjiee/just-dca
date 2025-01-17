@@ -21,15 +21,10 @@ export function ProfitPctBadge({ profitPct, className }: ProfitPctBadgeProps) {
       className={cn(
         "flex flex-row w-fit px-2 py-1 rounded-lg place-items-center",
         trend === "positive"
-          ? "bg-green-100"
+          ? "bg-green-100 text-green-800 dark:bg-green-300 dark:text-green-900"
           : trend === "negative"
-            ? "bg-red-100"
-            : "bg-gray-100",
-        trend === "positive"
-          ? "text-green-800"
-          : trend === "negative"
-            ? "text-red-800"
-            : "text-gray-500",
+            ? "bg-red-100 text-red-800 dark:bg-red-300 dark:text-red-900"
+            : "bg-gray-100 text-gray-500 dark:bg-gray-300 dark:text-gray-600",
         className
       )}
     >
@@ -53,10 +48,10 @@ export function ProfitAmtColored({ profit, className }: ProfitAmtColoredProps) {
     <p
       className={cn(
         trend === "positive"
-          ? "text-green-800"
+          ? "text-green-800 dark:text-green-600"
           : trend === "negative"
-            ? "text-red-800"
-            : "text-gray-500",
+            ? "text-red-800 dark:text-red-600"
+            : "text-gray-500 dark:text-gray-400",
         className
       )}
     >

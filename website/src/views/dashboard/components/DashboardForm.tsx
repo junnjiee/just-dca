@@ -97,7 +97,7 @@ export function DashboardForm() {
       </div>
 
       <div className="row-span-3 place-self-center justify-self-start">
-        <Button type="submit" disabled={isPending}>
+        <Button className="mt-2 md:mt-0" type="submit" disabled={isPending}>
           {isPending ? <Loader2 className="animate-spin" /> : "Generate"}
         </Button>
       </div>
