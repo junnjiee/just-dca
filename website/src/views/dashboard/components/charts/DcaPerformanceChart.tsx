@@ -1,7 +1,12 @@
 import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from "recharts";
 import { TrendingUpIcon, TrendingDownIcon } from "lucide-react";
 
-import { formatDate, formatNumber, formatPrice } from "@/lib/utils";
+import {
+  formatDate,
+  formatDateNoDay,
+  formatNumber,
+  formatPrice,
+} from "@/lib/utils";
 
 import { useUserInput } from "@/contexts/user-input";
 
@@ -19,7 +24,6 @@ import {
 const dcaPerformanceChartConfig = {
   total_val: {
     label: "Total Value",
-    // color: "#22c55e",
   },
   contribution: {
     label: "Contribution",
@@ -80,9 +84,14 @@ export function DcaPerformanceChart() {
           />
 
           <CartesianGrid vertical={false} />
-          <XAxis dataKey="date" />
+          <XAxis
+            dataKey="date"
+            tickFormatter={(value) => formatDateNoDay(new Date(value))}
+          />
           <YAxis tickLine={false} axisLine={false} dx={-10} />
-          <ChartTooltip content={<ChartTooltipContent />} />
+          <ChartTooltip
+            content={<ChartTooltipContent className="w-[170px]" />}
+          />
           <ChartLegend content={<ChartLegendContent />} />
         </AreaChart>
       </ChartContainer>
@@ -92,7 +101,7 @@ export function DcaPerformanceChart() {
           {finalProfitPct > 0
             ? "grew by " + formatNumber(finalProfitPct) + "%"
             : finalProfitPct < 0
-              ? "dipped by " + formatNumber(finalProfitPct) + "%"
+              ? "dipped by " + formatNumber(Math.abs(finalProfitPct)) + "%"
               : "stagnated"}
           {finalProfitPct > 0 ? (
             <TrendingUpIcon className="ps-1 w-5 h-5" />
@@ -104,8 +113,8 @@ export function DcaPerformanceChart() {
         </div>
         <p>
           By investing {formatPrice(userInput.contri)} each month from{" "}
-          {formatDate(new Date(userInput.start))} to{" "}
-          {formatDate(new Date(userInput.end))}.
+          {formatDate(new Date(filteredData[0].date))} to{" "}
+          {formatDate(new Date(filteredData[filteredData.length - 1].date))}.
         </p>
       </div>
     </div>

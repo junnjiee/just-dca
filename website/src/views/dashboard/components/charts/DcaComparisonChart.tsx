@@ -6,10 +6,15 @@ import {
   XAxis,
   YAxis,
   Tooltip,
+  TooltipProps,
 } from "recharts";
+import {
+  ValueType,
+  NameType,
+} from "recharts/types/component/DefaultTooltipContent";
 import { XIcon } from "lucide-react";
 
-import { cn, formatPrice } from "@/lib/utils";
+import { cn, formatPrice, formatDateNoDay, formatNumber } from "@/lib/utils";
 
 import { ComparisonChartExternalTooltip } from "@/types/chart";
 import { useGetMultipleSuspendedDcaReturns } from "@/queries/dca-returns";
@@ -22,9 +27,8 @@ import {
 } from "@/components/generic/profit-markers";
 import { useUserInput } from "@/contexts/user-input";
 
-const lines = ["line1", "line2", "line3", "line4", "line5"];
-
-const lineColors = [
+const colors = ["#a855f7", "#f59e0b", "#0ea5e9", "#1e3a8a", "#ea580c"];
+const bgColors = [
   "bg-[#a855f7]",
   "bg-[#f59e0b]",
   "bg-[#0ea5e9]",
@@ -33,21 +37,11 @@ const lineColors = [
 ];
 
 const multiInvestmentChartConfig = {
-  line1: {
-    color: "#a855f7",
-  },
-  line2: {
-    color: "#f59e0b",
-  },
-  line3: {
-    color: "#0ea5e9",
-  },
-  line4: {
-    color: "#1e3a8a",
-  },
-  line5: {
-    color: "#ea580c",
-  },
+  line1: {},
+  line2: {},
+  line3: {},
+  line4: {},
+  line5: {},
 } satisfies ChartConfig;
 
 type MultiInvestmentChartProps = {
@@ -119,7 +113,7 @@ export function DcaComparisonChart({
               name={tickers[idx]}
               key={tickers[idx]}
               type="monotone"
-              stroke={`var(--color-${lines[idx]})`}
+              stroke={colors[idx]}
               strokeWidth={2}
               dot={false}
             />
@@ -128,6 +122,7 @@ export function DcaComparisonChart({
             dataKey="date"
             type="category"
             allowDuplicatedCategory={false}
+            tickFormatter={(value) => formatDateNoDay(new Date(value))}
           />
           <YAxis
             dataKey="total_val"
@@ -135,7 +130,7 @@ export function DcaComparisonChart({
             tickLine={false}
             dx={-10}
           />
-          <Tooltip />
+          <Tooltip content={<CustomTooltip />} />
         </LineChart>
       </ChartContainer>
 
@@ -151,10 +146,7 @@ export function DcaComparisonChart({
           >
             <div className="flex flex-row gap-x-2">
               <div
-                className={cn(
-                  "block w-1.5 h-100 rounded-lg bg-red-500 ",
-                  lineColors[idx]
-                )}
+                className={cn("block w-1.5 h-100 rounded-lg", bgColors[idx])}
               >
                 {" "}
               </div>
@@ -187,4 +179,28 @@ export function DcaComparisonChart({
       })}
     </div>
   );
+}
+
+function CustomTooltip({
+  active,
+  payload,
+  label,
+}: TooltipProps<ValueType, NameType>) {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white p-2 space-y-1 border rounded-lg dark:bg-black">
+        <p className="font-medium">{label}</p>
+        {payload.map((data) => (
+          <div className="flex flex-row items-center gap-x-1.5">
+            <div className={cn("w-1 h-3 rounded-sm", `bg-[${data.stroke}]`)}>
+              {" "}
+            </div>
+            <p>{data.name}</p>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  return null;
 }
