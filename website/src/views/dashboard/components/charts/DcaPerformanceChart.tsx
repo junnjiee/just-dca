@@ -1,12 +1,7 @@
 import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from "recharts";
 import { TrendingUpIcon, TrendingDownIcon } from "lucide-react";
 
-import {
-  formatDate,
-  formatDateNoDay,
-  formatNumber,
-  formatPrice,
-} from "@/lib/utils";
+import { formatDateNoDay, formatNumber, formatPrice } from "@/lib/utils";
 
 import { useUserInput } from "@/contexts/user-input";
 
@@ -114,8 +109,11 @@ export function DcaPerformanceChart() {
         <p>
           By investing {formatPrice(userInput.contri)} each month in{" "}
           <span className="font-medium">{userInput.ticker}</span> from{" "}
-          {formatDate(new Date(filteredData[0].date))} to{" "}
-          {formatDate(new Date(filteredData[filteredData.length - 1].date))}.
+          {formatDateNoDay(new Date(filteredData[0].date))} to{" "}
+          {formatDateNoDay(
+            new Date(filteredData[filteredData.length - 1].date)
+          )}
+          .
         </p>
       </div>
     </div>

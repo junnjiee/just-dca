@@ -7,7 +7,7 @@ import { UserInputReducerAction } from "@/types/reducers";
 import { DcaReturnsQueryInput } from "@/types/financial-queries";
 
 const defaultUserInput = {
-  ticker: "AAPL",
+  ticker: "VOO",
   contri: 50,
   start: createDate(12),
   end: createDate(0),

@@ -16,8 +16,9 @@ export function Footer() {
         </p>
         <p>
           Disclaimer: All figures shown are in the US Dollar. Actual numbers may
-          vary based on brokerage fees, exact date/time when stock was bought
-          and other factors not listed. Market data is retrieved with{" "}
+          vary for each individual due to taxes, fees, exact date/time when
+          stock was bought and other factors not listed. Market data is
+          retrieved with{" "}
           <a
             href="https://github.com/ranaroussi/yfinance"
             target="_blank"
@@ -26,7 +27,7 @@ export function Footer() {
           >
             yfinance
           </a>
-          , A Python library to fetch financial data from{" "}
+          , A Python library that fetches financial data from{" "}
           <a
             href="https://finance.yahoo.com"
             target="_blank"

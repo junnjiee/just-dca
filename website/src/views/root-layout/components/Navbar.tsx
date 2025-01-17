@@ -16,9 +16,9 @@ import {
 } from "@/components/ui/drawer";
 
 const links = [
-  { url: "/", title: "Dashboard" },
-  { url: "/what-is-dca", title: "What is DCA?" },
-  { url: "/about", title: "About this App" },
+  { url: "/", title: "Dashboard", shortTitle: "Dashboard" },
+  { url: "/what-is-dca", title: "What is DCA?", shortTitle: "What is DCA?" },
+  { url: "/about", title: "About this App", shortTitle: "About" },
 ];
 
 export function Navbar() {
@@ -63,6 +63,7 @@ function NavLinks({ className }: { className?: string }) {
           )}
           variant={"ghost"}
           key={link.url}
+          onClick={() => (document.title = `just:dca | ${link.shortTitle}`)}
           asChild
         >
           <Link to={link.url}>{link.title}</Link>
@@ -81,7 +82,12 @@ function NavDrawer({ className }: { className?: string }) {
       <DrawerContent>
         <DrawerTitle className="hidden">Navbar</DrawerTitle>
         {links.map((link) => (
-          <DrawerClose className="ms-7 pb-4" key={link.url} asChild>
+          <DrawerClose
+            className="ms-7 pb-4"
+            key={link.url}
+            onClick={() => (document.title = `just:dca | ${link.shortTitle}`)}
+            asChild
+          >
             <Link to={link.url}>{link.title}</Link>
           </DrawerClose>
         ))}

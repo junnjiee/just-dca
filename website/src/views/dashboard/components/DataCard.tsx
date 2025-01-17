@@ -42,7 +42,10 @@ export function DataCard({ className }: DataCardProps) {
       <CardHeader></CardHeader>
       <CardContent className="grid grid-cols-1 divide-y font-medium">
         {cardData.map((row) => (
-          <div className="flex flex-row justify-between py-4 items-center">
+          <div
+            key={row.name}
+            className="flex flex-row justify-between py-4 items-center"
+          >
             <div className="text-zinc-500 dark:text-zinc-400 text-xs">
               {row.name}
             </div>
