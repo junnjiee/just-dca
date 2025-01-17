@@ -115,9 +115,12 @@ function ToggleDarkModeButton() {
 
 function JustDcaLogo() {
   return (
-    <div className="flex flex-row gap-x-1 items-center">
+    <a
+      className="flex flex-row gap-x-1 items-center"
+      href={import.meta.env.VITE_WEBSITE_URL!}
+    >
       <TrendingUpIcon />
       <p className="font-bold tracking-wide">just:dca</p>
-    </div>
+    </a>
   );
 }
