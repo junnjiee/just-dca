@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "format": "prettier --write .",
-    "knip": "knip"
+    "knip": "knip",
+    "test": "vitest"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -37,7 +38,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
     "@types/file-saver": "^2.0.7",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.10.5",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
@@ -47,11 +51,13 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
+    "jsdom": "^26.0.0",
     "knip": "^5.42.2",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "typescript": "~5.6.3",
     "typescript-eslint": "^8.18.2",
-    "vite": "^6.0.5"
+    "vite": "^6.0.5",
+    "vitest": "^3.0.2"
   }
 }
