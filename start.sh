@@ -2,7 +2,7 @@
 
 commands=(
     "cd website; pnpm run dev"
-    "echo 'Starting FastAPI server'; uvicorn api.index:app --port 8000 --reload"
+    "echo 'Starting FastAPI server'; uvicorn backend.index:app --port 8000 --reload"
 )
 
 for cmd in "${commands[@]}"; do
