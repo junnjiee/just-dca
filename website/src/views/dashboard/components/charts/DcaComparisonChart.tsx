@@ -191,7 +191,7 @@ function CustomTooltip({
       <div className="bg-white p-2 space-y-1 border rounded-lg dark:bg-black">
         <p className="font-medium">{label}</p>
         {payload.map((data) => (
-          <div className="flex flex-row items-center gap-x-1.5">
+          <div className="flex flex-row items-center gap-x-1.5" key={data.name}>
             <div className={cn("w-1 h-3 rounded-sm", `bg-[${data.stroke}]`)}>
               {" "}
             </div>

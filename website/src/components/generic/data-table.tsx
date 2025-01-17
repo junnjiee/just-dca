@@ -1,13 +1,18 @@
-import { useState } from "react";
 import {
+  Table as TanstackTable,
   ColumnDef,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
-  PaginationState,
 } from "@tanstack/react-table";
-import { SheetIcon } from "lucide-react";
+import {
+  SheetIcon,
+  ChevronLeftIcon,
+  ChevronsLeftIcon,
+  ChevronRightIcon,
+  ChevronsRightIcon,
+} from "lucide-react";
 import { saveAs } from "file-saver";
 
 import { DcaReturnsQueryOutput } from "@/types/financial-queries";
@@ -62,22 +67,18 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const defaultPageSize = 10;
   const pageSizeOptions = ["5", "10", "20", "30", "40", "50"];
-
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: defaultPageSize,
-  });
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination,
-    state: {
-      pagination,
+    initialState: {
+      pagination: {
+        pageIndex: 0,
+        pageSize: 10,
+      },
     },
   });
 
@@ -152,50 +153,81 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <div className="flex flex-col gap-y-2 md:flex-row md:justify-between md:items-center py-4">
-        <div className="text-sm text-gray-600">
-          Showing pages {table.getState().pagination.pageIndex + 1} of{" "}
-          {table.getPageCount()}
-        </div>
-        <div className="flex flex-col gap-y-2 md:flex-row md:gap-x-2">
-          <Select
-            onValueChange={(e) => {
-              table.setPageSize(Number(e));
-            }}
-            defaultValue={defaultPageSize.toString()}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {pageSizeOptions.map((pageSize) => (
-                  <SelectItem key={pageSize} value={pageSize}>
-                    {pageSize} rows
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
+      <TableInteraction table={table} pageSizeOptions={pageSizeOptions} />
+    </div>
+  );
+}
+
+interface TableInteractionProps<TData> {
+  table: TanstackTable<TData>;
+  pageSizeOptions: string[];
+}
+
+function TableInteraction<TData>({
+  table,
+  pageSizeOptions,
+}: TableInteractionProps<TData>) {
+  return (
+    <div className="flex flex-col gap-y-3 md:flex-row md:justify-between md:items-center py-3">
+      <p className="text-sm text-gray-600">
+        Showing page {table.getState().pagination.pageIndex + 1} of{" "}
+        {table.getPageCount()}
+      </p>
+      <div className="space-x-2 self-center">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => table.setPageIndex(0)}
+          disabled={!table.getCanPreviousPage()}
+        >
+          <ChevronsLeftIcon />
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          <ChevronLeftIcon />
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          <ChevronRightIcon />
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+          disabled={!table.getCanNextPage()}
+        >
+          <ChevronsRightIcon />
+        </Button>
+      </div>
+      <div className="flex flex-row items-center gap-x-2 text-sm self-center">
+        <p>Rows per page</p>
+        <Select
+          onValueChange={(e) => {
+            table.setPageSize(Number(e));
+          }}
+          defaultValue={table.initialState.pagination.pageSize.toString()}
+        >
+          <SelectTrigger className="w-[70px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {pageSizeOptions.map((pageSize) => (
+                <SelectItem key={pageSize} value={pageSize}>
+                  {pageSize}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );
