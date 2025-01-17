@@ -18,6 +18,7 @@ import {
 const links = [
   { url: "/", title: "Dashboard" },
   { url: "/what-is-dca", title: "What is DCA?" },
+  { url: "/about", title: "About this App" },
 ];
 
 export function Navbar() {
