@@ -35,11 +35,31 @@ export function buildUrlWithParamsObj(
 }
 
 export function formatDate(date: Date) {
-  return date
-    .toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    })
-    .replace(/\s/g, " ");
+  return date.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+export function formatDateNoDay(date: Date) {
+  return date.toLocaleDateString("en-GB", {
+    month: "short",
+    year: "numeric",
+  });
+}
+
+export function formatNumber(num: number) {
+  return num.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+const priceFormatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+export function formatPrice(price: number) {
+  return priceFormatter.format(price);
 }

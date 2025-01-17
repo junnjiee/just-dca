@@ -1,6 +1,6 @@
 import { ArrowUpRight, ArrowDownRight, ArrowRight } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn, formatPrice, formatNumber } from "@/lib/utils";
 
 type ProfitPctBadgeProps = {
   profitPct: number;
@@ -14,10 +14,7 @@ const getTrend = (amount: number) => {
 export function ProfitPctBadge({ profitPct, className }: ProfitPctBadgeProps) {
   const trend = getTrend(profitPct);
 
-  const profitPctFormatted =
-    Math.abs(profitPct).toLocaleString("en-US", {
-      maximumFractionDigits: 2,
-    }) + "%";
+  const profitPctFormatted = formatNumber(Math.abs(profitPct)) + "%";
 
   return (
     <div
@@ -51,10 +48,6 @@ type ProfitAmtColoredProps = {
 
 export function ProfitAmtColored({ profit, className }: ProfitAmtColoredProps) {
   const trend = getTrend(profit);
-  const profitFormatted = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(profit);
 
   return (
     <p
@@ -68,7 +61,7 @@ export function ProfitAmtColored({ profit, className }: ProfitAmtColoredProps) {
       )}
     >
       {trend === "positive" && "+"}
-      {profitFormatted}
+      {formatPrice(profit)}
     </p>
   );
 }

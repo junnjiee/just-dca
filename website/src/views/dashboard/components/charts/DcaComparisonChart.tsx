@@ -9,7 +9,7 @@ import {
 } from "recharts";
 import { XIcon } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 
 import { ComparisonChartExternalTooltip } from "@/types/chart";
 import { useGetMultipleSuspendedDcaReturns } from "@/queries/dca-returns";
@@ -141,10 +141,7 @@ export function DcaComparisonChart({
 
       {hoverDataToRender.map((data, idx) => {
         const totalValFormatted = data.totalVal
-          ? new Intl.NumberFormat("en-US", {
-              style: "currency",
-              currency: "USD",
-            }).format(data.totalVal)
+          ? formatPrice(data.totalVal)
           : "--";
 
         return (

@@ -1,5 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 
+import { formatDateNoDay, formatPrice, formatNumber } from "@/lib/utils";
+
 import { useUserInput } from "@/contexts/user-input";
 
 import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
@@ -14,55 +16,46 @@ import {
 } from "@/components/generic/profit-markers";
 
 const tableColumns: ColumnDef<InferArrayType<DcaReturnsQueryOutput>>[] = [
-  { accessorKey: "date", header: "Date" },
+  {
+    accessorKey: "date",
+    header: "Date",
+    cell: ({ row }) => formatDateNoDay(new Date(row.getValue("date"))),
+  },
   {
     accessorKey: "contribution",
     header: "Total Contribution",
-    cell: ({ row }) => {
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(row.getValue("contribution"));
-    },
+    cell: ({ row }) => formatPrice(row.getValue("contribution")),
   },
   {
     accessorKey: "total_val",
     header: "Total Value",
-    cell: ({ row }) => {
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(row.getValue("total_val"));
-    },
+    cell: ({ row }) => formatPrice(row.getValue("total_val")),
   },
   {
     accessorKey: "profit",
     header: "Overall Profit",
-    cell: ({ row }) => {
-      const profit: number = row.getValue("profit");
-      return <ProfitAmtColored profit={profit} />;
-    },
+    cell: ({ row }) => <ProfitAmtColored profit={row.getValue("profit")} />,
   },
   {
     accessorKey: "profitPct",
     header: "Overall Profit",
-    cell: ({ row }) => {
-      const profitPct: number = row.getValue("profitPct");
-      return <ProfitPctBadge profitPct={profitPct} />;
-    },
+    cell: ({ row }) => <ProfitPctBadge profitPct={row.getValue("profitPct")} />,
   },
   {
     accessorKey: "stock_price",
     header: "Share Price",
-    cell: ({ row }) => {
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(row.getValue("stock_price"));
-    },
+    cell: ({ row }) => formatPrice(row.getValue("stock_price")),
   },
-  { accessorKey: "shares_bought", header: "Shares Bought" },
-  { accessorKey: "shares_owned", header: "Shares Owned" },
+  {
+    accessorKey: "shares_bought",
+    header: "Shares Bought",
+    cell: ({ row }) => formatNumber(row.getValue("shares_bought")),
+  },
+  {
+    accessorKey: "shares_owned",
+    header: "Shares Owned",
+    cell: ({ row }) => formatNumber(row.getValue("shares_owned")),
+  },
 ];
 
 export function DcaReturnsTable() {

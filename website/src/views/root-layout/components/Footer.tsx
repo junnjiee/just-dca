@@ -16,8 +16,8 @@ export function Footer() {
         </p>
         <p>
           Disclaimer: All figures shown are in the US Dollar. Actual numbers may
-          vary based on brokerage fees, time when stock was bought and other
-          factors not listed. Market data is retrieved with{" "}
+          vary based on brokerage fees, exact date/time when stock was bought
+          and other factors not listed. Market data is retrieved with{" "}
           <a
             href="https://github.com/ranaroussi/yfinance"
             target="_blank"
@@ -35,7 +35,8 @@ export function Footer() {
           >
             Yahoo Finance
           </a>
-          . Make financial decisions at your own risk.
+          . Past results does not guarantee future returns. Make financial
+          decisions at your own risk.
         </p>
       </div>
     </div>

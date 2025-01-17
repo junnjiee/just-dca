@@ -1,7 +1,7 @@
 import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from "recharts";
 import { TrendingUpIcon, TrendingDownIcon } from "lucide-react";
 
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatNumber, formatPrice } from "@/lib/utils";
 
 import { useUserInput } from "@/contexts/user-input";
 
@@ -90,17 +90,9 @@ export function DcaPerformanceChart() {
         <div className="flex font-medium">
           Your contributions{" "}
           {finalProfitPct > 0
-            ? "grew by " +
-              finalProfitPct.toLocaleString("en-US", {
-                maximumFractionDigits: 2,
-              }) +
-              "%"
+            ? "grew by " + formatNumber(finalProfitPct) + "%"
             : finalProfitPct < 0
-              ? "dipped by " +
-                Math.abs(finalProfitPct).toLocaleString("en-US", {
-                  maximumFractionDigits: 2,
-                }) +
-                "%"
+              ? "dipped by " + formatNumber(finalProfitPct) + "%"
               : "stagnated"}
           {finalProfitPct > 0 ? (
             <TrendingUpIcon className="ps-1 w-5 h-5" />
@@ -111,7 +103,7 @@ export function DcaPerformanceChart() {
           )}
         </div>
         <p>
-          By investing ${userInput.contri} each month from{" "}
+          By investing {formatPrice(userInput.contri)} each month from{" "}
           {formatDate(new Date(userInput.start))} to{" "}
           {formatDate(new Date(userInput.end))}.
         </p>

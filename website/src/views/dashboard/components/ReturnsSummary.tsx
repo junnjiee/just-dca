@@ -1,5 +1,7 @@
 import { useUserInput } from "@/contexts/user-input";
 
+import { formatPrice } from "@/lib/utils";
+
 import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
 
 import {
@@ -11,10 +13,7 @@ export function ReturnsSummary() {
   const userInput = useUserInput();
   const { data } = useGetSuspendedDcaReturns(userInput);
 
-  const finalTotalVal = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(data[data.length - 1].total_val);
+  const finalTotalVal = formatPrice(data[data.length - 1].total_val);
 
   return (
     <div className="pb-2">
