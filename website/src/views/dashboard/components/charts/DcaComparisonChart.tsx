@@ -14,7 +14,7 @@ import {
 } from "recharts/types/component/DefaultTooltipContent";
 import { XIcon } from "lucide-react";
 
-import { cn, formatPrice, formatDateNoDay, formatNumber } from "@/lib/utils";
+import { cn, formatPrice, formatDateNoDay } from "@/lib/utils";
 
 import { ComparisonChartExternalTooltip } from "@/types/chart";
 import { useGetMultipleSuspendedDcaReturns } from "@/queries/dca-returns";

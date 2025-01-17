@@ -105,7 +105,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <ExportCsvDialogButton
+      <ExportCsvDialog
         exportToCsv={exportToCsv}
         className="mb-4 hidden md:flex"
       />
@@ -130,7 +130,7 @@ export function DataTable<TData, TValue>({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
+          {table.getRowModel().rows.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
@@ -206,10 +206,7 @@ type ExportCsvComponentProps = {
   className?: string;
 };
 
-function ExportCsvDialogButton({
-  exportToCsv,
-  className,
-}: ExportCsvComponentProps) {
+function ExportCsvDialog({ exportToCsv, className }: ExportCsvComponentProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
