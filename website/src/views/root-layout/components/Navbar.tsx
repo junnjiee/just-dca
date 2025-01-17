@@ -97,16 +97,18 @@ function NavDrawer({ className }: { className?: string }) {
 }
 
 function ToggleDarkModeButton() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(
+    window.matchMedia('(prefers-color-scheme: dark)').matches,
+  );
+
+  if (darkMode) {
+    document.body.classList.add('dark');
+  } else {
+    document.body.classList.remove('dark');
+  }
 
   const handleDarkModeChange = () => {
-    const isDarkMode = !darkMode;
-    setDarkMode(isDarkMode);
-    if (isDarkMode) {
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
-    }
+    setDarkMode((prev) => !prev);
   };
 
   return (
