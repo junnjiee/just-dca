@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 
+import { cn } from '@/lib/utils';
+
 import { useUserInput, useUserInputDispatch } from '@/contexts/user-input';
 
 import { DcaReturnsQueryInput } from '@/types/financial-queries';
@@ -12,7 +14,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 
-export function DashboardForm() {
+type DashboardFormProps = {
+  className?: string;
+};
+
+export function DashboardForm({ className }: DashboardFormProps) {
   const userInput = useUserInput();
   const userInputDispatch = useUserInputDispatch();
   const [isPending, startTransition] = useTransition();
@@ -37,7 +43,10 @@ export function DashboardForm() {
 
   return (
     <form
-      className="grid grid-cols-1 md:grid-rows-3 md:grid-flow-col items-end gap-x-2 gap-y-0.5"
+      className={cn(
+        'grid grid-cols-1 md:grid-rows-3 md:grid-flow-col items-end gap-x-2 gap-y-0.5',
+        className,
+      )}
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >

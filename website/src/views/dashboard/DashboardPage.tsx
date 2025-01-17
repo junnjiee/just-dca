@@ -19,15 +19,13 @@ export function DashboardPage() {
 
   return (
     <>
-      <div className="my-5">
-        <DashboardForm />
-      </div>
+      <DashboardForm className="mb-6 md:mb-0" />
       <ErrorBoundary
         FallbackComponent={ErrorFallback}
         resetKeys={[userInput.ticker, userInput.start, userInput.end]}
       >
         <Suspense fallback={<LoadingFallback />}>
-          <NameBar ticker={userInput.ticker} />
+          <TickerName ticker={userInput.ticker} />
           <div className="flex flex-col mb-8 md:flex-row md:mb-3 gap-x-5">
             <div className="md:basis-2/3">
               <ReturnsSummary />
@@ -35,7 +33,6 @@ export function DashboardPage() {
             </div>
             <DataCard className="h-fit md:basis-1/3" />
           </div>
-          {/* NOTE: export to excel? */}
           <DcaReturnsTable />
         </Suspense>
       </ErrorBoundary>
@@ -43,11 +40,11 @@ export function DashboardPage() {
   );
 }
 
-type NameBarProps = {
+type TickerNameProps = {
   ticker: string;
 };
 
-function NameBar({ ticker }: NameBarProps) {
+function TickerName({ ticker }: TickerNameProps) {
   const { data } = useGetSuspendedStockInfo(ticker);
 
   return (
