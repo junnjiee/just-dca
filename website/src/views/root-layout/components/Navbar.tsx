@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router";
-import { SunIcon, MoonIcon, MenuIcon } from "lucide-react";
+import { SunIcon, MoonIcon, MenuIcon, TrendingUpIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import GithubIcon from "@/assets/github-mark.svg";
@@ -23,9 +23,9 @@ const links = [
 export function Navbar() {
   return (
     <div className="flex flex-row border-b px-2 md:px-7 py-3 justify-between items-center">
-      <div className="flex flex-row items-center">
+      <div className="flex flex-row items-center gap-x-1">
         <NavDrawer className="md:hidden mx-2" />
-        <div>Logo</div>
+        <JustDcaLogo />
         <NavLinks className="hidden md:block" />
       </div>
 
@@ -110,5 +110,14 @@ function ToggleDarkModeButton() {
     >
       {darkMode ? <SunIcon /> : <MoonIcon />}
     </Button>
+  );
+}
+
+function JustDcaLogo() {
+  return (
+    <div className="flex flex-row gap-x-1 items-center">
+      <TrendingUpIcon />
+      <p className="font-bold tracking-wide">just:dca</p>
+    </div>
   );
 }

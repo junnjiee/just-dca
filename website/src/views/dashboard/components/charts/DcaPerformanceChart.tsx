@@ -112,7 +112,8 @@ export function DcaPerformanceChart() {
           )}
         </div>
         <p>
-          By investing {formatPrice(userInput.contri)} each month from{" "}
+          By investing {formatPrice(userInput.contri)} each month in{" "}
+          <span className="font-medium">{userInput.ticker}</span> from{" "}
           {formatDate(new Date(filteredData[0].date))} to{" "}
           {formatDate(new Date(filteredData[filteredData.length - 1].date))}.
         </p>

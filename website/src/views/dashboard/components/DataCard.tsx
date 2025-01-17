@@ -21,36 +21,35 @@ export function DataCard({ className }: DataCardProps) {
       0
     ) / data.filter((row) => !row.padded_row).length;
 
+  const cardData = [
+    {
+      name: "TOTAL VALUE",
+      value: formatPrice(data[data.length - 1].total_val),
+    },
+    {
+      name: "CONTRIBUTION",
+      value: formatPrice(data[data.length - 1].contribution),
+    },
+    {
+      name: "TOTAL SHARES",
+      value: formatNumber(data[data.length - 1].shares_owned),
+    },
+    { name: "AVG SHARE PRICE", value: formatPrice(avgSharePrice) },
+  ];
+
   return (
     <Card className={className}>
       <CardHeader></CardHeader>
-      <CardContent className="grid grid-cols-1 divide-y text-sm">
-        <div className="flex flex-row justify-between py-4">
-          <div className="text-zinc-500">TOTAL VALUE</div>
-          <div className="font-medium">
-            {formatPrice(data[data.length - 1].total_val)}
+      <CardContent className="grid grid-cols-1 divide-y font-medium">
+        {cardData.map((row) => (
+          <div className="flex flex-row justify-between py-4 items-center">
+            <div className="text-zinc-500 dark:text-zinc-400 text-xs">
+              {row.name}
+            </div>
+            <div className="text-sm">{row.value}</div>
           </div>
-        </div>
-        <div className="flex flex-row justify-between py-4">
-          <div className="text-zinc-500">CONTRIBUTION</div>
-          <div className="font-medium">
-            {formatPrice(data[data.length - 1].contribution)}
-          </div>
-        </div>
-        <div className="flex flex-row justify-between py-4">
-          <div className="text-zinc-500">TOTAL SHARES</div>
-          <div className="font-medium">
-            {formatNumber(data[data.length - 1].shares_owned)}
-          </div>
-        </div>
-        <div className="flex flex-row justify-between py-4">
-          <div className="text-zinc-500">AVG SHARE PRICE</div>
-          <div className="font-medium">{formatPrice(avgSharePrice)}</div>
-        </div>
+        ))}
       </CardContent>
-      {/* <CardFooter>
-        <p>Card Footer</p>
-      </CardFooter> */}
     </Card>
   );
 }
