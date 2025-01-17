@@ -3,7 +3,7 @@ export function Footer() {
     <div className="border-t py-7 text-sm">
       <div className="space-y-10 px-3 md:ps-10 md:w-2/3 lg:w-1/2">
         <p>
-          Looking to report a bug or suggest a feature? Open an{" "}
+          Looking to report a bug or suggest a feature? Open an{' '}
           <a
             href="https://github.com/junnjiee16/just-dca/issues"
             target="_blank"
@@ -18,7 +18,7 @@ export function Footer() {
           Disclaimer: All figures shown are in the US Dollar. Actual numbers may
           vary for each individual due to taxes, fees, exact date/time when
           stock was bought and other factors not listed. Market data is
-          retrieved with{" "}
+          retrieved with{' '}
           <a
             href="https://github.com/ranaroussi/yfinance"
             target="_blank"
@@ -27,7 +27,7 @@ export function Footer() {
           >
             yfinance
           </a>
-          , A Python library that fetches financial data from{" "}
+          , A Python library that fetches financial data from{' '}
           <a
             href="https://finance.yahoo.com"
             target="_blank"

@@ -1,11 +1,11 @@
-import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from "recharts";
-import { TrendingUpIcon, TrendingDownIcon } from "lucide-react";
+import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from 'recharts';
+import { TrendingUpIcon, TrendingDownIcon } from 'lucide-react';
 
-import { formatDateNoDay, formatNumber, formatPrice } from "@/lib/utils";
+import { formatDateNoDay, formatNumber, formatPrice } from '@/lib/utils';
 
-import { useUserInput } from "@/contexts/user-input";
+import { useUserInput } from '@/contexts/user-input';
 
-import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
+import { useGetSuspendedDcaReturns } from '@/queries/dca-returns';
 
 import {
   ChartConfig,
@@ -14,15 +14,15 @@ import {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from "@/components/ui/chart";
+} from '@/components/ui/chart';
 
 const dcaPerformanceChartConfig = {
   total_val: {
-    label: "Total Value",
+    label: 'Total Value',
   },
   contribution: {
-    label: "Contribution",
-    color: "#2563eb",
+    label: 'Contribution',
+    color: '#2563eb',
   },
 } satisfies ChartConfig;
 
@@ -35,10 +35,10 @@ export function DcaPerformanceChart() {
 
   const totalValColor =
     filteredData[filteredData.length - 1].profit > 0
-      ? "#22c55e"
+      ? '#22c55e'
       : filteredData[filteredData.length - 1].profit < 0
-        ? "#ef4444"
-        : "#a1a1aa";
+        ? '#ef4444'
+        : '#a1a1aa';
 
   return (
     <div>
@@ -92,12 +92,12 @@ export function DcaPerformanceChart() {
       </ChartContainer>
       <div className="text-sm ps-5 pt-3 space-y-2">
         <div className="flex font-medium">
-          Your contributions{" "}
+          Your contributions{' '}
           {finalProfitPct > 0
-            ? "grew by " + formatNumber(finalProfitPct) + "%"
+            ? 'grew by ' + formatNumber(finalProfitPct) + '%'
             : finalProfitPct < 0
-              ? "dipped by " + formatNumber(Math.abs(finalProfitPct)) + "%"
-              : "stagnated"}
+              ? 'dipped by ' + formatNumber(Math.abs(finalProfitPct)) + '%'
+              : 'stagnated'}
           {finalProfitPct > 0 ? (
             <TrendingUpIcon className="ps-1 w-5 h-5" />
           ) : finalProfitPct < 0 ? (
@@ -107,11 +107,11 @@ export function DcaPerformanceChart() {
           )}
         </div>
         <p>
-          By investing {formatPrice(userInput.contri)} each month in{" "}
-          <span className="font-medium">{userInput.ticker}</span> from{" "}
-          {formatDateNoDay(new Date(filteredData[0].date))} to{" "}
+          By investing {formatPrice(userInput.contri)} each month in{' '}
+          <span className="font-medium">{userInput.ticker}</span> from{' '}
+          {formatDateNoDay(new Date(filteredData[0].date))} to{' '}
           {formatDateNoDay(
-            new Date(filteredData[filteredData.length - 1].date)
+            new Date(filteredData[filteredData.length - 1].date),
           )}
           .
         </p>

@@ -1,60 +1,60 @@
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef } from '@tanstack/react-table';
 
-import { formatDateNoDay, formatPrice, formatNumber } from "@/lib/utils";
+import { formatDateNoDay, formatPrice, formatNumber } from '@/lib/utils';
 
-import { useUserInput } from "@/contexts/user-input";
+import { useUserInput } from '@/contexts/user-input';
 
-import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
+import { useGetSuspendedDcaReturns } from '@/queries/dca-returns';
 
-import { InferArrayType } from "@/types/utils";
-import { DcaReturnsQueryOutput } from "@/types/financial-queries";
+import { InferArrayType } from '@/types/utils';
+import { DcaReturnsQueryOutput } from '@/types/financial-queries';
 
-import { DataTable } from "@/components/generic/data-table";
+import { DataTable } from '@/components/generic/data-table';
 import {
   ProfitAmtColored,
   ProfitPctBadge,
-} from "@/components/generic/profit-markers";
+} from '@/components/generic/profit-markers';
 
 const tableColumns: ColumnDef<InferArrayType<DcaReturnsQueryOutput>>[] = [
   {
-    accessorKey: "date",
-    header: "Date",
-    cell: ({ row }) => formatDateNoDay(new Date(row.getValue("date"))),
+    accessorKey: 'date',
+    header: 'Date',
+    cell: ({ row }) => formatDateNoDay(new Date(row.getValue('date'))),
   },
   {
-    accessorKey: "contribution",
-    header: "Total Contribution",
-    cell: ({ row }) => formatPrice(row.getValue("contribution")),
+    accessorKey: 'contribution',
+    header: 'Total Contribution',
+    cell: ({ row }) => formatPrice(row.getValue('contribution')),
   },
   {
-    accessorKey: "total_val",
-    header: "Total Value",
-    cell: ({ row }) => formatPrice(row.getValue("total_val")),
+    accessorKey: 'total_val',
+    header: 'Total Value',
+    cell: ({ row }) => formatPrice(row.getValue('total_val')),
   },
   {
-    accessorKey: "profit",
-    header: "Overall Profit",
-    cell: ({ row }) => <ProfitAmtColored profit={row.getValue("profit")} />,
+    accessorKey: 'profit',
+    header: 'Overall Profit',
+    cell: ({ row }) => <ProfitAmtColored profit={row.getValue('profit')} />,
   },
   {
-    accessorKey: "profitPct",
-    header: "Overall Profit",
-    cell: ({ row }) => <ProfitPctBadge profitPct={row.getValue("profitPct")} />,
+    accessorKey: 'profitPct',
+    header: 'Overall Profit',
+    cell: ({ row }) => <ProfitPctBadge profitPct={row.getValue('profitPct')} />,
   },
   {
-    accessorKey: "stock_price",
-    header: "Share Price",
-    cell: ({ row }) => formatPrice(row.getValue("stock_price")),
+    accessorKey: 'stock_price',
+    header: 'Share Price',
+    cell: ({ row }) => formatPrice(row.getValue('stock_price')),
   },
   {
-    accessorKey: "shares_bought",
-    header: "Shares Bought",
-    cell: ({ row }) => formatNumber(row.getValue("shares_bought")),
+    accessorKey: 'shares_bought',
+    header: 'Shares Bought',
+    cell: ({ row }) => formatNumber(row.getValue('shares_bought')),
   },
   {
-    accessorKey: "shares_owned",
-    header: "Shares Owned",
-    cell: ({ row }) => formatNumber(row.getValue("shares_owned")),
+    accessorKey: 'shares_owned',
+    header: 'Shares Owned',
+    cell: ({ row }) => formatNumber(row.getValue('shares_owned')),
   },
 ];
 

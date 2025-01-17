@@ -1,17 +1,17 @@
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
-import { StockInfoQueryInput } from "@/types/financial-queries";
-import { StockInfoQueryOutputSchema } from "@/schemas/financial-queries";
-import { FastApiErrorSchema } from "@/schemas/error";
+import { StockInfoQueryInput } from '@/types/financial-queries';
+import { StockInfoQueryOutputSchema } from '@/schemas/financial-queries';
+import { FastApiErrorSchema } from '@/schemas/error';
 
-import { buildUrlWithParamsObj } from "@/lib/utils";
+import { buildUrlWithParamsObj } from '@/lib/utils';
 
-const API_ROUTE = "/api/stock/info";
+const API_ROUTE = '/api/stock/info';
 
 async function fetchStockInfo(ticker: StockInfoQueryInput) {
   const newUrl = buildUrlWithParamsObj(
     `${import.meta.env.VITE_BACKEND_URL!}${API_ROUTE}`,
-    { ticker: ticker }
+    { ticker: ticker },
   );
   try {
     const res = await fetch(newUrl);

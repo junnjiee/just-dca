@@ -1,16 +1,16 @@
-import { useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 
-import { useUserInput, useUserInputDispatch } from "@/contexts/user-input";
+import { useUserInput, useUserInputDispatch } from '@/contexts/user-input';
 
-import { DcaReturnsQueryInput } from "@/types/financial-queries";
-import { DcaReturnsQueryInputSchema } from "@/schemas/financial-queries";
+import { DcaReturnsQueryInput } from '@/types/financial-queries';
+import { DcaReturnsQueryInputSchema } from '@/schemas/financial-queries';
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 export function DashboardForm() {
   const userInput = useUserInput();
@@ -28,12 +28,12 @@ export function DashboardForm() {
   });
 
   function onSubmit(data: DcaReturnsQueryInput) {
-    startTransition(() => userInputDispatch({ type: "update", input: data }));
+    startTransition(() => userInputDispatch({ type: 'update', input: data }));
   }
 
   // programatically show updated date in the input boxes if user clicks on the preset date ranges
-  setValue("start", userInput.start);
-  setValue("end", userInput.end);
+  setValue('start', userInput.start);
+  setValue('end', userInput.end);
 
   return (
     <form
@@ -42,7 +42,7 @@ export function DashboardForm() {
       noValidate
     >
       <Label htmlFor="ticker">Ticker</Label>
-      <Input id="ticker" placeholder="e.g. AAPL" {...register("ticker")} />
+      <Input id="ticker" placeholder="e.g. AAPL" {...register('ticker')} />
       <div className="place-self-start">
         {errors.ticker && (
           <span className="text-red-600 text-sm">{errors.ticker.message}</span>
@@ -56,7 +56,7 @@ export function DashboardForm() {
         id="contribution"
         type="number"
         placeholder="USD"
-        {...register("contri", {
+        {...register('contri', {
           valueAsNumber: true,
         })}
       />
@@ -72,7 +72,7 @@ export function DashboardForm() {
       <Input
         id="start"
         type="date"
-        {...register("start", { required: true })}
+        {...register('start', { required: true })}
         className="dark:[color-scheme:dark]"
       />
       <div className="place-self-start">
@@ -87,7 +87,7 @@ export function DashboardForm() {
       <Input
         id="end"
         type="date"
-        {...register("end", { required: true })}
+        {...register('end', { required: true })}
         className="dark:[color-scheme:dark]"
       />
       <div className="place-self-start">
@@ -98,7 +98,7 @@ export function DashboardForm() {
 
       <div className="row-span-3 place-self-center justify-self-start">
         <Button className="mt-2 md:mt-0" type="submit" disabled={isPending}>
-          {isPending ? <Loader2 className="animate-spin" /> : "Generate"}
+          {isPending ? <Loader2 className="animate-spin" /> : 'Generate'}
         </Button>
       </div>
     </form>

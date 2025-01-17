@@ -1,13 +1,13 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useReducer } from 'react';
 
-import { userInputReducer } from "@/lib/reducers";
-import { createDate } from "@/lib/utils";
+import { userInputReducer } from '@/lib/reducers';
+import { createDate } from '@/lib/utils';
 
-import { UserInputReducerAction } from "@/types/reducers";
-import { DcaReturnsQueryInput } from "@/types/financial-queries";
+import { UserInputReducerAction } from '@/types/reducers';
+import { DcaReturnsQueryInput } from '@/types/financial-queries';
 
 const defaultUserInput = {
-  ticker: "VOO",
+  ticker: 'VOO',
   contri: 50,
   start: createDate(12),
   end: createDate(0),
@@ -19,13 +19,13 @@ const UserInputDispatchContext =
 
 export function useUserInput() {
   const context = useContext(UserInputContext);
-  if (context === null) throw Error("context is null");
+  if (context === null) throw Error('context is null');
   return context;
 }
 
 export function useUserInputDispatch() {
   const context = useContext(UserInputDispatchContext);
-  if (context === null) throw Error("context is null");
+  if (context === null) throw Error('context is null');
   return context;
 }
 
@@ -36,7 +36,7 @@ type UserInputProviderProps = {
 export function UserInputProvider({ children }: UserInputProviderProps) {
   const [userInput, userInputDispatch] = useReducer(
     userInputReducer,
-    defaultUserInput
+    defaultUserInput,
   );
 
   return (

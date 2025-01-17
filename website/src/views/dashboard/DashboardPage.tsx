@@ -1,18 +1,18 @@
-import { Suspense } from "react";
-import { ErrorBoundary } from "react-error-boundary";
+import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
-import { useUserInput } from "@/contexts/user-input";
+import { useUserInput } from '@/contexts/user-input';
 
-import { useGetSuspendedStockInfo } from "@/queries/stock-info";
+import { useGetSuspendedStockInfo } from '@/queries/stock-info';
 
-import { ErrorFallback } from "@/views/fallbacks/error";
-import { LoadingFallback } from "@/views/fallbacks/loading";
+import { ErrorFallback } from '@/views/fallbacks/error';
+import { LoadingFallback } from '@/views/fallbacks/loading';
 
-import { DashboardForm } from "./components/DashboardForm";
-import { ReturnsSummary } from "./components/ReturnsSummary";
-import { DataCard } from "./components/DataCard";
-import { ChartGroup } from "./components/charts/ChartGroup";
-import { DcaReturnsTable } from "./components/DcaReturnsTable";
+import { DashboardForm } from './components/DashboardForm';
+import { ReturnsSummary } from './components/ReturnsSummary';
+import { DataCard } from './components/DataCard';
+import { ChartGroup } from './components/charts/ChartGroup';
+import { DcaReturnsTable } from './components/DcaReturnsTable';
 
 export function DashboardPage() {
   const userInput = useUserInput();

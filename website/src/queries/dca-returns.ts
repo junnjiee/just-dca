@@ -3,20 +3,20 @@ import {
   useSuspenseQuery,
   useQueries,
   useSuspenseQueries,
-} from "@tanstack/react-query";
+} from '@tanstack/react-query';
 
-import { DcaReturnsQueryInput } from "@/types/financial-queries";
-import { DcaReturnsQueryOutputSchema } from "@/schemas/financial-queries";
-import { FastApiErrorSchema } from "@/schemas/error";
+import { DcaReturnsQueryInput } from '@/types/financial-queries';
+import { DcaReturnsQueryOutputSchema } from '@/schemas/financial-queries';
+import { FastApiErrorSchema } from '@/schemas/error';
 
-import { buildUrlWithParamsObj } from "@/lib/utils";
+import { buildUrlWithParamsObj } from '@/lib/utils';
 
-const API_ROUTE = "/api/dca/returns";
+const API_ROUTE = '/api/dca/returns';
 
 async function fetchDcaReturns(params: DcaReturnsQueryInput) {
   const newUrl = buildUrlWithParamsObj(
     `${import.meta.env.VITE_BACKEND_URL!}${API_ROUTE}`,
-    params
+    params,
   );
   try {
     const res = await fetch(newUrl);
@@ -59,7 +59,7 @@ export const useGetSuspendedDcaReturns = (params: DcaReturnsQueryInput) =>
   });
 
 export const useGetMultipleSuspendedDcaReturns = (
-  paramsArr: DcaReturnsQueryInput[]
+  paramsArr: DcaReturnsQueryInput[],
 ) =>
   useSuspenseQueries({
     queries: paramsArr.map((params) => ({

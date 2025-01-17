@@ -1,10 +1,10 @@
-import { useUserInput } from "@/contexts/user-input";
+import { useUserInput } from '@/contexts/user-input';
 
-import { formatNumber, formatPrice } from "@/lib/utils";
+import { formatNumber, formatPrice } from '@/lib/utils';
 
-import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
+import { useGetSuspendedDcaReturns } from '@/queries/dca-returns';
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 type DataCardProps = {
   className?: string;
@@ -18,23 +18,23 @@ export function DataCard({ className }: DataCardProps) {
     data.reduce(
       (accumulator, currentRow) =>
         accumulator + (currentRow.padded_row ? 0 : currentRow.stock_price),
-      0
+      0,
     ) / data.filter((row) => !row.padded_row).length;
 
   const cardData = [
     {
-      name: "TOTAL VALUE",
+      name: 'TOTAL VALUE',
       value: formatPrice(data[data.length - 1].total_val),
     },
     {
-      name: "CONTRIBUTION",
+      name: 'CONTRIBUTION',
       value: formatPrice(data[data.length - 1].contribution),
     },
     {
-      name: "TOTAL SHARES",
+      name: 'TOTAL SHARES',
       value: formatNumber(data[data.length - 1].shares_owned),
     },
-    { name: "AVG SHARE PRICE", value: formatPrice(avgSharePrice) },
+    { name: 'AVG SHARE PRICE', value: formatPrice(avgSharePrice) },
   ];
 
   return (

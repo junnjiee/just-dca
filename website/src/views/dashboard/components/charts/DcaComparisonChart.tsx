@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   CartesianGrid,
   Line,
@@ -7,33 +7,33 @@ import {
   YAxis,
   Tooltip,
   TooltipProps,
-} from "recharts";
+} from 'recharts';
 import {
   ValueType,
   NameType,
-} from "recharts/types/component/DefaultTooltipContent";
-import { XIcon } from "lucide-react";
+} from 'recharts/types/component/DefaultTooltipContent';
+import { XIcon } from 'lucide-react';
 
-import { cn, formatPrice, formatDateNoDay } from "@/lib/utils";
+import { cn, formatPrice, formatDateNoDay } from '@/lib/utils';
 
-import { ComparisonChartExternalTooltip } from "@/types/chart";
-import { useGetMultipleSuspendedDcaReturns } from "@/queries/dca-returns";
+import { ComparisonChartExternalTooltip } from '@/types/chart';
+import { useGetMultipleSuspendedDcaReturns } from '@/queries/dca-returns';
 
-import { Button } from "@/components/ui/button";
-import { ChartConfig, ChartContainer } from "@/components/ui/chart";
+import { Button } from '@/components/ui/button';
+import { ChartConfig, ChartContainer } from '@/components/ui/chart';
 import {
   ProfitPctBadge,
   ProfitAmtColored,
-} from "@/components/generic/profit-markers";
-import { useUserInput } from "@/contexts/user-input";
+} from '@/components/generic/profit-markers';
+import { useUserInput } from '@/contexts/user-input';
 
-const colors = ["#a855f7", "#f59e0b", "#0ea5e9", "#1e3a8a", "#ea580c"];
+const colors = ['#a855f7', '#f59e0b', '#0ea5e9', '#1e3a8a', '#ea580c'];
 const bgColors = [
-  "bg-[#a855f7]",
-  "bg-[#f59e0b]",
-  "bg-[#0ea5e9]",
-  "bg-[#1e3a8a]",
-  "bg-[#ea580c]",
+  'bg-[#a855f7]',
+  'bg-[#f59e0b]',
+  'bg-[#0ea5e9]',
+  'bg-[#1e3a8a]',
+  'bg-[#ea580c]',
 ];
 
 const multiInvestmentChartConfig = {
@@ -60,13 +60,13 @@ export function DcaComparisonChart({
     tickers.map((ticker) => ({
       ...userInput,
       ticker: ticker,
-    }))
+    })),
   );
 
   const filteredQueryData = queryResults.map((query) =>
     query.data.map((row) =>
-      row.padded_row ? { ...row, total_val: null } : row
-    )
+      row.padded_row ? { ...row, total_val: null } : row,
+    ),
   );
 
   const defaultHoverData: ComparisonChartExternalTooltip =
@@ -137,7 +137,7 @@ export function DcaComparisonChart({
       {hoverDataToRender.map((data, idx) => {
         const totalValFormatted = data.totalVal
           ? formatPrice(data.totalVal)
-          : "--";
+          : '--';
 
         return (
           <div
@@ -146,9 +146,9 @@ export function DcaComparisonChart({
           >
             <div className="flex flex-row gap-x-2">
               <div
-                className={cn("block w-1.5 h-100 rounded-lg", bgColors[idx])}
+                className={cn('block w-1.5 h-100 rounded-lg', bgColors[idx])}
               >
-                {" "}
+                {' '}
               </div>
               <p>{data.ticker}</p>
             </div>
@@ -161,7 +161,7 @@ export function DcaComparisonChart({
               <ProfitPctBadge profitPct={data.profitPct} />
               <Button
                 disabled={mainTicker === data.ticker}
-                className={cn("p-0", mainTicker === data.ticker && "invisible")}
+                className={cn('p-0', mainTicker === data.ticker && 'invisible')}
                 onClick={() => {
                   removeTicker(data.ticker);
                 }}
@@ -192,8 +192,8 @@ function CustomTooltip({
         <p className="font-medium">{label}</p>
         {payload.map((data) => (
           <div className="flex flex-row items-center gap-x-1.5" key={data.name}>
-            <div className={cn("w-1 h-3 rounded-sm", `bg-[${data.stroke}]`)}>
-              {" "}
+            <div className={cn('w-1 h-3 rounded-sm', `bg-[${data.stroke}]`)}>
+              {' '}
             </div>
             <p>{data.name}</p>
           </div>

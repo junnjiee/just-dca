@@ -1,24 +1,24 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router";
-import { SunIcon, MoonIcon, MenuIcon, TrendingUpIcon } from "lucide-react";
+import { useState } from 'react';
+import { Link, useLocation } from 'react-router';
+import { SunIcon, MoonIcon, MenuIcon, TrendingUpIcon } from 'lucide-react';
 
-import { cn } from "@/lib/utils";
-import GithubIcon from "@/assets/github-mark.svg";
-import GithubIconDarkMode from "@/assets/github-mark-white.svg";
+import { cn } from '@/lib/utils';
+import GithubIcon from '@/assets/github-mark.svg';
+import GithubIconDarkMode from '@/assets/github-mark-white.svg';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
+} from '@/components/ui/drawer';
 
 const links = [
-  { url: "/", title: "Dashboard", shortTitle: "Dashboard" },
-  { url: "/what-is-dca", title: "What is DCA?", shortTitle: "What is DCA?" },
-  { url: "/about", title: "About this App", shortTitle: "About" },
+  { url: '/', title: 'Dashboard', shortTitle: 'Dashboard' },
+  { url: '/what-is-dca', title: 'What is DCA?', shortTitle: 'What is DCA?' },
+  { url: '/about', title: 'About this App', shortTitle: 'About' },
 ];
 
 export function Navbar() {
@@ -57,11 +57,11 @@ function NavLinks({ className }: { className?: string }) {
       {links.map((link) => (
         <Button
           className={cn(
-            "font-normal",
+            'font-normal',
             location.pathname === link.url &&
-              "font-medium text-accent-foreground"
+              'font-medium text-accent-foreground',
           )}
-          variant={"ghost"}
+          variant={'ghost'}
           key={link.url}
           onClick={() => (document.title = `just:dca | ${link.shortTitle}`)}
           asChild
@@ -103,15 +103,15 @@ function ToggleDarkModeButton() {
     const isDarkMode = !darkMode;
     setDarkMode(isDarkMode);
     if (isDarkMode) {
-      document.body.classList.add("dark");
+      document.body.classList.add('dark');
     } else {
-      document.body.classList.remove("dark");
+      document.body.classList.remove('dark');
     }
   };
 
   return (
     <Button
-      variant={"ghost"}
+      variant={'ghost'}
       className="text-accent-foreground"
       onClick={handleDarkModeChange}
     >

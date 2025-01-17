@@ -1,21 +1,21 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const DcaReturnsQueryInputSchema = z
   .object({
-    ticker: z.string().toUpperCase().nonempty("Enter a ticker"),
+    ticker: z.string().toUpperCase().nonempty('Enter a ticker'),
     contri: z
       .number({
-        required_error: "Enter a number",
-        invalid_type_error: "Enter a number",
+        required_error: 'Enter a number',
+        invalid_type_error: 'Enter a number',
       })
       .positive()
-      .multipleOf(0.01, "2 decimal places only (e.g. 0.01)"),
+      .multipleOf(0.01, '2 decimal places only (e.g. 0.01)'),
     start: z.string().date().nonempty(),
     end: z.string().date().nonempty(),
   })
   .refine((data) => data.end > data.start, {
-    message: "End date must be later than start",
-    path: ["end"],
+    message: 'End date must be later than start',
+    path: ['end'],
   });
 
 export const DcaReturnsQueryOutputSchema = z.array(
@@ -29,7 +29,7 @@ export const DcaReturnsQueryOutputSchema = z.array(
     total_val: z.number(),
     profit: z.number(),
     profitPct: z.number(),
-  })
+  }),
 );
 
 export const StockInfoQueryOutputSchema = z.object({

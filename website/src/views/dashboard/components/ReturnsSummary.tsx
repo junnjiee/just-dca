@@ -1,13 +1,13 @@
-import { useUserInput } from "@/contexts/user-input";
+import { useUserInput } from '@/contexts/user-input';
 
-import { formatPrice } from "@/lib/utils";
+import { formatPrice } from '@/lib/utils';
 
-import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
+import { useGetSuspendedDcaReturns } from '@/queries/dca-returns';
 
 import {
   ProfitPctBadge,
   ProfitAmtColored,
-} from "@/components/generic/profit-markers";
+} from '@/components/generic/profit-markers';
 
 export function ReturnsSummary() {
   const userInput = useUserInput();
