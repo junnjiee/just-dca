@@ -34,14 +34,6 @@ export function buildUrlWithParamsObj(
   return newUrl.concat(paramsArr.join('&'));
 }
 
-export function formatDate(date: Date) {
-  return date.toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  });
-}
-
 export function formatDateNoDay(date: Date) {
   return date.toLocaleDateString('en-GB', {
     month: 'short',

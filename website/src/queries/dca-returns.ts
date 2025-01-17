@@ -1,5 +1,4 @@
 import {
-  useQuery,
   useSuspenseQuery,
   useQueries,
   useSuspenseQueries,
@@ -37,12 +36,6 @@ async function fetchDcaReturns(params: DcaReturnsQueryInput) {
     throw err;
   }
 }
-
-export const useGetDcaReturns = (params: DcaReturnsQueryInput) =>
-  useQuery({
-    queryKey: [API_ROUTE, params],
-    queryFn: () => fetchDcaReturns(params),
-  });
 
 export const useGetMultipleDcaReturns = (paramsArr: DcaReturnsQueryInput[]) =>
   useQueries({
