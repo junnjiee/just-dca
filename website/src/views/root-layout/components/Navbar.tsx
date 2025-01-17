@@ -32,7 +32,7 @@ export function Navbar() {
 
       <div className="flex flex-row gap-x-2 items-center">
         <a
-          href="https://github.com/junnjiee16/just-dca-lah"
+          href="https://github.com/junnjiee16/just-dca"
           target="_blank"
           rel="noopener noreferrer"
         >

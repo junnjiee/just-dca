@@ -5,7 +5,7 @@ export function Footer() {
         <p>
           Looking to report a bug or suggest a feature? Open an{" "}
           <a
-            href="https://github.com/junnjiee16/just-dca-lah/issues"
+            href="https://github.com/junnjiee16/just-dca/issues"
             target="_blank"
             rel="noopener noreferrer"
             className="underline"
