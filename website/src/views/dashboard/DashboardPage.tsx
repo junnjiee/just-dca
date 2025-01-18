@@ -25,7 +25,7 @@ export function DashboardPage() {
         resetKeys={[userInput.ticker, userInput.start, userInput.end]}
       >
         <Suspense fallback={<LoadingFallback />}>
-          <TickerName ticker={userInput.ticker} />
+          <TickerName />
           <div className="flex flex-col mb-8 md:flex-row md:mb-3 gap-x-5">
             <div className="md:basis-2/3">
               <ReturnsSummary />
@@ -40,12 +40,9 @@ export function DashboardPage() {
   );
 }
 
-type TickerNameProps = {
-  ticker: string;
-};
-
-function TickerName({ ticker }: TickerNameProps) {
-  const { data } = useGetSuspendedStockInfo(ticker);
+export function TickerName() {
+  const userInput = useUserInput();
+  const { data } = useGetSuspendedStockInfo(userInput.ticker);
 
   return (
     <div className="border-b pb-3 space-y-0.5 mb-3">
