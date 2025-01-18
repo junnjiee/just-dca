@@ -40,7 +40,7 @@ export function DashboardPage() {
   );
 }
 
-export function TickerName() {
+function TickerName() {
   const userInput = useUserInput();
   const { data } = useGetSuspendedStockInfo(userInput.ticker);
 
