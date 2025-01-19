@@ -16,9 +16,8 @@ export function Footer() {
         </p>
         <p>
           Disclaimer: All figures shown are in the US Dollar. Actual numbers may
-          vary for each individual due to taxes, fees, exact date/time when
-          stock was bought and other factors not listed. Market data is
-          retrieved with{' '}
+          vary for each individual due to taxes, fees, and other factors not
+          listed. Market data is retrieved with{' '}
           <a
             href="https://github.com/ranaroussi/yfinance"
             target="_blank"
