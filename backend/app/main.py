@@ -2,11 +2,13 @@ from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
 from .dca.routes import router as api_dca_router
 from .stock.routes import router as api_stock_router
+from .config import settings
+
 
 app = FastAPI()
 
 origins = [
-    "http://localhost:5173",
+    settings.website_url,
 ]
 
 app.add_middleware(
