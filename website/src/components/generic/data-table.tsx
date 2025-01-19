@@ -284,7 +284,7 @@ function ExportCsvDrawer({ exportToCsv, className }: ExportCsvComponentProps) {
           </DrawerDescription>
         </DrawerHeader>
         <DrawerFooter>
-          <DrawerClose>
+          <DrawerClose asChild>
             <Button onClick={() => exportToCsv()}>Download</Button>
           </DrawerClose>
         </DrawerFooter>
