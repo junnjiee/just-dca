@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status
 import yfinance as yf
 import pandas as pd
-from backend.lib.utils import check_ticker_validity, check_history_validity
+from ..lib.utils import check_ticker_validity, check_history_validity
 
 router = APIRouter()
 

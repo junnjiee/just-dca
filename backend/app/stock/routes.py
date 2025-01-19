@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status
 import yfinance as yf
-from backend.lib.utils import check_ticker_validity
+from ..lib.utils import check_ticker_validity
 
 router = APIRouter()
 

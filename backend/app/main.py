@@ -1,7 +1,7 @@
 from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
-from backend.dca.routes import router as api_dca_router
-from backend.stock.routes import router as api_stock_router
+from .dca.routes import router as api_dca_router
+from .stock.routes import router as api_stock_router
 
 app = FastAPI()
 
