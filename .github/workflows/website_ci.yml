@@ -8,7 +8,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build_test:
+  ci_test:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,6 +27,7 @@ jobs:
         uses: pnpm/action-setup@v4.0.0
         with:
           run_install: true
+          version: 9.15.4
       
       - name: Lint
         run: pnpm run lint
