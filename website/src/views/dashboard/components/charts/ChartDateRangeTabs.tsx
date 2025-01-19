@@ -20,7 +20,7 @@ export function ChartDateRangeTabs({ className }: ChartDateRangeTabsProps) {
   const datePresets = [
     { dateRange: '3M', start: createDate(3), end: createDate(0) },
     { dateRange: '6M', start: createDate(6), end: createDate(0) },
-    { dateRange: 'YTD', start: createDate(12), end: createDate(0) },
+    { dateRange: '1Y', start: createDate(12), end: createDate(0) },
     { dateRange: '3Y', start: createDate(36), end: createDate(0) },
     { dateRange: '5Y', start: createDate(60), end: createDate(0) },
     { dateRange: '10Y', start: createDate(120), end: createDate(0) },
