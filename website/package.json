@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
-    "ci": "pnpm run format && pnpm run lint && pnpm run test && pnpm run build"
+    "ci": "pnpm run lint && pnpm run test && pnpm run build",
+    "prepush": "pnpm run format && pnpm run knip && pnpm run lint && pnpm run test && pnpm run build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
