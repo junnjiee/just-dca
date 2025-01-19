@@ -38,7 +38,7 @@ const tableColumns: ColumnDef<InferArrayType<DcaReturnsQueryOutput>>[] = [
   },
   {
     accessorKey: 'profitPct',
-    header: 'Overall Profit',
+    header: 'Overall Profit (%)',
     cell: ({ row }) => <ProfitPctBadge profitPct={row.getValue('profitPct')} />,
   },
   {
