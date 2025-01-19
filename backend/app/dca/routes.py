@@ -20,6 +20,7 @@ dict_keys = (
 
 @router.get("/returns", status_code=status.HTTP_200_OK)
 def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
+    print("LOG: hit /dca/returns")
     stock = yf.Ticker(ticker)
     check_ticker_validity(stock)
 
