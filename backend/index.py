@@ -21,6 +21,6 @@ app.include_router(api_dca_router, prefix="/api/dca")
 app.include_router(api_stock_router, prefix="/api/stock")
 
 
-@app.get("/api", status_code=status.HTTP_200_OK)
+@app.get("/", status_code=status.HTTP_200_OK)
 def check_status():
     return {"message": "service up and running"}
