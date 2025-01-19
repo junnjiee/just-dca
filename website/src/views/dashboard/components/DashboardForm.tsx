@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 
-import { cn } from '@/lib/utils';
+import { cn, createDate } from '@/lib/utils';
 
 import { useUserInput, useUserInputDispatch } from '@/contexts/user-input';
 
@@ -22,6 +22,7 @@ export function DashboardForm({ className }: DashboardFormProps) {
   const userInput = useUserInput();
   const userInputDispatch = useUserInputDispatch();
   const [isPending, startTransition] = useTransition();
+  const dateNow = createDate(0);
 
   const {
     register,
@@ -83,6 +84,7 @@ export function DashboardForm({ className }: DashboardFormProps) {
         type="date"
         {...register('start', { required: true })}
         className="dark:[color-scheme:dark]"
+        max={dateNow}
       />
       <div className="place-self-start">
         {errors.start && (
@@ -98,6 +100,7 @@ export function DashboardForm({ className }: DashboardFormProps) {
         type="date"
         {...register('end', { required: true })}
         className="dark:[color-scheme:dark]"
+        max={dateNow}
       />
       <div className="place-self-start">
         {errors.end && (
