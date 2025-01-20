@@ -1,15 +1,17 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { UserInputProvider } from "@/contexts/user-input";
 import { DashboardForm } from "./DashboardForm";
 
+const transitionSpy = vi.fn();
+
 describe("DashboardForm", () => {
   it("Ensure component rendered properly", () => {
     render(
       <UserInputProvider>
-        <DashboardForm />
+        <DashboardForm startTransition={transitionSpy} closeDialog={vi.fn()} />
       </UserInputProvider>
     );
     expect(screen.getByLabelText("Ticker")).toBeInTheDocument();
@@ -24,7 +26,7 @@ describe("DashboardForm", () => {
     const user = userEvent.setup();
     render(
       <UserInputProvider>
-        <DashboardForm />
+        <DashboardForm startTransition={transitionSpy} closeDialog={vi.fn()} />
       </UserInputProvider>
     );
 
@@ -44,7 +46,7 @@ describe("DashboardForm", () => {
     // NOTE: does not check if button triggered the submit function
     render(
       <UserInputProvider>
-        <DashboardForm />
+        <DashboardForm startTransition={transitionSpy} closeDialog={vi.fn()} />
       </UserInputProvider>
     );
 
@@ -66,7 +68,7 @@ describe("DashboardForm", () => {
     // NOTE: does not check if button triggered the submit function
     render(
       <UserInputProvider>
-        <DashboardForm />
+        <DashboardForm startTransition={transitionSpy} closeDialog={vi.fn()} />
       </UserInputProvider>
     );
 
