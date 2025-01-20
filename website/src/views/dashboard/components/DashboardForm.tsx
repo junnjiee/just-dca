@@ -54,7 +54,7 @@ export function DashboardFormButton({ className }: DashboardFormButtonProps) {
           </DialogDescription>
           <DialogDescription>
             To avoid errors, please follow Yahoo! Finance's ticker format. e.g.
-            to search Bitcoin, use BTC-USD, not BTC.
+            to search for VWRA, use VWRA.L instead.
           </DialogDescription>
         </DialogHeader>
         <DashboardForm
