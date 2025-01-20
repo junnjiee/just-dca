@@ -16,7 +16,7 @@ describe("DashboardForm", () => {
     expect(screen.getByLabelText("Monthly Contribution")).toBeInTheDocument();
     expect(screen.getByLabelText("From")).toBeInTheDocument();
     expect(screen.getByLabelText("To")).toBeInTheDocument();
-    expect(screen.getByText("Search")).toBeInTheDocument();
+    expect(screen.getByText("Calculate")).toBeInTheDocument();
   });
 
   it("Show relevant error messages for empty inputs", async () => {
@@ -32,7 +32,7 @@ describe("DashboardForm", () => {
     user.clear(screen.getByLabelText("Monthly Contribution"));
     user.clear(screen.getByLabelText("From"));
     user.clear(screen.getByLabelText("To"));
-    user.click(screen.getByText("Search"));
+    user.click(screen.getByText("Calculate"));
 
     expect(await screen.findByText("Enter a ticker")).toBeInTheDocument();
     expect(await screen.findByText("Enter a number")).toBeInTheDocument();
@@ -54,7 +54,7 @@ describe("DashboardForm", () => {
     fireEvent.change(screen.getByLabelText("To"), {
       target: { value: "2025-01-01" },
     });
-    user.click(screen.getByText("Search"));
+    user.click(screen.getByText("Calculate"));
 
     expect(
       await screen.findByText("End date must be later than start")
@@ -72,7 +72,7 @@ describe("DashboardForm", () => {
 
     user.clear(screen.getByLabelText("Monthly Contribution"));
     user.type(screen.getByLabelText("Monthly Contribution"), "1.111");
-    user.click(screen.getByText("Search"));
+    user.click(screen.getByText("Calculate"));
 
     expect(
       await screen.findByText("2 decimal places only (e.g. 0.01)")

@@ -1,7 +1,7 @@
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, CircleAlertIcon } from "lucide-react";
+import { Loader2, SearchIcon } from "lucide-react";
 import { useBoolean } from "usehooks-ts";
 
 import { createDate } from "@/lib/utils";
@@ -14,11 +14,6 @@ import { DcaReturnsQueryInputSchema } from "@/schemas/financial-queries";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Dialog,
   DialogContent,
@@ -40,15 +35,26 @@ export function DashboardFormButton({ className }: DashboardFormButtonProps) {
     <Dialog open={dialogOpen} onOpenChange={toggle}>
       <DialogTrigger asChild className={className} disabled={isPending}>
         <Button>
-          {isPending ? <Loader2 className="animate-spin" /> : "Search Ticker"}
+          {isPending ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            <>
+              <SearchIcon />
+              Enter Info
+            </>
+          )}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Search Ticker</DialogTitle>
+          <DialogTitle>Calculate Returns</DialogTitle>
           <DialogDescription>
-            Calculate DCA returns for any stock or cryptocurrency, as long as it
-            is available on Yahoo! Finance.
+            Calculate historical DCA returns for any stock or cryptocurrency, as
+            long as it is available on Yahoo! Finance.
+          </DialogDescription>
+          <DialogDescription>
+            To avoid errors, please follow Yahoo! Finance's ticker format. e.g.
+            to search Bitcoin, use BTC-USD, not BTC.
           </DialogDescription>
         </DialogHeader>
         <DashboardForm
@@ -100,15 +106,6 @@ export function DashboardForm({
     >
       <div>
         <Label htmlFor="ticker">Ticker</Label>
-        <Popover>
-          <PopoverTrigger className="ms-1">
-            <CircleAlertIcon width={"13"} height={"13"} />
-          </PopoverTrigger>
-          <PopoverContent>
-            Follow Yahoo Finance's tickers. e.g. To search Bitcoin, use BTC-USD,
-            not BTC.
-          </PopoverContent>
-        </Popover>
         <Input id="ticker" placeholder="e.g. AAPL" {...register("ticker")} />
         {errors.ticker && (
           <p className="text-red-600 text-sm">{errors.ticker.message}</p>
@@ -165,7 +162,7 @@ export function DashboardForm({
       </div>
 
       <div>
-        <Button type="submit">Search</Button>
+        <Button type="submit">Calculate</Button>
       </div>
     </form>
   );

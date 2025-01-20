@@ -1,29 +1,29 @@
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router';
-import { SunIcon, MoonIcon, MenuIcon, TrendingUpIcon } from 'lucide-react';
+import { Link, useLocation } from "react-router";
+import { SunIcon, MoonIcon, MenuIcon, TrendingUpIcon } from "lucide-react";
+import { useBoolean } from "usehooks-ts";
 
-import { cn } from '@/lib/utils';
-import GithubIcon from '@/assets/github-mark.svg';
-import GithubIconDarkMode from '@/assets/github-mark-white.svg';
+import { cn } from "@/lib/utils";
+import GithubIcon from "@/assets/github-mark.svg";
+import GithubIconDarkMode from "@/assets/github-mark-white.svg";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
   DrawerTitle,
   DrawerTrigger,
-} from '@/components/ui/drawer';
+} from "@/components/ui/drawer";
 
 const links = [
-  { url: '/', title: 'Dashboard', shortTitle: 'Dashboard' },
-  { url: '/what-is-dca', title: 'What is DCA?', shortTitle: 'What is DCA?' },
-  { url: '/about', title: 'About this App', shortTitle: 'About' },
+  { url: "/", title: "Dashboard", shortTitle: "Dashboard" },
+  { url: "/what-is-dca", title: "What is DCA?", shortTitle: "What is DCA?" },
+  { url: "/about", title: "About this App", shortTitle: "About" },
 ];
 
 export function Navbar() {
   return (
-    <div className="flex flex-row border-b px-2 md:px-7 py-3 justify-between items-center">
+    <div className="flex flex-row border-b px-2 md:px-7 py-3 justify-between items-center sticky top-0 backdrop-blur-md z-50">
       <div className="flex flex-row items-center gap-x-1">
         <NavDrawer className="md:hidden mx-2" />
         <JustDcaLogo />
@@ -57,11 +57,11 @@ function NavLinks({ className }: { className?: string }) {
       {links.map((link) => (
         <Button
           className={cn(
-            'font-normal',
+            "font-normal",
             location.pathname === link.url &&
-              'font-medium text-accent-foreground',
+              "font-medium text-accent-foreground"
           )}
-          variant={'ghost'}
+          variant={"ghost"}
           key={link.url}
           onClick={() => (document.title = `just:dca | ${link.shortTitle}`)}
           asChild
@@ -97,27 +97,23 @@ function NavDrawer({ className }: { className?: string }) {
 }
 
 function ToggleDarkModeButton() {
-  const [darkMode, setDarkMode] = useState(
-    window.matchMedia('(prefers-color-scheme: dark)').matches,
+  const { value: isDarkMode, toggle } = useBoolean(
+    window.matchMedia("(prefers-color-scheme: dark)").matches
   );
 
-  if (darkMode) {
-    document.body.classList.add('dark');
+  if (isDarkMode) {
+    document.body.classList.add("dark");
   } else {
-    document.body.classList.remove('dark');
+    document.body.classList.remove("dark");
   }
-
-  const handleDarkModeChange = () => {
-    setDarkMode((prev) => !prev);
-  };
 
   return (
     <Button
-      variant={'ghost'}
+      variant={"ghost"}
       className="text-accent-foreground"
-      onClick={handleDarkModeChange}
+      onClick={toggle}
     >
-      {darkMode ? <SunIcon /> : <MoonIcon />}
+      {isDarkMode ? <SunIcon /> : <MoonIcon />}
     </Button>
   );
 }
