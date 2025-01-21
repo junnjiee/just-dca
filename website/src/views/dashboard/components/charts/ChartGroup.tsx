@@ -1,23 +1,28 @@
-import { useState, useReducer, useDeferredValue } from 'react';
-import { SearchIcon, PlusIcon, Loader2, XIcon } from 'lucide-react';
+import { useState, useReducer, useDeferredValue } from "react";
+import { SearchIcon, PlusIcon, Loader2, XIcon } from "lucide-react";
 
-import { useUserInput } from '@/contexts/user-input';
+import { useUserInput } from "@/contexts/user-input";
 
-import { cn } from '@/lib/utils';
-import { tickersReducer } from '@/lib/reducers';
+import { cn } from "@/lib/utils";
+import { tickersReducer } from "@/lib/reducers";
 
-import { useGetMultipleDcaReturns } from '@/queries/dca-returns';
+import { useGetMultipleDcaReturns } from "@/queries/dca-returns";
 
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { DcaPerformanceChart } from './DcaPerformanceChart';
-import { DcaComparisonChart } from './DcaComparisonChart';
-import { ChartDateRangeTabs } from './ChartDateRangeTabs';
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { DcaPerformanceChart } from "./DcaPerformanceChart";
+import { DcaComparisonChart } from "./DcaComparisonChart";
+import { CostPerShareChart } from "./CostPerShareChart";
+import { DcaVsStockChart } from "./DcaVsStockChart";
 
-export function ChartGroup() {
+type ChartGroupProps = {
+  className?: string;
+};
+
+export function ChartGroup({ className }: ChartGroupProps) {
   const userInput = useUserInput();
-  const [newTicker, setNewTicker] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
+  const [newTicker, setNewTicker] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const [tickers, tickerDispatch] = useReducer(tickersReducer, [
     userInput.ticker,
@@ -25,16 +30,16 @@ export function ChartGroup() {
   const deferredTickers = useDeferredValue(tickers);
 
   const removeTicker = (ticker: string) => {
-    tickerDispatch({ type: 'remove', ticker: ticker });
-    setErrorMsg('');
+    tickerDispatch({ type: "remove", ticker: ticker });
+    setErrorMsg("");
   };
   const clearTickers = () => {
-    tickerDispatch({ type: 'clear' });
-    setErrorMsg('');
+    tickerDispatch({ type: "clear" });
+    setErrorMsg("");
   };
 
   const queryArr =
-    newTicker === '' ? [] : [{ ...userInput, ticker: newTicker }];
+    newTicker === "" ? [] : [{ ...userInput, ticker: newTicker }];
   const newTickerTestQuery = useGetMultipleDcaReturns(queryArr);
   const newTickerQueryLoading =
     newTickerTestQuery.map((query) => query.isLoading).length > 0;
@@ -43,38 +48,41 @@ export function ChartGroup() {
     // wait for query to resolve before resetting newTicker state
     if (newTickerTestQuery[0].isError) {
       setErrorMsg(newTickerTestQuery[0].error.message);
-      setNewTicker('');
+      setNewTicker("");
     }
     if (newTickerTestQuery[0].isSuccess) {
-      tickerDispatch({ type: 'add', ticker: newTicker.toUpperCase() });
-      setErrorMsg('');
-      setNewTicker('');
+      tickerDispatch({ type: "add", ticker: newTicker.toUpperCase() });
+      setErrorMsg("");
+      setNewTicker("");
     }
   }
 
   return (
-    <div className="space-y-3">
-      <ChartDateRangeTabs />
-      {tickers.length > 1 ? (
-        <div className={cn(tickers !== deferredTickers && 'opacity-50')}>
-          <DcaComparisonChart
-            tickers={deferredTickers}
-            removeTicker={removeTicker}
-            key={`${userInput.start}${userInput.end}${userInput.contri}`}
-          />
-        </div>
-      ) : (
-        <DcaPerformanceChart />
-      )}
-      <ComparisonInputButtonGroup
-        tickers={tickers}
-        clearTickers={clearTickers}
-        errorMsg={errorMsg}
-        setErrorMsg={setErrorMsg}
-        newTickerQueryLoading={newTickerQueryLoading}
-        setNewTicker={setNewTicker}
-        key={tickers.join()}
-      />
+    <div className={cn("grid grid-cols-1 gap-3 md:grid-cols-2", className)}>
+      <div className="space-y-3 md:col-span-2">
+        {tickers.length > 1 ? (
+          <div className={cn(tickers !== deferredTickers && "opacity-50")}>
+            <DcaComparisonChart
+              tickers={deferredTickers}
+              removeTicker={removeTicker}
+              key={`${userInput.start}${userInput.end}${userInput.contri}`}
+            />
+          </div>
+        ) : (
+          <DcaPerformanceChart />
+        )}
+        <ComparisonInputButtonGroup
+          tickers={tickers}
+          clearTickers={clearTickers}
+          errorMsg={errorMsg}
+          setErrorMsg={setErrorMsg}
+          newTickerQueryLoading={newTickerQueryLoading}
+          setNewTicker={setNewTicker}
+          key={tickers.join()}
+        />
+      </div>
+      <CostPerShareChart />
+      <DcaVsStockChart />
     </div>
   );
 }
@@ -97,17 +105,17 @@ function ComparisonInputButtonGroup({
   newTickerQueryLoading,
 }: ComparisonInputButtonGroupProps) {
   const [openInput, setOpenInput] = useState(false);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
 
   const handleCloseInput = () => {
     setOpenInput(false);
-    setInput('');
-    setErrorMsg('');
+    setInput("");
+    setErrorMsg("");
   };
 
   const handleSubmit = () => {
     if (tickers.includes(input.toUpperCase())) {
-      setErrorMsg('Ticker already shown');
+      setErrorMsg("Ticker already shown");
     } else {
       setNewTicker(input);
     }
@@ -130,7 +138,7 @@ function ComparisonInputButtonGroup({
               {newTickerQueryLoading ? (
                 <Loader2 className="animate-spin" />
               ) : (
-                'Add'
+                "Add"
               )}
             </Button>
             <Button
@@ -172,7 +180,7 @@ function ComparisonInputButtonGroup({
           </Button>
         )}
       </div>
-      <p className={cn('text-red-500', !errorMsg.length && 'invisible')}>
+      <p className={cn("text-red-500", !errorMsg.length && "invisible")}>
         Error: {errorMsg}
       </p>
     </>

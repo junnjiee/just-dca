@@ -28,11 +28,7 @@ export function DashboardPage() {
       >
         <Suspense fallback={<LoadingFallback />}>
           <CardGroup className="mb-3" />
-          <div className="flex flex-col mb-8 md:flex-row md:mb-3 gap-x-5">
-            <div className="md:basis-1/2">
-              <ChartGroup key={userInput.ticker} />
-            </div>
-          </div>
+          <ChartGroup key={userInput.ticker} />
           <DcaReturnsTable />
         </Suspense>
       </ErrorBoundary>

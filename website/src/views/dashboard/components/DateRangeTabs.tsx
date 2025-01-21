@@ -7,11 +7,11 @@ import { createDate } from "@/lib/utils";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-type ChartDateRangeTabsProps = {
+type DateRangeTabsProps = {
   className?: string;
 };
 
-export function ChartDateRangeTabs({ className }: ChartDateRangeTabsProps) {
+export function DateRangeTabs({ className }: DateRangeTabsProps) {
   const userInput = useUserInput();
   const userInputDispatch = useUserInputDispatch();
   const [isPending, startTransition] = useTransition();
