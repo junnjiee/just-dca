@@ -46,15 +46,15 @@ export function CardGroup({ className }: CardGroupProps) {
           <CardTitle>Current Value</CardTitle>
           <CardDescription className="flex flex-row justify-between items-start">
             <div>
-              <p className="font-medium">US{totalVal}</p>
+              <p>US{totalVal}</p>
               <ProfitAmtColored
                 profit={data[data.length - 1].profit}
-                className="text-sm"
+                className="text-sm font-normal"
               />
             </div>
             <ProfitPctBadge
               profitPct={data[data.length - 1].profitPct}
-              className="text-sm"
+              className="text-sm font-normal"
             />
           </CardDescription>
         </CardHeader>

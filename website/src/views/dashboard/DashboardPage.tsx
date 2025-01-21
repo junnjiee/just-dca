@@ -9,8 +9,6 @@ import { ErrorFallback } from "@/views/fallbacks/error";
 import { LoadingFallback } from "@/views/fallbacks/loading";
 
 import { DashboardFormButton } from "./components/DashboardForm";
-// import { ReturnsSummary } from "./components/ReturnsSummary";
-import { DataCard } from "./components/DataCard";
 import { ChartGroup } from "./components/charts/ChartGroup";
 import { DcaReturnsTable } from "./components/DcaReturnsTable";
 import { CardGroup } from "./components/CardGroup";
@@ -31,11 +29,9 @@ export function DashboardPage() {
         <Suspense fallback={<LoadingFallback />}>
           <CardGroup className="mb-3" />
           <div className="flex flex-col mb-8 md:flex-row md:mb-3 gap-x-5">
-            <div className="md:basis-2/3">
-              {/* <ReturnsSummary /> */}
+            <div className="md:basis-1/2">
               <ChartGroup key={userInput.ticker} />
             </div>
-            <DataCard className="h-fit md:basis-1/3" />
           </div>
           <DcaReturnsTable />
         </Suspense>
