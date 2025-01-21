@@ -1,6 +1,6 @@
-import { ArrowUpRight, ArrowDownRight, ArrowRight } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, ArrowRight } from "lucide-react";
 
-import { cn, formatPrice, formatNumber } from '@/lib/utils';
+import { cn, formatPrice, formatPct } from "@/lib/utils";
 
 type ProfitPctBadgeProps = {
   profitPct: number;
@@ -8,29 +8,29 @@ type ProfitPctBadgeProps = {
 };
 
 const getTrend = (amount: number) => {
-  return amount > 0 ? 'positive' : amount < 0 ? 'negative' : 'neutral';
+  return amount > 0 ? "positive" : amount < 0 ? "negative" : "neutral";
 };
 
 export function ProfitPctBadge({ profitPct, className }: ProfitPctBadgeProps) {
   const trend = getTrend(profitPct);
 
-  const profitPctFormatted = formatNumber(Math.abs(profitPct)) + '%';
+  const profitPctFormatted = formatPct(Math.abs(profitPct));
 
   return (
     <div
       className={cn(
-        'flex flex-row w-fit px-2 py-1 rounded-lg place-items-center',
-        trend === 'positive'
-          ? 'bg-green-100 text-green-800 dark:bg-green-300 dark:text-green-900'
-          : trend === 'negative'
-            ? 'bg-red-100 text-red-800 dark:bg-red-300 dark:text-red-900'
-            : 'bg-gray-100 text-gray-500 dark:bg-gray-300 dark:text-gray-600',
-        className,
+        "flex flex-row w-fit px-1 py-0.5 rounded-lg place-items-center",
+        trend === "positive"
+          ? "bg-green-100 text-green-800 dark:bg-green-300 dark:text-green-900"
+          : trend === "negative"
+          ? "bg-red-100 text-red-800 dark:bg-red-300 dark:text-red-900"
+          : "bg-gray-100 text-gray-500 dark:bg-gray-300 dark:text-gray-600",
+        className
       )}
     >
-      {trend === 'positive' && <ArrowUpRight />}
-      {trend === 'negative' && <ArrowDownRight />}
-      {trend === 'neutral' && <ArrowRight />}
+      {trend === "positive" && <ArrowUpRight />}
+      {trend === "negative" && <ArrowDownRight />}
+      {trend === "neutral" && <ArrowRight />}
       {profitPctFormatted}
     </div>
   );
@@ -47,15 +47,15 @@ export function ProfitAmtColored({ profit, className }: ProfitAmtColoredProps) {
   return (
     <p
       className={cn(
-        trend === 'positive'
-          ? 'text-green-800 dark:text-green-600'
-          : trend === 'negative'
-            ? 'text-red-800 dark:text-red-600'
-            : 'text-gray-500 dark:text-gray-400',
-        className,
+        trend === "positive"
+          ? "text-green-800 dark:text-green-600"
+          : trend === "negative"
+          ? "text-red-800 dark:text-red-600"
+          : "text-gray-500 dark:text-gray-400",
+        className
       )}
     >
-      {trend === 'positive' && '+'}
+      {trend === "positive" && "+"}
       {formatPrice(profit)}
     </p>
   );

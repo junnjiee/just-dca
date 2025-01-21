@@ -169,7 +169,7 @@ function TableInteraction<TData>({
 }: TableInteractionProps<TData>) {
   return (
     <div className="flex flex-col gap-y-3 md:flex-row md:justify-between md:items-center py-3">
-      <p className="text-sm text-gray-600 dark:text-gray-400">
+      <p className="text-sm text-muted-foreground">
         Showing page {table.getState().pagination.pageIndex + 1} of{' '}
         {table.getPageCount()}
       </p>

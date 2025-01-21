@@ -63,7 +63,7 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
 
         data["total_val"] = round(total_val, 2)
         data["profit"] = round(data["total_val"] - data["contribution"], 2)
-        data["profitPct"] = round(data["profit"] / data["contribution"] * 100, 2)
+        data["profitPct"] = round(data["profit"] / data["contribution"], 4)
 
         table.append(data)
 
