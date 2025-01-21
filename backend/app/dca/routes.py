@@ -25,7 +25,7 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
     check_ticker_validity(stock)
 
     history = stock.history(start=start, end=end, interval="1mo")
-    check_history_validity(history)
+    check_history_validity(ticker, history)
 
     table = []
 
