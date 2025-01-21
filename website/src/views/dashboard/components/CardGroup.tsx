@@ -65,11 +65,12 @@ export function CardGroup({ className }: CardGroupProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle>Contribution</CardTitle>
+          <CardTitle>Total Contribution</CardTitle>
           <CardDescription>US{contri}</CardDescription>
         </CardHeader>
         <CardContent className="font-normal text-sm">
-          Over 10 months
+          By contributing {formatPrice(userInput.contri)}/month from{" "}
+          {userInput.start} to {userInput.end}
         </CardContent>
       </Card>
 

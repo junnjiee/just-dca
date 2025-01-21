@@ -19,7 +19,7 @@ export function DashboardPage() {
   return (
     <>
       <div className="border-b pb-3 mb-3 flex flex-col-reverse gap-y-3 md:flex-row md:items-center md:justify-between">
-        <TickerName />
+        <DashboardHeader />
         <DashboardFormButton className="w-fit" />
       </div>
       <ErrorBoundary
@@ -40,10 +40,17 @@ export function DashboardPage() {
   );
 }
 
-function TickerName() {
+function DashboardHeader() {
   const userInput = useUserInput();
   const { data, isSuccess } = useGetStockInfo(userInput.ticker);
   const tickerName = isSuccess ? data.longName : "";
 
-  return <h1 className="text-2xl">{tickerName}</h1>;
+  return (
+    <div>
+      <h1 className="text-2xl">{tickerName}</h1>
+      <p className="text-muted-foreground text-sm">
+        Ticker: {userInput.ticker}
+      </p>
+    </div>
+  );
 }
