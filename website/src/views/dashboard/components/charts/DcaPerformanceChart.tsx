@@ -1,11 +1,9 @@
-import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from 'recharts';
-import { TrendingUpIcon, TrendingDownIcon } from 'lucide-react';
+import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from "recharts";
+import { TrendingUpIcon, TrendingDownIcon } from "lucide-react";
 
-import { formatDateNoDay, formatNumber, formatPrice } from '@/lib/utils';
-
-import { useUserInput } from '@/contexts/user-input';
-
-import { useGetSuspendedDcaReturns } from '@/queries/dca-returns';
+import { formatDateNoDay, formatPct, formatPrice } from "@/lib/utils";
+import { useUserInput } from "@/contexts/user-input";
+import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
 
 import {
   ChartConfig,
@@ -14,15 +12,15 @@ import {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from '@/components/ui/chart';
+} from "@/components/ui/chart";
 
 const dcaPerformanceChartConfig = {
   total_val: {
-    label: 'Total Value',
+    label: "Total Value",
   },
   contribution: {
-    label: 'Contribution',
-    color: '#2563eb',
+    label: "Contribution",
+    color: "#2563eb",
   },
 } satisfies ChartConfig;
 
@@ -35,16 +33,20 @@ export function DcaPerformanceChart() {
 
   const trendColor =
     filteredData[filteredData.length - 1].profit > 0
-      ? '#22c55e'
+      ? "#22c55e"
       : filteredData[filteredData.length - 1].profit < 0
-        ? '#ef4444'
-        : '#a1a1aa';
+      ? "#ef4444"
+      : "#a1a1aa";
 
   return (
     <div>
-      <ChartContainer config={dcaPerformanceChartConfig}>
+      <p className="font-medium text-lg ms-4 mb-5">Your DCA Performance</p>
+      <ChartContainer
+        config={dcaPerformanceChartConfig}
+        className="md:aspect-[3/1]"
+      >
         {/* recharts component */}
-        <AreaChart data={filteredData}>
+        <AreaChart data={filteredData} height={10}>
           <defs>
             <linearGradient id="fillTotalVal" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor={trendColor} stopOpacity={0.8} />
@@ -90,28 +92,24 @@ export function DcaPerformanceChart() {
           <ChartLegend content={<ChartLegendContent />} />
         </AreaChart>
       </ChartContainer>
+
       <div className="text-sm ps-5 pt-3 space-y-2">
         <div className="flex font-medium">
-          Your contributions{' '}
+          Your contributions{" "}
           {finalProfitPct > 0
-            ? 'grew by ' + formatNumber(finalProfitPct) + '%'
+            ? "grew by " + formatPct(finalProfitPct)
             : finalProfitPct < 0
-              ? 'dipped by ' + formatNumber(Math.abs(finalProfitPct)) + '%'
-              : 'stagnated'}
-          {finalProfitPct > 0 ? (
-            <TrendingUpIcon className="ps-1 w-5 h-5" />
-          ) : finalProfitPct < 0 ? (
-            <TrendingDownIcon className="ps-1 w-5 h-5" />
-          ) : (
-            <></>
-          )}
+            ? "dipped by " + formatPct(Math.abs(finalProfitPct))
+            : "stagnated"}
+          {finalProfitPct > 0 && <TrendingUpIcon className="ps-1 w-5 h-5" />}
+          {finalProfitPct < 0 && <TrendingDownIcon className="ps-1 w-5 h-5" />}
         </div>
         <p>
-          By investing {formatPrice(userInput.contri)} each month in{' '}
-          <span className="font-medium">{userInput.ticker}</span> from{' '}
-          {formatDateNoDay(new Date(filteredData[0].date))} to{' '}
+          By investing {formatPrice(userInput.contri)} each month in{" "}
+          <span className="font-medium">{userInput.ticker}</span> from{" "}
+          {formatDateNoDay(new Date(filteredData[0].date))} to{" "}
           {formatDateNoDay(
-            new Date(filteredData[filteredData.length - 1].date),
+            new Date(filteredData[filteredData.length - 1].date)
           )}
           .
         </p>

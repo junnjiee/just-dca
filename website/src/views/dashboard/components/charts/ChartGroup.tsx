@@ -59,7 +59,7 @@ export function ChartGroup({ className }: ChartGroupProps) {
 
   return (
     <div className={cn("grid grid-cols-1 gap-3 md:grid-cols-2", className)}>
-      <div className="space-y-3 md:col-span-2">
+      <div className="space-y-3 md:col-span-2 md:mx-4">
         {tickers.length > 1 ? (
           <div className={cn(tickers !== deferredTickers && "opacity-50")}>
             <DcaComparisonChart
@@ -127,6 +127,7 @@ function ComparisonInputButtonGroup({
         {openInput ? (
           <div className="flex flex-row gap-x-3">
             <Input
+              className="text-sm"
               placeholder="Enter ticker (e.g. META)"
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -138,7 +139,7 @@ function ComparisonInputButtonGroup({
               {newTickerQueryLoading ? (
                 <Loader2 className="animate-spin" />
               ) : (
-                "Add"
+                <>Add</>
               )}
             </Button>
             <Button

@@ -28,7 +28,7 @@ export function DashboardPage() {
       >
         <Suspense fallback={<LoadingFallback />}>
           <CardGroup className="mb-3" />
-          <ChartGroup key={userInput.ticker} />
+          <ChartGroup className="mt-7" key={userInput.ticker} />
           <DcaReturnsTable />
         </Suspense>
       </ErrorBoundary>

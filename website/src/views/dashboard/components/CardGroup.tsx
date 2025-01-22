@@ -40,8 +40,8 @@ export function CardGroup({ className }: CardGroupProps) {
   );
 
   return (
-    <div className={cn("grid gap-3 grid-cols-2 md:grid-cols-3", className)}>
-      <Card className="col-span-2 md:col-span-1">
+    <div className={cn("grid gap-3 grid-cols-2 sm:grid-cols-3", className)}>
+      <Card className="col-span-2 sm:col-span-1">
         <CardHeader>
           <CardTitle>Current Value</CardTitle>
           <CardDescription className="flex flex-row justify-between items-start">
