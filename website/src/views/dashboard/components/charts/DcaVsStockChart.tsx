@@ -102,7 +102,12 @@ export function DcaVsStockChart() {
               dataKey="date"
               tickFormatter={(value) => formatDateNoDay(new Date(value))}
             />
-            <YAxis tickLine={false} axisLine={false} dx={-10} />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              dx={-10}
+              tickFormatter={(value) => formatPct(value)}
+            />
             <ChartTooltip
               content={<ChartTooltipContent className="w-[170px]" />}
             />

@@ -61,13 +61,16 @@ export function ChartGroup({ className }: ChartGroupProps) {
   return (
     <div className={cn("grid grid-cols-1 gap-3 md:grid-cols-2", className)}>
       <div className="md:col-span-2 md:mx-4">
-        <p className="font-medium text-lg mb-2">
-          {tickers.length > 1 ? (
-            <>Comparing DCA Performances</>
-          ) : (
-            <>Your DCA Performance</>
-          )}
-        </p>
+        <div className="mb-2">
+          <p className="font-medium text-lg">
+            {tickers.length > 1 ? (
+              <>Comparing DCA Performances</>
+            ) : (
+              <>Your DCA Performance</>
+            )}
+          </p>
+          <p className="text-sm text-muted-foreground">{userInput.start} - {userInput.end}</p>
+        </div>
         <DateRangeTabs className="my-3" />
         {tickers.length > 1 ? (
           <div className={cn(tickers !== deferredTickers && "opacity-50")}>

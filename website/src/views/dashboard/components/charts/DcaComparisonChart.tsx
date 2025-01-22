@@ -143,10 +143,18 @@ export function DcaComparisonChart({
             Compare dollar-cost averaging performances between stocks.
           </p>
           <p>
-            Assuming a contribution rate of {formatPrice(userInput.contri)}/month.
+            Assuming a contribution rate of {formatPrice(userInput.contri)}
+            /month.
           </p>
         </div>
 
+        <div className="grid grid-cols-5 text-sm text-muted-foreground justify-items-center">
+          <p className="invisible"></p>
+          <p className="">Total Value</p>
+          <p className="invisible"></p>
+          <p className="">Profit</p>
+          <p className="invisible"></p>
+        </div>
         {hoverDataToRender.map((data, idx) => {
           const totalValFormatted = data.totalVal
             ? formatPrice(data.totalVal)
@@ -155,9 +163,9 @@ export function DcaComparisonChart({
           return (
             <div
               key={data.ticker}
-              className="flex flex-row py-2 justify-between place-items-center border-b text-sm"
+              className="grid grid-cols-5 py-1.5 place-items-center border-b text-sm"
             >
-              <div className="flex flex-row gap-x-2">
+              <div className="flex flex-row gap-x-2 justify-self-start">
                 <div
                   className={cn("block w-1.5 h-100 rounded-lg", bgColors[idx])}
                 >
@@ -165,31 +173,35 @@ export function DcaComparisonChart({
                 </div>
                 <p>{data.ticker}</p>
               </div>
+
               <p>{totalValFormatted}</p>
+              <div className="invisible"></div>
+
               <div className="flex flex-row gap-x-7 place-items-center">
                 <ProfitAmtColored
                   profit={data.profit}
                   className="hidden md:block"
                 />
                 <ProfitPctBadge profitPct={data.profitPct} />
-                <Button
-                  disabled={mainTicker === data.ticker}
-                  className={cn(
-                    "p-0",
-                    mainTicker === data.ticker && "invisible"
-                  )}
-                  onClick={() => {
-                    removeTicker(data.ticker);
-                  }}
-                  variant="ghost"
-                  asChild
-                >
-                  <XIcon
-                    className="cursor-pointer text-gray-600 rounded-full"
-                    size={30}
-                  />
-                </Button>
               </div>
+
+              <Button
+                disabled={mainTicker === data.ticker}
+                className={cn(
+                  "p-0 justify-self-end",
+                  mainTicker === data.ticker && "invisible"
+                )}
+                onClick={() => {
+                  removeTicker(data.ticker);
+                }}
+                variant="ghost"
+                asChild
+              >
+                <XIcon
+                  className="cursor-pointer text-gray-600 rounded-full"
+                  size={30}
+                />
+              </Button>
             </div>
           );
         })}

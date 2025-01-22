@@ -5,18 +5,18 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table";
 import {
   SheetIcon,
   ChevronLeftIcon,
   ChevronsLeftIcon,
   ChevronRightIcon,
   ChevronsRightIcon,
-} from 'lucide-react';
-import { saveAs } from 'file-saver';
+} from "lucide-react";
+import { saveAs } from "file-saver";
 
-import { DcaReturnsQueryOutput } from '@/types/financial-queries';
-import { InferArrayType } from '@/types/utils';
+import { DcaReturnsQueryOutput } from "@/types/financial-queries";
+import { InferArrayType } from "@/types/utils";
 
 import {
   Table,
@@ -25,8 +25,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -34,7 +34,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -44,7 +44,7 @@ import {
   DialogTrigger,
   DialogFooter,
   DialogClose,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerClose,
@@ -54,7 +54,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from '@/components/ui/drawer';
+} from "@/components/ui/drawer";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -67,7 +67,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const pageSizeOptions = ['5', '10', '20', '30', '40', '50'];
+  const pageSizeOptions = ["5", "10", "20", "30", "40", "50"];
 
   const table = useReactTable({
     data,
@@ -94,14 +94,14 @@ export function DataTable<TData, TValue>({
               header as keyof InferArrayType<DcaReturnsQueryOutput>;
             return assertedRow[assertedHeader];
           })
-          .join(',');
+          .join(",");
       })
-      .join('\n');
+      .join("\n");
 
-    const csv = headers.join(',').concat('\n' + commaSeperatedData);
-    const csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const csv = headers.join(",").concat("\n" + commaSeperatedData);
+    const csvData = new Blob([csv], { type: "text/csv;charset=utf-8;" });
 
-    saveAs(csvData, 'data.csv');
+    saveAs(csvData, "data.csv");
   };
 
   return (
@@ -122,7 +122,7 @@ export function DataTable<TData, TValue>({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                   </TableHead>
                 );
@@ -135,7 +135,7 @@ export function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
+                data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
@@ -170,7 +170,7 @@ function TableInteraction<TData>({
   return (
     <div className="flex flex-col gap-y-3 md:flex-row md:justify-between md:items-center py-3">
       <p className="text-sm text-muted-foreground">
-        Showing page {table.getState().pagination.pageIndex + 1} of{' '}
+        Showing page {table.getState().pagination.pageIndex + 1} of{" "}
         {table.getPageCount()}
       </p>
       <div className="space-x-2 self-center">
