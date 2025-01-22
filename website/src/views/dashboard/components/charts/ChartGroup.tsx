@@ -14,6 +14,7 @@ import { DcaPerformanceChart } from "./DcaPerformanceChart";
 import { DcaComparisonChart } from "./DcaComparisonChart";
 import { CostPerShareChart } from "./CostPerShareChart";
 import { DcaVsStockChart } from "./DcaVsStockChart";
+import { DateRangeTabs } from "../DateRangeTabs";
 
 type ChartGroupProps = {
   className?: string;
@@ -59,7 +60,15 @@ export function ChartGroup({ className }: ChartGroupProps) {
 
   return (
     <div className={cn("grid grid-cols-1 gap-3 md:grid-cols-2", className)}>
-      <div className="space-y-3 md:col-span-2 md:mx-4">
+      <div className="md:col-span-2 md:mx-4">
+        <p className="font-medium text-lg mb-2">
+          {tickers.length > 1 ? (
+            <>Comparing DCA Performances</>
+          ) : (
+            <>Your DCA Performance</>
+          )}
+        </p>
+        <DateRangeTabs className="my-3" />
         {tickers.length > 1 ? (
           <div className={cn(tickers !== deferredTickers && "opacity-50")}>
             <DcaComparisonChart
@@ -81,8 +90,8 @@ export function ChartGroup({ className }: ChartGroupProps) {
           key={tickers.join()}
         />
       </div>
-      <CostPerShareChart />
       <DcaVsStockChart />
+      <CostPerShareChart />
     </div>
   );
 }
@@ -123,7 +132,7 @@ function ComparisonInputButtonGroup({
 
   return (
     <>
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row justify-between mt-1">
         {openInput ? (
           <div className="flex flex-row gap-x-3">
             <Input

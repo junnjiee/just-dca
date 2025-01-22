@@ -48,7 +48,7 @@ export function DateRangeTabs({ className }: DateRangeTabsProps) {
   return (
     <>
       <Tabs value={chosenPreset()} className={className}>
-        <TabsList className="w-full lg:w-2/3">
+        <TabsList className="w-full md:w-1/2">
           {datePresets.map((preset) => (
             <TabsTrigger
               className="w-full"

@@ -45,12 +45,12 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
 
         data["padded_row"] = False
         data["date"] = history.index[i].strftime("%d %b %Y")
-        data["stock_price"] = history["Open"].iloc[i].round(2)
-        data["shares_bought"] = (contri / history["Open"].iloc[i]).round(2)
-        data["contribution"] = round(contri * (i + 1), 2)
+        data["stock_price"] = history["Open"].iloc[i]
+        data["shares_bought"] = contri / history["Open"].iloc[i]
+        data["contribution"] = contri * (i + 1)
 
         shares_owned += data["shares_bought"]
-        data["shares_owned"] = round(shares_owned, 2)
+        data["shares_owned"] = shares_owned
 
         # profit varies by which month stock is bought
         total_val = contri
@@ -61,9 +61,9 @@ def calculate_dca_returns(ticker: str, contri: float, start: str, end: str):
             # current price / price at month x * monthly contribution value
             total_val += contri * (history["Open"].iloc[i] / row["stock_price"])
 
-        data["total_val"] = round(total_val, 2)
-        data["profit"] = round(data["total_val"] - data["contribution"], 2)
-        data["profitPct"] = round(data["profit"] / data["contribution"], 4)
+        data["total_val"] = total_val
+        data["profit"] = data["total_val"] - data["contribution"]
+        data["profitPct"] = data["profit"] / data["contribution"]
 
         table.append(data)
 

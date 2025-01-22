@@ -1,11 +1,11 @@
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { TrendingUpIcon, TrendingDownIcon } from "lucide-react";
 
-import { formatDateNoDay, formatNumber, formatPrice } from "@/lib/utils";
-
+import { formatDateNoDay, formatPct } from "@/lib/utils";
 import { useUserInput } from "@/contexts/user-input";
-
 import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
+import { DcaReturnsQueryOutput } from "@/types/financial-queries";
+import { InferArrayType } from "@/types/utils";
 
 import {
   ChartConfig,
@@ -15,15 +15,21 @@ import {
   ChartLegend,
   ChartLegendContent,
 } from "@/components/ui/chart";
-import { DcaReturnsQueryOutput } from "@/types/financial-queries";
-import { InferArrayType } from "@/types/utils";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const dcaPerformanceChartConfig = {
   stockPct: {
-    label: "Stock Growth",
+    label: "Stock Growth (%)",
   },
   profitPct: {
-    label: "DCA Growth",
+    label: "DCA Growth (%)",
   },
 } satisfies ChartConfig;
 
@@ -40,7 +46,6 @@ export function DcaVsStockChart() {
     ? firstNonPaddedRow.stock_price
     : 0;
 
-  // filter padded rows + create dca_price key
   const filteredData = data.reduce(
     (
       acc: DcaReturnsQueryOutputMutated[],
@@ -51,9 +56,7 @@ export function DcaVsStockChart() {
           ...acc,
           {
             ...row,
-            stockPct: parseFloat(
-              formatNumber(row.stock_price / initialStockPrice - 1)
-            ),
+            stockPct: row.stock_price / initialStockPrice - 1,
           },
         ];
       }
@@ -62,61 +65,69 @@ export function DcaVsStockChart() {
     []
   );
 
-  const finalProfitPct = data[data.length - 1].profitPct;
+  const trend =
+    filteredData[filteredData.length - 1].profit > 0
+      ? "positive"
+      : filteredData[filteredData.length - 1].profit < 0
+      ? "negative"
+      : "neutral";
 
   const trendColor =
-    filteredData[filteredData.length - 1].profit > 0
+    trend === "positive"
       ? "#22c55e"
-      : filteredData[filteredData.length - 1].profit < 0
+      : trend === "negative"
       ? "#ef4444"
       : "#a1a1aa";
 
   return (
-    <div>
-      <ChartContainer config={dcaPerformanceChartConfig}>
-        {/* recharts component */}
-        <LineChart data={filteredData}>
-          <Line dataKey="profitPct" stroke={trendColor} dot={false} />
-          <Line dataKey="stockPct" stroke="#6b7280" dot={false} />
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-lg font-medium text-inherit">
+          Investment Growth
+        </CardTitle>
+        <CardDescription className="text-sm font-normal text-muted-foreground">
+          View your dollar-cost averaging growth relative to {userInput.ticker}
+          's growth, from x to y
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={dcaPerformanceChartConfig}>
+          {/* recharts component */}
+          <LineChart data={filteredData}>
+            <Line dataKey="profitPct" stroke={trendColor} dot={false} />
+            <Line dataKey="stockPct" stroke="#6b7280" dot={false} />
 
-          <CartesianGrid vertical={false} />
-          <XAxis
-            dataKey="date"
-            tickFormatter={(value) => formatDateNoDay(new Date(value))}
-          />
-          <YAxis tickLine={false} axisLine={false} dx={-10} />
-          <ChartTooltip
-            content={<ChartTooltipContent className="w-[170px]" />}
-          />
-          <ChartLegend content={<ChartLegendContent />} />
-        </LineChart>
-      </ChartContainer>
-      <div className="text-sm ps-5 pt-3 space-y-2">
-        <div className="flex font-medium">
-          Your contributions{" "}
-          {finalProfitPct > 0
-            ? "grew by " + formatNumber(finalProfitPct) + "%"
-            : finalProfitPct < 0
-            ? "dipped by " + formatNumber(Math.abs(finalProfitPct)) + "%"
-            : "stagnated"}
-          {finalProfitPct > 0 ? (
-            <TrendingUpIcon className="ps-1 w-5 h-5" />
-          ) : finalProfitPct < 0 ? (
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="date"
+              tickFormatter={(value) => formatDateNoDay(new Date(value))}
+            />
+            <YAxis tickLine={false} axisLine={false} dx={-10} />
+            <ChartTooltip
+              content={<ChartTooltipContent className="w-[170px]" />}
+            />
+            <ChartLegend content={<ChartLegendContent />} />
+          </LineChart>
+        </ChartContainer>
+      </CardContent>
+      <CardFooter className="flex-col text-sm items-start gap-y-1">
+        <p className="flex font-medium">
+          Dollar-cost averaging generated a{" "}
+          {(trend === "positive" || trend === "neutral") && <>growth</>}
+          {trend === "negative" && <>loss</>} of{" "}
+          {formatPct(Math.abs(filteredData[filteredData.length - 1].profitPct))}
+          {trend === "positive" && <TrendingUpIcon className="ps-1 w-5 h-5" />}
+          {trend === "negative" && (
             <TrendingDownIcon className="ps-1 w-5 h-5" />
-          ) : (
-            <></>
           )}
-        </div>
-        <p>
-          By investing {formatPrice(userInput.contri)} each month in{" "}
-          <span className="font-medium">{userInput.ticker}</span> from{" "}
-          {formatDateNoDay(new Date(filteredData[0].date))} to{" "}
-          {formatDateNoDay(
-            new Date(filteredData[filteredData.length - 1].date)
-          )}
-          .
         </p>
-      </div>
-    </div>
+        <p>
+          In the same period, {userInput.ticker}{" "}
+          {(trend === "positive" || trend === "neutral") && <>grew</>}
+          {trend === "negative" && <>fell</>} by{" "}
+          {formatPct(Math.abs(filteredData[filteredData.length - 1].stockPct))}
+        </p>
+      </CardFooter>
+    </Card>
   );
 }

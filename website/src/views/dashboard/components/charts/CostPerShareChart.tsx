@@ -1,11 +1,10 @@
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
-import { TrendingUpIcon, TrendingDownIcon } from "lucide-react";
 
-import { formatDateNoDay, formatNumber, formatPrice } from "@/lib/utils";
-
+import { formatDateNoDay } from "@/lib/utils";
 import { useUserInput } from "@/contexts/user-input";
-
 import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
+import { DcaReturnsQueryOutput } from "@/types/financial-queries";
+import { InferArrayType } from "@/types/utils";
 
 import {
   ChartConfig,
@@ -15,12 +14,17 @@ import {
   ChartLegend,
   ChartLegendContent,
 } from "@/components/ui/chart";
-import { DcaReturnsQueryOutput } from "@/types/financial-queries";
-import { InferArrayType } from "@/types/utils";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const dcaPerformanceChartConfig = {
   stock_price: {
-    label: "Price at Open",
+    label: "Share Price (at Open)",
   },
   dca_price: {
     label: "DCA Price",
@@ -42,12 +46,13 @@ export function CostPerShareChart() {
       row: InferArrayType<DcaReturnsQueryOutput>
     ) => {
       if (!row.padded_row) {
+        console.log(row.contribution / row.shares_owned);
         return [
           ...acc,
           {
             ...row,
             dca_price: parseFloat(
-              formatNumber(row.contribution / row.shares_owned)
+              (row.contribution / row.shares_owned).toFixed(2)
             ),
           },
         ];
@@ -57,8 +62,6 @@ export function CostPerShareChart() {
     []
   );
 
-  const finalProfitPct = data[data.length - 1].profitPct;
-
   const trendColor =
     filteredData[filteredData.length - 1].profit > 0
       ? "#22c55e"
@@ -67,51 +70,37 @@ export function CostPerShareChart() {
       : "#a1a1aa";
 
   return (
-    <div>
-      <ChartContainer config={dcaPerformanceChartConfig}>
-        {/* recharts component */}
-        <LineChart data={filteredData}>
-          <Line dataKey="dca_price" stroke={trendColor} dot={false} />
-          <Line dataKey="stock_price" stroke="#6b7280" dot={false} />
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-lg font-medium text-inherit">
+          Price per share
+        </CardTitle>
+        <CardDescription className="text-sm font-normal text-muted-foreground">
+          DCA helps to smoothen price fluctuations. View how your dollar-cost
+          averaged price evolved compared to the price of{" "}
+          <span className="font-medium">{userInput.ticker}</span>.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={dcaPerformanceChartConfig}>
+          {/* recharts component */}
+          <LineChart data={filteredData}>
+            <Line dataKey="dca_price" stroke={trendColor} dot={false} />
+            <Line dataKey="stock_price" stroke="#6b7280" dot={false} />
 
-          <CartesianGrid vertical={false} />
-          <XAxis
-            dataKey="date"
-            tickFormatter={(value) => formatDateNoDay(new Date(value))}
-          />
-          <YAxis tickLine={false} axisLine={false} dx={-10} />
-          <ChartTooltip
-            content={<ChartTooltipContent className="w-[170px]" />}
-          />
-          <ChartLegend content={<ChartLegendContent />} />
-        </LineChart>
-      </ChartContainer>
-      <div className="text-sm ps-5 pt-3 space-y-2">
-        <div className="flex font-medium">
-          Your contributions{" "}
-          {finalProfitPct > 0
-            ? "grew by " + formatNumber(finalProfitPct) + "%"
-            : finalProfitPct < 0
-            ? "dipped by " + formatNumber(Math.abs(finalProfitPct)) + "%"
-            : "stagnated"}
-          {finalProfitPct > 0 ? (
-            <TrendingUpIcon className="ps-1 w-5 h-5" />
-          ) : finalProfitPct < 0 ? (
-            <TrendingDownIcon className="ps-1 w-5 h-5" />
-          ) : (
-            <></>
-          )}
-        </div>
-        <p>
-          By investing {formatPrice(userInput.contri)} each month in{" "}
-          <span className="font-medium">{userInput.ticker}</span> from{" "}
-          {formatDateNoDay(new Date(filteredData[0].date))} to{" "}
-          {formatDateNoDay(
-            new Date(filteredData[filteredData.length - 1].date)
-          )}
-          .
-        </p>
-      </div>
-    </div>
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="date"
+              tickFormatter={(value) => formatDateNoDay(new Date(value))}
+            />
+            <YAxis tickLine={false} axisLine={false} dx={-10} />
+            <ChartTooltip
+              content={<ChartTooltipContent className="w-[170px]" />}
+            />
+            <ChartLegend content={<ChartLegendContent />} />
+          </LineChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
   );
 }

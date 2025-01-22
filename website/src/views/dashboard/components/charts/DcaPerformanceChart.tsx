@@ -1,7 +1,6 @@
 import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from "recharts";
-import { TrendingUpIcon, TrendingDownIcon } from "lucide-react";
 
-import { formatDateNoDay, formatPct, formatPrice } from "@/lib/utils";
+import { formatDateNoDay } from "@/lib/utils";
 import { useUserInput } from "@/contexts/user-input";
 import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
 
@@ -29,8 +28,6 @@ export function DcaPerformanceChart() {
   const { data } = useGetSuspendedDcaReturns(userInput);
   const filteredData = data.filter((row) => !row.padded_row);
 
-  const finalProfitPct = data[data.length - 1].profitPct;
-
   const trendColor =
     filteredData[filteredData.length - 1].profit > 0
       ? "#22c55e"
@@ -40,7 +37,6 @@ export function DcaPerformanceChart() {
 
   return (
     <div>
-      <p className="font-medium text-lg ms-4 mb-5">Your DCA Performance</p>
       <ChartContainer
         config={dcaPerformanceChartConfig}
         className="md:aspect-[3/1]"
@@ -92,28 +88,6 @@ export function DcaPerformanceChart() {
           <ChartLegend content={<ChartLegendContent />} />
         </AreaChart>
       </ChartContainer>
-
-      <div className="text-sm ps-5 pt-3 space-y-2">
-        <div className="flex font-medium">
-          Your contributions{" "}
-          {finalProfitPct > 0
-            ? "grew by " + formatPct(finalProfitPct)
-            : finalProfitPct < 0
-            ? "dipped by " + formatPct(Math.abs(finalProfitPct))
-            : "stagnated"}
-          {finalProfitPct > 0 && <TrendingUpIcon className="ps-1 w-5 h-5" />}
-          {finalProfitPct < 0 && <TrendingDownIcon className="ps-1 w-5 h-5" />}
-        </div>
-        <p>
-          By investing {formatPrice(userInput.contri)} each month in{" "}
-          <span className="font-medium">{userInput.ticker}</span> from{" "}
-          {formatDateNoDay(new Date(filteredData[0].date))} to{" "}
-          {formatDateNoDay(
-            new Date(filteredData[filteredData.length - 1].date)
-          )}
-          .
-        </p>
-      </div>
     </div>
   );
 }

@@ -85,9 +85,6 @@ export function DcaComparisonChart({
 
   return (
     <div>
-      <p className="font-medium text-lg ms-4 mb-5">
-        Comparing DCA Performances
-      </p>
       <ChartContainer
         config={multiInvestmentChartConfig}
         className="md:aspect-[3/1]"
@@ -143,10 +140,10 @@ export function DcaComparisonChart({
       <div className="ms-3 mt-4">
         <div className="text-sm space-y-1.5 mb-4">
           <p className="font-medium">
-            Compare the DCA performance of {userInput.ticker} against other investments
+            Compare dollar-cost averaging performances between stocks.
           </p>
           <p>
-            Assuming contribution rate of {formatPrice(userInput.contri)}/month.
+            Assuming a contribution rate of {formatPrice(userInput.contri)}/month.
           </p>
         </div>
 
