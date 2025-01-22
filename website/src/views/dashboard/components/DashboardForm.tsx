@@ -2,7 +2,7 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, FileChartColumnIcon } from "lucide-react";
-import { useBoolean } from "usehooks-ts";
+import { useBoolean, useMediaQuery } from "usehooks-ts";
 
 import { createDate, cn } from "@/lib/utils";
 
@@ -22,54 +22,105 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 
-type DashboardFormButtonProps = {
+type FormButtonProps = {
   className?: string;
 };
 
-export function DashboardFormButton({ className }: DashboardFormButtonProps) {
+export function FormButton({ className }: FormButtonProps) {
   const [isPending, startTransition] = useTransition();
   const { value: dialogOpen, setFalse, toggle } = useBoolean(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  if (isDesktop) {
+    return (
+      <Dialog open={dialogOpen} onOpenChange={toggle}>
+        <DialogTrigger asChild className={className} disabled={isPending}>
+          <Button>
+            {isPending ? (
+              <>
+                <Loader2 className="animate-spin" />
+                <p>Loading</p>
+              </>
+            ) : (
+              <>
+                <FileChartColumnIcon />
+                <p>Enter Info</p>
+              </>
+            )}
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Calculate Returns</DialogTitle>
+            <DialogDescription>
+              Calculate DCA returns for any stock or cryptocurrency on Yahoo
+              Finance.
+            </DialogDescription>
+            <DialogDescription>
+              To avoid errors, please follow Yahoo Finance's ticker format. e.g.
+              to search for VWRA, use VWRA.L.
+            </DialogDescription>
+          </DialogHeader>
+          <DashboardForm
+            startTransition={startTransition}
+            closeDialog={setFalse}
+          />
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
   return (
-    <Dialog open={dialogOpen} onOpenChange={toggle}>
-      <DialogTrigger
+    <Drawer open={dialogOpen} onOpenChange={toggle}>
+      <DrawerTrigger
         asChild
-        className={cn(
-          "z-50 md:z-0 absolute fixed bottom-5 right-5 w-14 h-14 rounded-full md:w-fit md:h-fit md:rounded-md md:static md:flex",
-          className
-        )}
         disabled={isPending}
+        className={cn(
+          "z-50 absolute fixed bottom-5 right-5 w-16 h-16 rounded-full",
+          isPending && "w-32 h-12"
+        )}
       >
         <Button>
           {isPending ? (
-            <Loader2 className="animate-spin" />
-          ) : (
             <>
-              <FileChartColumnIcon className="scale-125 md:scale-100" />
-              <p className="hidden md:block">Enter Info</p>
+              <Loader2 className="animate-spin" />
+              <p>Loading</p>
             </>
+          ) : (
+            <FileChartColumnIcon className="scale-150" />
           )}
         </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Calculate Returns</DialogTitle>
-          <DialogDescription>
-            Calculate historical DCA returns for any stock or cryptocurrency, as
-            long as it is available on Yahoo! Finance.
-          </DialogDescription>
-          <DialogDescription>
-            To avoid errors, please follow Yahoo! Finance's ticker format. e.g.
-            to search for VWRA, use VWRA.L instead.
-          </DialogDescription>
-        </DialogHeader>
-        <DashboardForm
-          startTransition={startTransition}
-          closeDialog={setFalse}
-        />
-      </DialogContent>
-    </Dialog>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>Calculate Returns</DrawerTitle>
+          <DrawerDescription>
+            Calculate DCA returns for any stock or cryptocurrency on Yahoo
+            Finance.
+          </DrawerDescription>
+          <DrawerDescription>
+            To avoid errors, please follow Yahoo Finance's ticker format. e.g.
+            to search for VWRA, use VWRA.L.
+          </DrawerDescription>
+        </DrawerHeader>
+        <DrawerFooter>
+          <DashboardForm
+            startTransition={startTransition}
+            closeDialog={setFalse}
+          />
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }
 
@@ -107,7 +158,7 @@ export function DashboardForm({
 
   return (
     <form
-      className="grid grid-cols-1 gap-y-2"
+      className="grid grid-cols-1 gap-y-2.5"
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
@@ -168,7 +219,7 @@ export function DashboardForm({
         )}
       </div>
 
-      <div>
+      <div className="justify-self-center">
         <Button type="submit">Calculate</Button>
       </div>
     </form>

@@ -87,11 +87,13 @@ export function PctGrowthChart() {
           Investment Growth
         </CardTitle>
         <CardDescription className="text-sm font-normal text-muted-foreground">
-          Compare your dollar-cost averaging growth to {userInput.ticker}
-          's growth, from {userInput.start} to {userInput.end}
+          Compare your DCA growth to{" "}
+          <span className="font-medium">{userInput.ticker}</span>
+          's growth, from {formatDateNoDay(userInput.start)} to{" "}
+          {formatDateNoDay(userInput.end)}
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="mt-6">
         <ChartContainer config={dcaPerformanceChartConfig}>
           {/* recharts component */}
           <LineChart data={filteredData}>
@@ -99,10 +101,7 @@ export function PctGrowthChart() {
             <Line dataKey="stockPct" stroke="#6b7280" dot={false} />
 
             <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickFormatter={(value) => formatDateNoDay(value)}
-            />
+            <XAxis dataKey="date" />
             <YAxis
               tickLine={false}
               axisLine={false}
@@ -131,7 +130,11 @@ export function PctGrowthChart() {
           In the same period, {userInput.ticker}{" "}
           {(trend === "positive" || trend === "neutral") && <>grew</>}
           {trend === "negative" && <>fell</>} by{" "}
-          {formatPct(Math.abs(filteredData[filteredData.length - 1].stockPct))}
+          <span className="font-medium">
+            {formatPct(
+              Math.abs(filteredData[filteredData.length - 1].stockPct)
+            )}
+          </span>
         </p>
       </CardFooter>
     </Card>

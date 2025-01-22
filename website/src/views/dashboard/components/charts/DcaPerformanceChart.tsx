@@ -91,10 +91,7 @@ export function DcaPerformanceChart() {
           />
 
           <CartesianGrid vertical={false} />
-          <XAxis
-            dataKey="date"
-            tickFormatter={(value) => formatDateNoDay(value)}
-          />
+          <XAxis dataKey="date" />
           <YAxis tickLine={false} axisLine={false} dx={-10} />
           <ChartTooltip
             content={<ChartTooltipContent className="w-[170px]" />}

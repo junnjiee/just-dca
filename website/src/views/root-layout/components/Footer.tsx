@@ -1,7 +1,7 @@
 export function Footer() {
   return (
     <div className="border-t py-7 text-sm">
-      <div className="space-y-10 px-3 md:ps-10 md:w-2/3 lg:w-1/2">
+      <div className="space-y-10 px-3 mb-[4em] md:ps-10 md:w-2/3 lg:w-1/2">
         <p>
           Looking to report a bug or suggest a feature? Open an{' '}
           <a

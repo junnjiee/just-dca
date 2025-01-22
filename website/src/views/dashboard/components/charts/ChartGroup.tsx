@@ -144,7 +144,7 @@ function ComparisonInputButtonGroup({
 
   return (
     <>
-      <div className="flex flex-row justify-between mt-1">
+      <div className="mt-3">
         {inputIsOpen ? (
           <div className="flex flex-row gap-x-3">
             <Input
@@ -173,29 +173,30 @@ function ComparisonInputButtonGroup({
             </Button>
           </div>
         ) : (
-          <Button className="text-primary" variant="link" onClick={openInput}>
-            {tickers.length > 1 ? (
-              <>
-                <PlusIcon />
-                Add Comparison
-              </>
-            ) : (
-              <>
-                <SearchIcon />
-                Compare to
-              </>
+          <div className="flex flex-row justify-between">
+            <Button className="text-primary" variant="link" onClick={openInput}>
+              {tickers.length > 1 ? (
+                <>
+                  <PlusIcon />
+                  Add Comparison
+                </>
+              ) : (
+                <>
+                  <SearchIcon />
+                  Compare to
+                </>
+              )}
+            </Button>
+            {tickers.length > 1 && (
+              <Button
+                className="text-primary"
+                variant="link"
+                onClick={clearTickers}
+              >
+                Clear All
+              </Button>
             )}
-          </Button>
-        )}
-
-        {tickers.length > 1 && (
-          <Button
-            className="text-primary"
-            variant="link"
-            onClick={clearTickers}
-          >
-            Clear All
-          </Button>
+          </div>
         )}
       </div>
       <p className={cn("text-red-500", !errorMsg.length && "invisible")}>

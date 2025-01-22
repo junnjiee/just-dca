@@ -1,6 +1,6 @@
 import { Area, AreaChart, XAxis } from "recharts";
 
-import { formatPrice, formatNumber, cn } from "@/lib/utils";
+import { formatPrice, formatNumber, cn, formatDateNoDay } from "@/lib/utils";
 import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
 import { useUserInput } from "@/contexts/user-input";
 import { DcaReturnsQueryOutput } from "@/types/financial-queries";
@@ -107,10 +107,15 @@ function SparkChart({ data }: SparkChartProps) {
       ? "#ef4444"
       : "#a1a1aa";
 
+  const filteredData = data.map((row) => ({
+    ...row,
+    date: formatDateNoDay(row.date),
+  }));
+
   return (
     <ChartContainer config={chartConfig} className="aspect-[4/1]">
       {/* recharts component */}
-      <AreaChart data={data}>
+      <AreaChart data={filteredData}>
         <defs>
           <linearGradient id="profit" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor={trendColor} stopOpacity={0.8} />

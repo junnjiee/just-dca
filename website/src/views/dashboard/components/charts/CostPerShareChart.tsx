@@ -74,12 +74,12 @@ export function CostPerShareChart() {
           Cost per Share
         </CardTitle>
         <CardDescription className="text-sm font-normal text-muted-foreground">
-          DCA helps to smoothen price fluctuations. View how your dollar-cost
-          averaged price evolved compared to the price of{" "}
+          DCA helps smoothen price fluctuations. View how your dollar-cost
+          averaged price evolved compared to{" "}
           <span className="font-medium">{userInput.ticker}</span>.
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="mt-6">
         <ChartContainer config={dcaPerformanceChartConfig}>
           {/* recharts component */}
           <LineChart data={filteredData}>
@@ -87,10 +87,7 @@ export function CostPerShareChart() {
             <Line dataKey="stock_price" stroke="#6b7280" dot={false} />
 
             <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickFormatter={(value) => formatDateNoDay(value)}
-            />
+            <XAxis dataKey="date" />
             <YAxis tickLine={false} axisLine={false} dx={-10} />
             <ChartTooltip
               content={<ChartTooltipContent className="w-[170px]" />}

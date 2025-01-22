@@ -66,7 +66,11 @@ export function DcaComparisonChart({
   const filteredQueryData = queryResults.map((query) =>
     query.data.map((row) =>
       row.padded_row
-        ? { ...row, total_val: null }
+        ? {
+            ...row,
+            total_val: null,
+            date: formatDateNoDay(row.date, "numeric"),
+          }
         : { ...row, date: formatDateNoDay(row.date, "numeric") }
     )
   );
@@ -140,16 +144,6 @@ export function DcaComparisonChart({
       </ChartContainer>
 
       <div className="ms-3 mt-4">
-        <div className="text-sm space-y-1.5 mb-4">
-          <p className="font-medium">
-            Compare dollar-cost averaging performances between stocks.
-          </p>
-          <p>
-            Assuming a contribution rate of {formatPrice(userInput.contri)}
-            /month.
-          </p>
-        </div>
-
         <div className="grid grid-cols-5 text-sm text-muted-foreground justify-items-center">
           <p className="invisible"></p>
           <p className="">Total Value</p>
