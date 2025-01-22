@@ -113,7 +113,7 @@ export function FormButton({ className }: FormButtonProps) {
             to search for VWRA, use VWRA.L.
           </DrawerDescription>
         </DrawerHeader>
-        <DrawerFooter>
+        <DrawerFooter className="mb-5">
           <DashboardForm
             startTransition={startTransition}
             closeDialog={setFalse}

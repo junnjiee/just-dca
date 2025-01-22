@@ -131,7 +131,6 @@ export function DcaComparisonChart({
             dataKey="date"
             type="category"
             allowDuplicatedCategory={false}
-            tickFormatter={(value) => formatDateNoDay(value)}
           />
           <YAxis
             dataKey="total_val"

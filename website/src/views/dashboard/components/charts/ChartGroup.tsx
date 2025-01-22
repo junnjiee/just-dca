@@ -146,7 +146,7 @@ function ComparisonInputButtonGroup({
     <>
       <div className="mt-3">
         {inputIsOpen ? (
-          <div className="flex flex-row gap-x-3">
+          <div className="flex flex-row gap-x-3 mx-8 md:w-1/2 md:ms-0">
             <Input
               className="text-sm"
               placeholder="Enter ticker (e.g. META)"
