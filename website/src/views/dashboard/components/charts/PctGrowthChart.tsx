@@ -33,7 +33,7 @@ const dcaPerformanceChartConfig = {
   },
 } satisfies ChartConfig;
 
-export function DcaVsStockChart() {
+export function PctGrowthChart() {
   const userInput = useUserInput();
   const { data } = useGetSuspendedDcaReturns(userInput);
 
@@ -57,6 +57,7 @@ export function DcaVsStockChart() {
           {
             ...row,
             stockPct: row.stock_price / initialStockPrice - 1,
+            date: formatDateNoDay(row.date, "numeric"),
           },
         ];
       }
@@ -86,8 +87,8 @@ export function DcaVsStockChart() {
           Investment Growth
         </CardTitle>
         <CardDescription className="text-sm font-normal text-muted-foreground">
-          View your dollar-cost averaging growth relative to {userInput.ticker}
-          's growth, from x to y
+          Compare your dollar-cost averaging growth to {userInput.ticker}
+          's growth, from {userInput.start} to {userInput.end}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -100,7 +101,7 @@ export function DcaVsStockChart() {
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
-              tickFormatter={(value) => formatDateNoDay(new Date(value))}
+              tickFormatter={(value) => formatDateNoDay(value)}
             />
             <YAxis
               tickLine={false}

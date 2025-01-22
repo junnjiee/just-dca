@@ -18,12 +18,12 @@ export function DateRangeTabs({ className }: DateRangeTabsProps) {
 
   // NOTE: can memoize this
   const datePresets = [
-    { dateRange: "3M", start: createDate(3), end: createDate(0) },
-    { dateRange: "6M", start: createDate(6), end: createDate(0) },
-    { dateRange: "1Y", start: createDate(12), end: createDate(0) },
-    { dateRange: "3Y", start: createDate(36), end: createDate(0) },
-    { dateRange: "5Y", start: createDate(60), end: createDate(0) },
-    { dateRange: "10Y", start: createDate(120), end: createDate(0) },
+    { dateRange: "3M", start: createDate(2), end: createDate(0) },
+    { dateRange: "6M", start: createDate(5), end: createDate(0) },
+    { dateRange: "1Y", start: createDate(11), end: createDate(0) },
+    { dateRange: "3Y", start: createDate(35), end: createDate(0) },
+    { dateRange: "5Y", start: createDate(59), end: createDate(0) },
+    { dateRange: "10Y", start: createDate(119), end: createDate(0) },
   ];
 
   // use useTransition instead to show pending state

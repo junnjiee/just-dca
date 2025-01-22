@@ -1,9 +1,10 @@
 import { useState, useReducer, useDeferredValue } from "react";
+import { useBoolean } from "usehooks-ts";
 import { SearchIcon, PlusIcon, Loader2, XIcon } from "lucide-react";
 
 import { useUserInput } from "@/contexts/user-input";
 
-import { cn } from "@/lib/utils";
+import { cn, formatDateNoDay } from "@/lib/utils";
 import { tickersReducer } from "@/lib/reducers";
 
 import { useGetMultipleDcaReturns } from "@/queries/dca-returns";
@@ -13,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { DcaPerformanceChart } from "./DcaPerformanceChart";
 import { DcaComparisonChart } from "./DcaComparisonChart";
 import { CostPerShareChart } from "./CostPerShareChart";
-import { DcaVsStockChart } from "./DcaVsStockChart";
+import { PctGrowthChart } from "./PctGrowthChart";
 import { DateRangeTabs } from "../DateRangeTabs";
 
 type ChartGroupProps = {
@@ -61,7 +62,7 @@ export function ChartGroup({ className }: ChartGroupProps) {
   return (
     <div className={cn("grid grid-cols-1 gap-3 md:grid-cols-2", className)}>
       <div className="md:col-span-2 md:mx-4">
-        <div className="mb-2">
+        <div className="mb-2 ms-2">
           <p className="font-medium text-lg">
             {tickers.length > 1 ? (
               <>Comparing DCA Performances</>
@@ -69,7 +70,10 @@ export function ChartGroup({ className }: ChartGroupProps) {
               <>Your DCA Performance</>
             )}
           </p>
-          <p className="text-sm text-muted-foreground">{userInput.start} - {userInput.end}</p>
+          <p className="text-sm text-muted-foreground">
+            {formatDateNoDay(userInput.start, "numeric")} -{" "}
+            {formatDateNoDay(userInput.end, "numeric")}
+          </p>
         </div>
         <DateRangeTabs className="my-3" />
         {tickers.length > 1 ? (
@@ -93,7 +97,7 @@ export function ChartGroup({ className }: ChartGroupProps) {
           key={tickers.join()}
         />
       </div>
-      <DcaVsStockChart />
+      <PctGrowthChart />
       <CostPerShareChart />
     </div>
   );
@@ -116,11 +120,16 @@ function ComparisonInputButtonGroup({
   setNewTicker,
   newTickerQueryLoading,
 }: ComparisonInputButtonGroupProps) {
-  const [openInput, setOpenInput] = useState(false);
+  const {
+    value: inputIsOpen,
+    setTrue: openInput,
+    setFalse: closeInput,
+  } = useBoolean(false);
+
   const [input, setInput] = useState("");
 
   const handleCloseInput = () => {
-    setOpenInput(false);
+    closeInput();
     setInput("");
     setErrorMsg("");
   };
@@ -136,7 +145,7 @@ function ComparisonInputButtonGroup({
   return (
     <>
       <div className="flex flex-row justify-between mt-1">
-        {openInput ? (
+        {inputIsOpen ? (
           <div className="flex flex-row gap-x-3">
             <Input
               className="text-sm"
@@ -164,11 +173,7 @@ function ComparisonInputButtonGroup({
             </Button>
           </div>
         ) : (
-          <Button
-            className="text-primary"
-            variant="link"
-            onClick={() => setOpenInput(true)}
-          >
+          <Button className="text-primary" variant="link" onClick={openInput}>
             {tickers.length > 1 ? (
               <>
                 <PlusIcon />

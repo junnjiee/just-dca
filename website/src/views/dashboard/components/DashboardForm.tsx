@@ -1,10 +1,10 @@
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, SearchIcon } from "lucide-react";
+import { Loader2, FileChartColumnIcon } from "lucide-react";
 import { useBoolean } from "usehooks-ts";
 
-import { createDate } from "@/lib/utils";
+import { createDate, cn } from "@/lib/utils";
 
 import { useUserInput, useUserInputDispatch } from "@/contexts/user-input";
 
@@ -33,14 +33,21 @@ export function DashboardFormButton({ className }: DashboardFormButtonProps) {
 
   return (
     <Dialog open={dialogOpen} onOpenChange={toggle}>
-      <DialogTrigger asChild className={className} disabled={isPending}>
+      <DialogTrigger
+        asChild
+        className={cn(
+          "z-50 md:z-0 absolute fixed bottom-5 right-5 w-14 h-14 rounded-full md:w-fit md:h-fit md:rounded-md md:static md:flex",
+          className
+        )}
+        disabled={isPending}
+      >
         <Button>
           {isPending ? (
             <Loader2 className="animate-spin" />
           ) : (
             <>
-              <SearchIcon />
-              Enter Info
+              <FileChartColumnIcon className="scale-125 md:scale-100" />
+              <p className="hidden md:block">Enter Info</p>
             </>
           )}
         </Button>

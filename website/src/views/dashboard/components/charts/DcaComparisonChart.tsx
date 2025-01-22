@@ -65,7 +65,9 @@ export function DcaComparisonChart({
 
   const filteredQueryData = queryResults.map((query) =>
     query.data.map((row) =>
-      row.padded_row ? { ...row, total_val: null } : row
+      row.padded_row
+        ? { ...row, total_val: null }
+        : { ...row, date: formatDateNoDay(row.date, "numeric") }
     )
   );
 
@@ -125,7 +127,7 @@ export function DcaComparisonChart({
             dataKey="date"
             type="category"
             allowDuplicatedCategory={false}
-            tickFormatter={(value) => formatDateNoDay(new Date(value))}
+            tickFormatter={(value) => formatDateNoDay(value)}
           />
           <YAxis
             dataKey="total_val"

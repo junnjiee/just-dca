@@ -20,7 +20,7 @@ export function DashboardPage() {
     <>
       <div className="border-b pb-3 mb-3 flex flex-col-reverse gap-y-3 md:flex-row md:items-center md:justify-between">
         <DashboardHeader />
-        <DashboardFormButton className="w-fit" />
+        <DashboardFormButton />
       </div>
       <ErrorBoundary
         FallbackComponent={ErrorFallback}

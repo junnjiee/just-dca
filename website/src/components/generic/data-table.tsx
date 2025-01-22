@@ -106,11 +106,6 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <ExportCsvDialog
-        exportToCsv={exportToCsv}
-        className="mb-4 hidden md:flex"
-      />
-      <ExportCsvDrawer exportToCsv={exportToCsv} className="mb-4 md:hidden" />
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -153,7 +148,11 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <TableInteraction table={table} pageSizeOptions={pageSizeOptions} />
+      <TableInteraction
+        table={table}
+        pageSizeOptions={pageSizeOptions}
+        exportToCsv={exportToCsv}
+      />
     </div>
   );
 }
@@ -161,19 +160,21 @@ export function DataTable<TData, TValue>({
 interface TableInteractionProps<TData> {
   table: TanstackTable<TData>;
   pageSizeOptions: string[];
+  exportToCsv: () => void;
 }
 
 function TableInteraction<TData>({
   table,
   pageSizeOptions,
+  exportToCsv,
 }: TableInteractionProps<TData>) {
   return (
-    <div className="flex flex-col gap-y-3 md:flex-row md:justify-between md:items-center py-3">
+    <div className="flex flex-col py-3 gap-y-3 md:flex-row md:justify-between">
       <p className="text-sm text-muted-foreground">
         Showing page {table.getState().pagination.pageIndex + 1} of{" "}
         {table.getPageCount()}
       </p>
-      <div className="space-x-2 self-center">
+      <div className="space-x-2 self-center md:self-start">
         <Button
           variant="ghost"
           size="sm"
@@ -207,27 +208,34 @@ function TableInteraction<TData>({
           <ChevronsRightIcon />
         </Button>
       </div>
-      <div className="flex flex-row items-center gap-x-2 text-sm self-center">
-        <p>Rows per page</p>
-        <Select
-          onValueChange={(e) => {
-            table.setPageSize(Number(e));
-          }}
-          defaultValue={table.initialState.pagination.pageSize.toString()}
-        >
-          <SelectTrigger className="w-[70px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {pageSizeOptions.map((pageSize) => (
-                <SelectItem key={pageSize} value={pageSize}>
-                  {pageSize}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-row items-center gap-x-2 text-sm self-center">
+          <p>Rows per page</p>
+          <Select
+            onValueChange={(e) => {
+              table.setPageSize(Number(e));
+            }}
+            defaultValue={table.initialState.pagination.pageSize.toString()}
+          >
+            <SelectTrigger className="w-[70px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {pageSizeOptions.map((pageSize) => (
+                  <SelectItem key={pageSize} value={pageSize}>
+                    {pageSize}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <ExportCsvDialog exportToCsv={exportToCsv} className="hidden md:flex" />
+        <ExportCsvDrawer
+          exportToCsv={exportToCsv}
+          className="self-center md:hidden"
+        />
       </div>
     </div>
   );

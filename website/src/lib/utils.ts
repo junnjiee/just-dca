@@ -34,14 +34,22 @@ export function buildUrlWithParamsObj(
   return newUrl.concat(paramsArr.join("&"));
 }
 
-export function formatDateNoDay(date: Date) {
+// Formatters
+export function formatDateNoDay(
+  dateStr: string,
+  year: "2-digit" | "numeric" = "2-digit"
+) {
+  const date = new Date(dateStr);
   return date.toLocaleDateString("en-GB", {
     month: "short",
-    year: "numeric",
+    year: year,
   });
 }
 
 export function formatNumber(num: number) {
+  if (num < 1) {
+    return num.toPrecision(3);
+  }
   return num.toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,

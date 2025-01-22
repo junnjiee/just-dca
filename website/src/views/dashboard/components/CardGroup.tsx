@@ -32,11 +32,13 @@ export function CardGroup({ className }: CardGroupProps) {
   const { data } = useGetSuspendedDcaReturns(userInput);
 
   const filteredData = data.filter((row) => !row.padded_row);
+
   const totalVal = formatPrice(data[data.length - 1].total_val);
   const contri = formatPrice(data[data.length - 1].contribution);
   const sharesOwned = formatNumber(data[data.length - 1].shares_owned);
-  const avgSharePrice = formatPrice(
-    data[data.length - 1].contribution / data[data.length - 1].shares_owned
+
+  const avgSharesBought = formatNumber(
+    data[data.length - 1].shares_owned / data.length
   );
 
   return (
@@ -68,9 +70,9 @@ export function CardGroup({ className }: CardGroupProps) {
           <CardTitle>Total Contribution</CardTitle>
           <CardDescription>US{contri}</CardDescription>
         </CardHeader>
-        <CardContent className="font-normal text-sm">
-          By contributing {formatPrice(userInput.contri)}/month from{" "}
-          {userInput.start} to {userInput.end}
+        <CardContent className="text-muted-foreground text-xs mt-1">
+          You invested {formatPrice(userInput.contri)}/month over {data.length}{" "}
+          months
         </CardContent>
       </Card>
 
@@ -79,8 +81,8 @@ export function CardGroup({ className }: CardGroupProps) {
           <CardTitle>Shares Owned</CardTitle>
           <CardDescription>{sharesOwned}</CardDescription>
         </CardHeader>
-        <CardContent className="font-normal text-sm">
-          On average, you bought each share at {avgSharePrice}
+        <CardContent className="text-muted-foreground text-xs mt-1">
+          You bought an average of {avgSharesBought} shares per month
         </CardContent>
       </Card>
     </div>

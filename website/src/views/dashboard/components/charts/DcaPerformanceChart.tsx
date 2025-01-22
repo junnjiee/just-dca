@@ -3,6 +3,7 @@ import { CartesianGrid, Area, AreaChart, XAxis, YAxis } from "recharts";
 import { formatDateNoDay } from "@/lib/utils";
 import { useUserInput } from "@/contexts/user-input";
 import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
+import { DcaReturnsQueryOutput } from "@/types/financial-queries";
 
 import {
   ChartConfig,
@@ -26,7 +27,20 @@ const dcaPerformanceChartConfig = {
 export function DcaPerformanceChart() {
   const userInput = useUserInput();
   const { data } = useGetSuspendedDcaReturns(userInput);
-  const filteredData = data.filter((row) => !row.padded_row);
+  // const filteredData = data.filter((row) => !row.padded_row);
+
+  const filteredData = data.reduce((acc: DcaReturnsQueryOutput, row) => {
+    if (!row.padded_row) {
+      return [
+        ...acc,
+        {
+          ...row,
+          date: formatDateNoDay(row.date, "numeric"),
+        },
+      ];
+    }
+    return acc;
+  }, []);
 
   const trendColor =
     filteredData[filteredData.length - 1].profit > 0
@@ -79,7 +93,7 @@ export function DcaPerformanceChart() {
           <CartesianGrid vertical={false} />
           <XAxis
             dataKey="date"
-            tickFormatter={(value) => formatDateNoDay(new Date(value))}
+            tickFormatter={(value) => formatDateNoDay(value)}
           />
           <YAxis tickLine={false} axisLine={false} dx={-10} />
           <ChartTooltip

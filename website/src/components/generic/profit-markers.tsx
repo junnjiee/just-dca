@@ -17,7 +17,7 @@ export function ProfitPctBadge({ profitPct, className }: ProfitPctBadgeProps) {
   const profitPctFormatted = formatPct(Math.abs(profitPct));
 
   return (
-    <span
+    <div
       className={cn(
         "flex flex-row w-fit px-1 py-0.5 rounded-lg place-items-center",
         trend === "positive"
@@ -32,7 +32,7 @@ export function ProfitPctBadge({ profitPct, className }: ProfitPctBadgeProps) {
       {trend === "negative" && <ArrowDownRight />}
       {trend === "neutral" && <ArrowRight />}
       {profitPctFormatted}
-    </span>
+    </div>
   );
 }
 

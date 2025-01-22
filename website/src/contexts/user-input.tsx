@@ -9,7 +9,7 @@ import { DcaReturnsQueryInput } from '@/types/financial-queries';
 const defaultUserInput = {
   ticker: 'VOO',
   contri: 50,
-  start: createDate(12),
+  start: createDate(11),
   end: createDate(0),
 };
 

@@ -46,14 +46,12 @@ export function CostPerShareChart() {
       row: InferArrayType<DcaReturnsQueryOutput>
     ) => {
       if (!row.padded_row) {
-        console.log(row.contribution / row.shares_owned);
         return [
           ...acc,
           {
             ...row,
-            dca_price: parseFloat(
-              (row.contribution / row.shares_owned).toFixed(2)
-            ),
+            dca_price: row.contribution / row.shares_owned,
+            date: formatDateNoDay(row.date, "numeric"),
           },
         ];
       }
@@ -73,7 +71,7 @@ export function CostPerShareChart() {
     <Card>
       <CardHeader>
         <CardTitle className="text-lg font-medium text-inherit">
-          Price per share
+          Cost per Share
         </CardTitle>
         <CardDescription className="text-sm font-normal text-muted-foreground">
           DCA helps to smoothen price fluctuations. View how your dollar-cost
@@ -91,7 +89,7 @@ export function CostPerShareChart() {
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
-              tickFormatter={(value) => formatDateNoDay(new Date(value))}
+              tickFormatter={(value) => formatDateNoDay(value)}
             />
             <YAxis tickLine={false} axisLine={false} dx={-10} />
             <ChartTooltip
