@@ -1,6 +1,6 @@
 # just:dca Website
 
-This website is built using [React](https://react.dev/) and [TypeScript](https://www.typescriptlang.org/), and hosted on [Cloudflare Pages](https://pages.cloudflare.com/).
+The website is built with [React](https://react.dev/) and [TypeScript](https://www.typescriptlang.org/), and hosted on [Cloudflare Pages](https://pages.cloudflare.com/).
 
 ## Getting Started
 
