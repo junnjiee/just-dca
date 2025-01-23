@@ -18,7 +18,7 @@ export function ErrorFallback({ error }: ErrorFallbackProps) {
           <div className="pt-5">
             <p>Pro Tip:</p>
             <p>
-              We actually get our data from{' '}
+              We actually get our data from{" "}
               <a
                 href="https://finance.yahoo.com"
                 target="_blank"
@@ -28,7 +28,7 @@ export function ErrorFallback({ error }: ErrorFallbackProps) {
                 Yahoo Finance
               </a>
               ! Please ensure that ticker names follow their convention. (e.g.
-              for <b className="font-medium">VWRA</b>, use{' '}
+              for <b className="font-medium">VWRA</b>, use{" "}
               <b className="font-medium">VWRA.L</b> instead)
             </p>
           </div>

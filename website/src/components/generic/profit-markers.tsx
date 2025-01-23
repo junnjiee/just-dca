@@ -23,9 +23,9 @@ export function ProfitPctBadge({ profitPct, className }: ProfitPctBadgeProps) {
         trend === "positive"
           ? "bg-green-100 text-green-800 dark:bg-green-300 dark:text-green-900"
           : trend === "negative"
-          ? "bg-red-100 text-red-800 dark:bg-red-300 dark:text-red-900"
-          : "bg-gray-100 text-gray-500 dark:bg-gray-300 dark:text-gray-600",
-        className
+            ? "bg-red-100 text-red-800 dark:bg-red-300 dark:text-red-900"
+            : "bg-gray-100 text-gray-500 dark:bg-gray-300 dark:text-gray-600",
+        className,
       )}
     >
       {trend === "positive" && <ArrowUpRight />}
@@ -50,9 +50,9 @@ export function ProfitAmtColored({ profit, className }: ProfitAmtColoredProps) {
         trend === "positive"
           ? "text-green-800 dark:text-green-600"
           : trend === "negative"
-          ? "text-red-800 dark:text-red-600"
-          : "text-gray-500 dark:text-gray-400",
-        className
+            ? "text-red-800 dark:text-red-600"
+            : "text-gray-500 dark:text-gray-400",
+        className,
       )}
     >
       {trend === "positive" && "+"}

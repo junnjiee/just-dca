@@ -11,7 +11,7 @@ const API_ROUTE = "/api/stock/info";
 async function fetchStockInfo(ticker: StockInfoQueryInput) {
   const newUrl = buildUrlWithParamsObj(
     `${import.meta.env.VITE_BACKEND_URL!}${API_ROUTE}`,
-    { ticker: ticker }
+    { ticker: ticker },
   );
   try {
     const res = await fetch(newUrl);

@@ -1,8 +1,5 @@
 import { useReducer } from "react";
-import {
-  UserInputContext,
-  UserInputDispatchContext,
-} from "./context";
+import { UserInputContext, UserInputDispatchContext } from "./context";
 
 import { userInputReducer } from "@/lib/reducers";
 import { createDate } from "@/lib/utils";
@@ -21,7 +18,7 @@ type UserInputProviderProps = {
 export function UserInputProvider({ children }: UserInputProviderProps) {
   const [userInput, userInputDispatch] = useReducer(
     userInputReducer,
-    defaultUserInput
+    defaultUserInput,
   );
 
   return (

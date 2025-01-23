@@ -1,12 +1,12 @@
-import { Routes, Route } from 'react-router';
+import { Routes, Route } from "react-router";
 
-import { UserInputProvider } from '@/contexts/user-input/provider';
+import { UserInputProvider } from "@/contexts/user-input/provider";
 
-import { RootLayout } from '@/views/root-layout/RootLayout';
-import { DashboardPage } from '@/views/dashboard/DashboardPage';
-import { WhatIsDcaPage } from '@/views/static/what-is-dca';
-import { AboutPage } from '@/views/static/about';
-import { PageNotFound } from '@/views/fallbacks/error';
+import { RootLayout } from "@/views/root-layout/RootLayout";
+import { DashboardPage } from "@/views/dashboard/DashboardPage";
+import { WhatIsDcaPage } from "@/views/static/what-is-dca";
+import { AboutPage } from "@/views/static/about";
+import { PageNotFound } from "@/views/fallbacks/error";
 
 export function AppRoutes() {
   return (

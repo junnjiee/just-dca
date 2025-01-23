@@ -14,13 +14,13 @@ export const createDate = (monthsToSubtract: number) => {
     "-",
     String(monthsAgoDate.getMonth() + 1).padStart(2, "0"),
     "-",
-    String(monthsAgoDate.getDate()).padStart(2, "0")
+    String(monthsAgoDate.getDate()).padStart(2, "0"),
   );
 };
 
 export function buildUrlWithParamsObj(
   url: string,
-  params: Record<string, string | number | boolean | undefined | null>
+  params: Record<string, string | number | boolean | undefined | null>,
 ) {
   const newUrl = url.concat("?");
   let paramsArr: string[] = [];
@@ -37,7 +37,7 @@ export function buildUrlWithParamsObj(
 // Formatters
 export function formatDateNoDay(
   dateStr: string,
-  year: "2-digit" | "numeric" = "2-digit"
+  year: "2-digit" | "numeric" = "2-digit",
 ) {
   const date = new Date(dateStr);
   return date.toLocaleDateString("en-GB", {

@@ -4,7 +4,7 @@ import { UserInputReducerAction } from "@/types/reducers";
 import { DcaReturnsQueryInput } from "@/types/financial-queries";
 
 export const UserInputContext = createContext<DcaReturnsQueryInput | null>(
-  null
+  null,
 );
 export const UserInputDispatchContext =
   createContext<React.Dispatch<UserInputReducerAction> | null>(null);

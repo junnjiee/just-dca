@@ -6,7 +6,10 @@ import { useBoolean, useMediaQuery } from "usehooks-ts";
 
 import { createDate, cn } from "@/lib/utils";
 
-import { useUserInput, useUserInputDispatch } from "@/contexts/user-input/context";
+import {
+  useUserInput,
+  useUserInputDispatch,
+} from "@/contexts/user-input/context";
 
 import { DcaReturnsQueryInput } from "@/types/financial-queries";
 import { DcaReturnsQueryInputSchema } from "@/schemas/financial-queries";
@@ -96,7 +99,7 @@ export function FormButton({ className }: FormButtonProps) {
         disabled={isPending}
         className={cn(
           "z-50 absolute fixed bottom-5 right-5 w-16 h-16 rounded-full",
-          isPending && "w-32 h-12"
+          isPending && "w-32 h-12",
         )}
       >
         <Button>

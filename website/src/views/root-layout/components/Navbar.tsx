@@ -59,7 +59,7 @@ function NavLinks({ className }: { className?: string }) {
           className={cn(
             "font-normal",
             location.pathname === link.url &&
-              "font-medium text-accent-foreground"
+              "font-medium text-accent-foreground",
           )}
           variant={"ghost"}
           key={link.url}
@@ -98,7 +98,7 @@ function NavDrawer({ className }: { className?: string }) {
 
 function ToggleDarkModeButton() {
   const { value: isDarkMode, toggle } = useBoolean(
-    window.matchMedia("(prefers-color-scheme: dark)").matches
+    window.matchMedia("(prefers-color-scheme: dark)").matches,
   );
 
   if (isDarkMode) {

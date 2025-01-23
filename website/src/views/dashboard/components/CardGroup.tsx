@@ -38,7 +38,7 @@ export function CardGroup({ className }: CardGroupProps) {
   const sharesOwned = formatNumber(data[data.length - 1].shares_owned);
 
   const avgSharesBought = formatNumber(
-    data[data.length - 1].shares_owned / filteredData.length
+    data[data.length - 1].shares_owned / filteredData.length,
   );
 
   return (
@@ -104,8 +104,8 @@ function SparkChart({ data }: SparkChartProps) {
     data[data.length - 1].profit > 0
       ? "#22c55e"
       : data[data.length - 1].profit < 0
-      ? "#ef4444"
-      : "#a1a1aa";
+        ? "#ef4444"
+        : "#a1a1aa";
 
   const filteredData = data.map((row) => ({
     ...row,

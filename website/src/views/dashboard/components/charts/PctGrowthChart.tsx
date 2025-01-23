@@ -49,7 +49,7 @@ export function PctGrowthChart() {
   const filteredData = data.reduce(
     (
       acc: DcaReturnsQueryOutputMutated[],
-      row: InferArrayType<DcaReturnsQueryOutput>
+      row: InferArrayType<DcaReturnsQueryOutput>,
     ) => {
       if (!row.padded_row) {
         return [
@@ -63,22 +63,22 @@ export function PctGrowthChart() {
       }
       return acc;
     },
-    []
+    [],
   );
 
   const trend =
     filteredData[filteredData.length - 1].profit > 0
       ? "positive"
       : filteredData[filteredData.length - 1].profit < 0
-      ? "negative"
-      : "neutral";
+        ? "negative"
+        : "neutral";
 
   const trendColor =
     trend === "positive"
       ? "#22c55e"
       : trend === "negative"
-      ? "#ef4444"
-      : "#a1a1aa";
+        ? "#ef4444"
+        : "#a1a1aa";
 
   return (
     <Card>
@@ -132,7 +132,7 @@ export function PctGrowthChart() {
           {trend === "negative" && <>fell</>} by{" "}
           <span className="font-medium">
             {formatPct(
-              Math.abs(filteredData[filteredData.length - 1].stockPct)
+              Math.abs(filteredData[filteredData.length - 1].stockPct),
             )}
           </span>
         </p>

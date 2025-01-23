@@ -12,7 +12,7 @@ describe("DashboardForm", () => {
     render(
       <UserInputProvider>
         <DashboardForm startTransition={transitionSpy} closeDialog={vi.fn()} />
-      </UserInputProvider>
+      </UserInputProvider>,
     );
     expect(screen.getByLabelText("Ticker")).toBeInTheDocument();
     expect(screen.getByLabelText("Monthly Contribution")).toBeInTheDocument();
@@ -27,7 +27,7 @@ describe("DashboardForm", () => {
     render(
       <UserInputProvider>
         <DashboardForm startTransition={transitionSpy} closeDialog={vi.fn()} />
-      </UserInputProvider>
+      </UserInputProvider>,
     );
 
     user.clear(screen.getByLabelText("Ticker"));
@@ -47,7 +47,7 @@ describe("DashboardForm", () => {
     render(
       <UserInputProvider>
         <DashboardForm startTransition={transitionSpy} closeDialog={vi.fn()} />
-      </UserInputProvider>
+      </UserInputProvider>,
     );
 
     fireEvent.change(screen.getByLabelText("From"), {
@@ -59,7 +59,7 @@ describe("DashboardForm", () => {
     user.click(screen.getByText("Calculate"));
 
     expect(
-      await screen.findByText("End date must be later than start")
+      await screen.findByText("End date must be later than start"),
     ).toBeInTheDocument();
   });
 
@@ -69,7 +69,7 @@ describe("DashboardForm", () => {
     render(
       <UserInputProvider>
         <DashboardForm startTransition={transitionSpy} closeDialog={vi.fn()} />
-      </UserInputProvider>
+      </UserInputProvider>,
     );
 
     user.clear(screen.getByLabelText("Monthly Contribution"));
@@ -77,7 +77,7 @@ describe("DashboardForm", () => {
     user.click(screen.getByText("Calculate"));
 
     expect(
-      await screen.findByText("2 decimal places only (e.g. 0.01)")
+      await screen.findByText("2 decimal places only (e.g. 0.01)"),
     ).toBeInTheDocument();
   });
 });

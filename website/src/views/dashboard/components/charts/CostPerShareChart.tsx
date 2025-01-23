@@ -43,7 +43,7 @@ export function CostPerShareChart() {
   const filteredData = data.reduce(
     (
       acc: DcaReturnsQueryOutputMutated[],
-      row: InferArrayType<DcaReturnsQueryOutput>
+      row: InferArrayType<DcaReturnsQueryOutput>,
     ) => {
       if (!row.padded_row) {
         return [
@@ -57,15 +57,15 @@ export function CostPerShareChart() {
       }
       return acc;
     },
-    []
+    [],
   );
 
   const trendColor =
     filteredData[filteredData.length - 1].profit > 0
       ? "#22c55e"
       : filteredData[filteredData.length - 1].profit < 0
-      ? "#ef4444"
-      : "#a1a1aa";
+        ? "#ef4444"
+        : "#a1a1aa";
 
   return (
     <Card>

@@ -1,7 +1,10 @@
 import { useTransition } from "react";
 import { Loader2 } from "lucide-react";
 
-import { useUserInput, useUserInputDispatch } from "@/contexts/user-input/context";
+import {
+  useUserInput,
+  useUserInputDispatch,
+} from "@/contexts/user-input/context";
 
 import { createDate } from "@/lib/utils";
 
@@ -32,14 +35,15 @@ export function DateRangeTabs({ className }: DateRangeTabsProps) {
       userInputDispatch({
         type: "updateDates",
         dates: { start: start, end: end },
-      })
+      }),
     );
   };
 
   // if date chosen matches preset, select that tab
   const chosenPreset = () => {
     const preset = datePresets.find(
-      (preset) => userInput.start == preset.start && userInput.end == preset.end
+      (preset) =>
+        userInput.start == preset.start && userInput.end == preset.end,
     )?.dateRange;
 
     return preset ? preset : "";

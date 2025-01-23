@@ -46,8 +46,8 @@ export function DcaPerformanceChart() {
     filteredData[filteredData.length - 1].profit > 0
       ? "#22c55e"
       : filteredData[filteredData.length - 1].profit < 0
-      ? "#ef4444"
-      : "#a1a1aa";
+        ? "#ef4444"
+        : "#a1a1aa";
 
   return (
     <div>

@@ -60,7 +60,7 @@ export function DcaComparisonChart({
     tickers.map((ticker) => ({
       ...userInput,
       ticker: ticker,
-    }))
+    })),
   );
 
   const filteredQueryData = queryResults.map((query) =>
@@ -71,8 +71,8 @@ export function DcaComparisonChart({
             total_val: null,
             date: formatDateNoDay(row.date, "numeric"),
           }
-        : { ...row, date: formatDateNoDay(row.date, "numeric") }
-    )
+        : { ...row, date: formatDateNoDay(row.date, "numeric") },
+    ),
   );
 
   const defaultHoverData: ComparisonChartExternalTooltip =
@@ -184,7 +184,7 @@ export function DcaComparisonChart({
                 disabled={mainTicker === data.ticker}
                 className={cn(
                   "p-0 justify-self-end",
-                  mainTicker === data.ticker && "invisible"
+                  mainTicker === data.ticker && "invisible",
                 )}
                 onClick={() => {
                   removeTicker(data.ticker);

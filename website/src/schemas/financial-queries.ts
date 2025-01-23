@@ -40,7 +40,7 @@ export const DcaReturnsQueryOutputSchema = z.array(
     total_val: z.number(),
     profit: z.number(),
     profitPct: z.number(),
-  })
+  }),
 );
 
 export const StockInfoQueryOutputSchema = z.object({

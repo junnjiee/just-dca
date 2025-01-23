@@ -23,7 +23,7 @@ async function fetchDcaReturns(params: DcaReturnsQueryInput) {
 
   const newUrl = buildUrlWithParamsObj(
     `${import.meta.env.VITE_BACKEND_URL!}${API_ROUTE}`,
-    params
+    params,
   );
   try {
     const res = await fetch(newUrl);
@@ -60,7 +60,7 @@ export const useGetSuspendedDcaReturns = (params: DcaReturnsQueryInput) =>
   });
 
 export const useGetMultipleSuspendedDcaReturns = (
-  paramsArr: DcaReturnsQueryInput[]
+  paramsArr: DcaReturnsQueryInput[],
 ) =>
   useSuspenseQueries({
     queries: paramsArr.map((params) => ({
