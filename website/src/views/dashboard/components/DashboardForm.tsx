@@ -63,12 +63,21 @@ export function FormButton({ className }: FormButtonProps) {
           <DialogHeader>
             <DialogTitle>Calculate Returns</DialogTitle>
             <DialogDescription>
-              Calculate DCA returns for any stock or cryptocurrency on Yahoo
-              Finance.
+              Calculate DCA returns for any stock or cryptocurrency on{" "}
+              <a
+                href="https://finance.yahoo.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline"
+              >
+                Yahoo Finance
+              </a>
+              .
             </DialogDescription>
             <DialogDescription>
-              To avoid errors, please follow Yahoo Finance's ticker format. e.g.
-              to search for VWRA, use VWRA.L.
+              To avoid errors, follow Yahoo Finance's ticker format. e.g. to
+              search for <span className="font-medium">VWRA</span>, use{" "}
+              <span className="font-medium">VWRA.L</span> instead.
             </DialogDescription>
           </DialogHeader>
           <DashboardForm
@@ -105,12 +114,21 @@ export function FormButton({ className }: FormButtonProps) {
         <DrawerHeader>
           <DrawerTitle>Calculate Returns</DrawerTitle>
           <DrawerDescription>
-            Calculate DCA returns for any stock or cryptocurrency on Yahoo
-            Finance.
+            Calculate DCA returns for any stock or cryptocurrency on{" "}
+            <a
+              href="https://finance.yahoo.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+            >
+              Yahoo Finance
+            </a>
+            .
           </DrawerDescription>
           <DrawerDescription>
-            To avoid errors, please follow Yahoo Finance's ticker format. e.g.
-            to search for VWRA, use VWRA.L.
+            To avoid errors, follow Yahoo Finance's ticker format. e.g. to
+            search for <span className="font-medium">VWRA</span>, use{" "}
+            <span className="font-medium">VWRA.L</span> instead.
           </DrawerDescription>
         </DrawerHeader>
         <DrawerFooter className="mb-5">

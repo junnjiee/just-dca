@@ -38,7 +38,7 @@ export function CardGroup({ className }: CardGroupProps) {
   const sharesOwned = formatNumber(data[data.length - 1].shares_owned);
 
   const avgSharesBought = formatNumber(
-    data[data.length - 1].shares_owned / data.length
+    data[data.length - 1].shares_owned / filteredData.length
   );
 
   return (
@@ -71,8 +71,8 @@ export function CardGroup({ className }: CardGroupProps) {
           <CardDescription>US{contri}</CardDescription>
         </CardHeader>
         <CardContent className="text-muted-foreground text-xs mt-1">
-          You invested {formatPrice(userInput.contri)}/month over {data.length}{" "}
-          months
+          You invested {formatPrice(userInput.contri)}/month over{" "}
+          {filteredData.length} months
         </CardContent>
       </Card>
 

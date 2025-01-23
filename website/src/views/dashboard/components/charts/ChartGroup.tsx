@@ -7,7 +7,10 @@ import { useUserInput } from "@/contexts/user-input";
 import { cn, formatDateNoDay } from "@/lib/utils";
 import { tickersReducer } from "@/lib/reducers";
 
-import { useGetMultipleDcaReturns } from "@/queries/dca-returns";
+import {
+  useGetMultipleDcaReturns,
+  useGetSuspendedDcaReturns,
+} from "@/queries/dca-returns";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -23,6 +26,9 @@ type ChartGroupProps = {
 
 export function ChartGroup({ className }: ChartGroupProps) {
   const userInput = useUserInput();
+  const { data } = useGetSuspendedDcaReturns(userInput);
+  const startDate = data.find((row) => !row.padded_row)!.date;
+
   const [newTicker, setNewTicker] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -71,8 +77,8 @@ export function ChartGroup({ className }: ChartGroupProps) {
             )}
           </p>
           <p className="text-sm text-muted-foreground">
-            {formatDateNoDay(userInput.start, "numeric")} -{" "}
-            {formatDateNoDay(userInput.end, "numeric")}
+            {formatDateNoDay(startDate, "numeric")} -{" "}
+            {formatDateNoDay(data[data.length - 1].date, "numeric")}
           </p>
         </div>
         <DateRangeTabs className="my-3" />

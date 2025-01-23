@@ -89,8 +89,8 @@ export function PctGrowthChart() {
         <CardDescription className="text-sm font-normal text-muted-foreground">
           Compare your DCA growth to{" "}
           <span className="font-medium">{userInput.ticker}</span>
-          's growth, from {formatDateNoDay(userInput.start)} to{" "}
-          {formatDateNoDay(userInput.end)}
+          's growth, from {formatDateNoDay(filteredData[0].date)} to{" "}
+          {formatDateNoDay(filteredData[filteredData.length - 1].date)}
         </CardDescription>
       </CardHeader>
       <CardContent className="mt-6">
