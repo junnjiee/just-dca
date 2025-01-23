@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
-import { useUserInput } from "@/contexts/user-input";
+import { useUserInput } from "@/contexts/user-input/context";
 
 import { useGetStockInfo } from "@/queries/stock-info";
 

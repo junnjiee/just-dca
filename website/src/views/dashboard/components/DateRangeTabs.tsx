@@ -1,7 +1,7 @@
 import { useTransition } from "react";
 import { Loader2 } from "lucide-react";
 
-import { useUserInput, useUserInputDispatch } from "@/contexts/user-input";
+import { useUserInput, useUserInputDispatch } from "@/contexts/user-input/context";
 
 import { createDate } from "@/lib/utils";
 

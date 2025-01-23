@@ -25,7 +25,7 @@ import {
   ProfitPctBadge,
   ProfitAmtColored,
 } from "@/components/generic/profit-markers";
-import { useUserInput } from "@/contexts/user-input";
+import { useUserInput } from "@/contexts/user-input/context";
 
 const colors = ["#a855f7", "#f59e0b", "#0ea5e9", "#1e3a8a", "#ea580c"];
 const bgColors = [

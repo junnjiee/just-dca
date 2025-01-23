@@ -2,7 +2,7 @@ import { useState, useReducer, useDeferredValue } from "react";
 import { useBoolean } from "usehooks-ts";
 import { SearchIcon, PlusIcon, Loader2, XIcon } from "lucide-react";
 
-import { useUserInput } from "@/contexts/user-input";
+import { useUserInput } from "@/contexts/user-input/context";
 
 import { cn, formatDateNoDay } from "@/lib/utils";
 import { tickersReducer } from "@/lib/reducers";

@@ -1,7 +1,7 @@
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 import { formatDateNoDay } from "@/lib/utils";
-import { useUserInput } from "@/contexts/user-input";
+import { useUserInput } from "@/contexts/user-input/context";
 import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
 import { DcaReturnsQueryOutput } from "@/types/financial-queries";
 import { InferArrayType } from "@/types/utils";

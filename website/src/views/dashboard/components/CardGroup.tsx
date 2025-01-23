@@ -2,7 +2,7 @@ import { Area, AreaChart, XAxis } from "recharts";
 
 import { formatPrice, formatNumber, cn, formatDateNoDay } from "@/lib/utils";
 import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
-import { useUserInput } from "@/contexts/user-input";
+import { useUserInput } from "@/contexts/user-input/context";
 import { DcaReturnsQueryOutput } from "@/types/financial-queries";
 
 import {

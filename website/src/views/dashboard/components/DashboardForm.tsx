@@ -6,7 +6,7 @@ import { useBoolean, useMediaQuery } from "usehooks-ts";
 
 import { createDate, cn } from "@/lib/utils";
 
-import { useUserInput, useUserInputDispatch } from "@/contexts/user-input";
+import { useUserInput, useUserInputDispatch } from "@/contexts/user-input/context";
 
 import { DcaReturnsQueryInput } from "@/types/financial-queries";
 import { DcaReturnsQueryInputSchema } from "@/schemas/financial-queries";

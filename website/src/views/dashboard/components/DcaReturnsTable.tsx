@@ -2,7 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { formatDateNoDay, formatPrice, formatNumber } from "@/lib/utils";
 
-import { useUserInput } from "@/contexts/user-input";
+import { useUserInput } from "@/contexts/user-input/context";
 
 import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
 
