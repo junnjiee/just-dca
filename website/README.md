@@ -1,50 +1,53 @@
-# React + TypeScript + Vite
+# just:dca Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This website is built using [React](https://react.dev/) and [TypeScript](https://www.typescriptlang.org/), and hosted on [Cloudflare Pages](https://pages.cloudflare.com/).
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This guide assumes you have [Node.js](https://nodejs.org/en) >= 18 and [pnpm](https://pnpm.io/) installed.
 
-## Expanding the ESLint configuration
+1. Copy `.env.example` and rename to `.env`
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+2. Install project dependencies
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
+```shell
+pnpm i
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+3. Run the local development server using [Vite](https://vite.dev/)
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react';
+```shell
+pnpm run dev
+```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-});
+4. Build for production using [Vite](https://vite.dev/)
+
+```shell
+pnpm run ci
+```
+
+This command runs linting, testing and building steps sequentially.
+
+Currently, [Vite](https://vite.dev/) uses [Rollup](https://rollupjs.org/) for bundling, but this may be changed in the future with the introduction of [Rolldown](https://rolldown.rs/) (A shiny new Rust-based bundler).
+
+## Additional Information
+
+[React Query](https://tanstack.com/query/latest) and [zod](https://zod.dev/) are used to fetch and parse the API data respectively.
+
+[TailwindCSS](https://tailwindcss.com/) is used for styling. The application also uses [shadcn/ui](https://ui.shadcn.com/) components.
+
+[Recharts](https://recharts.org/en-US/) is the charting library of choice.
+
+## Developer Tooling
+
+The [Vitest](https://vitest.dev/) environment has been set-up for the application. Currently, tests are only written for the `DashboardForm` component. Test files are co-located with the component file.
+
+Formatting is done with [Prettier](https://prettier.io/) and some basic [ESLint](https://eslint.org/) rules have been set-up.
+
+[Knip](https://github.com/webpro-nl/knip) (amazing tool honestly) is used to find unused dependencies and exports in the codebase.
+
+To run the knip tool:
+
+```
+pnpm run knip
 ```
