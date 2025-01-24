@@ -13,9 +13,9 @@ export function AboutPage() {
         </p>
         <p>
           Personally, I believe that it's a great way to get started with
-          investing, as one does not need to “time” the market, and it also
-          takes emotions out of the equation, making this strategy easy to apply
-          and follow through.
+          investing, as one does not need to “time” the market. This strategy
+          also helps build discipline when managing your own finances, due to
+          having to contribute at regular intervals.
         </p>
         <p>
           My goal building this dashboard was to share how powerful dollar-cost
