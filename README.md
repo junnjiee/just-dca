@@ -14,7 +14,7 @@ To start-up both backend and website local development servers with one command 
 ./start.sh
 ```
 
-The script uses gnome-terminal. Change it to your terminal emulator if necessary.
+The script assumes that you use `gnome-terminal`. Change it to your terminal emulator if necessary.
 
 ## Suggest a feature or report bugs?
 
