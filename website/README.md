@@ -28,7 +28,7 @@ pnpm run ci
 
 This command runs linting, testing and building steps sequentially.
 
-Currently, [Vite](https://vite.dev/) uses [Rollup](https://rollupjs.org/) for bundling, but this may be changed in the future with the introduction of [Rolldown](https://rolldown.rs/) (A shiny new Rust-based bundler).
+Currently, [Vite](https://vite.dev/) uses [Rollup](https://rollupjs.org/) for bundling, but this may be changed in the future with the introduction of [Rolldown](https://rolldown.rs/) (A new Rust-based bundler).
 
 ## Additional Information
 
