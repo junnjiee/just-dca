@@ -1,6 +1,20 @@
-# just:dca
+<h1 align="center">just:dca</h1>
 
-just:dca helps you to calculate and visualize historical dollar-cost averaging returns of listed stocks and cryptocurrencies. View how consistent investments over time can impact your financial growth today.
+<img src="./assets/banner.png" alt="banner">
+
+[just:dca](https://just-dca.pages.dev/) helps you **visualize** dollar-cost averaging returns of listed **stocks** and **cryptocurrencies**. View how consistent investments over time can impact your financial growth today.
+
+## Dollar-Cost Averaging (DCA)
+
+DCA is the practice of investing a fixed amount of money at regular intervals over a period of time into the same assets, regardless of market conditions.
+
+It's a good way to develop a good investing habit while removing the need to time the market.
+
+Not convinced? Take a look at historical returns using this strategy with [just:dca](https://just-dca.pages.dev/) today.
+
+## Disclaimer
+
+Content is for informational/educational purposes only and should not be treated as financial advice.
 
 ## Getting Started
 
