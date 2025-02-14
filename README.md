@@ -36,4 +36,4 @@ Open an [issue](https://github.com/junnjiee16/just-dca/issues).
 
 ## License
 
-[MIT](https://github.com/junnjiee16/just-dca).
+[MIT](https://github.com/junnjiee16/just-dca)
