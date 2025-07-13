@@ -73,7 +73,7 @@ export function ChartGroup({ className }: ChartGroupProps) {
             {tickers.length > 1 ? (
               <>Comparing DCA Performances</>
             ) : (
-              <>Your DCA Performance</>
+              <>Dollar Cost Averaging - {tickers[0]}</>
             )}
           </p>
           <p className="text-sm text-muted-foreground">

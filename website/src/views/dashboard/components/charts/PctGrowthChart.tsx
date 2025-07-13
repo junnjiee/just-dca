@@ -1,7 +1,7 @@
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { TrendingUpIcon, TrendingDownIcon } from "lucide-react";
 
-import { formatDateNoDay, formatPct } from "@/lib/utils";
+import { formatDateNoDay, formatPctString } from "@/lib/utils";
 import { useUserInput } from "@/contexts/user-input/context";
 import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
 import { DcaReturnsQueryOutput } from "@/types/financial-queries";
@@ -26,10 +26,10 @@ import {
 
 const dcaPerformanceChartConfig = {
   stockPct: {
-    label: "Stock Growth (%)",
+    label: "Stock Growth",
   },
   profitPct: {
-    label: "DCA Growth (%)",
+    label: "DCA Growth",
   },
 } satisfies ChartConfig;
 
@@ -106,7 +106,7 @@ export function PctGrowthChart() {
               tickLine={false}
               axisLine={false}
               dx={-10}
-              tickFormatter={(value) => formatPct(value)}
+              tickFormatter={(value) => formatPctString(value)}
             />
             <ChartTooltip
               content={<ChartTooltipContent className="w-[170px]" />}
@@ -120,7 +120,7 @@ export function PctGrowthChart() {
           Dollar-cost averaging generated a{" "}
           {(trend === "positive" || trend === "neutral") && <>growth</>}
           {trend === "negative" && <>loss</>} of{" "}
-          {formatPct(Math.abs(filteredData[filteredData.length - 1].profitPct))}
+          {formatPctString(Math.abs(filteredData[filteredData.length - 1].profitPct))}
           {trend === "positive" && <TrendingUpIcon className="ps-1 w-5 h-5" />}
           {trend === "negative" && (
             <TrendingDownIcon className="ps-1 w-5 h-5" />
@@ -131,7 +131,7 @@ export function PctGrowthChart() {
           {(trend === "positive" || trend === "neutral") && <>grew</>}
           {trend === "negative" && <>fell</>} by{" "}
           <span className="font-medium">
-            {formatPct(
+            {formatPctString(
               Math.abs(filteredData[filteredData.length - 1].stockPct),
             )}
           </span>

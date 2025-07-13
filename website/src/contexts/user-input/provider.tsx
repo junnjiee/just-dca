@@ -5,9 +5,9 @@ import { userInputReducer } from "@/lib/reducers";
 import { createDate } from "@/lib/utils";
 
 const defaultUserInput = {
-  ticker: "VOO",
-  contri: 50,
-  start: createDate(11),
+  ticker: "AMZN",
+  contri: 100,
+  start: createDate(59),
   end: createDate(0),
 };
 

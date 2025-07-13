@@ -56,7 +56,7 @@ export function formatNumber(num: number) {
   });
 }
 
-export function formatPct(num: number) {
+export function formatPctString(num: number) {
   return num.toLocaleString("en-US", {
     style: "percent",
     minimumFractionDigits: 2,
@@ -64,7 +64,7 @@ export function formatPct(num: number) {
   });
 }
 
-export function formatPrice(num: number) {
+export function formatPriceString(num: number) {
   return num.toLocaleString("en-US", {
     style: "currency",
     currency: "USD",

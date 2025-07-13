@@ -14,7 +14,7 @@ import {
 } from "recharts/types/component/DefaultTooltipContent";
 import { XIcon } from "lucide-react";
 
-import { cn, formatPrice, formatDateNoDay } from "@/lib/utils";
+import { cn, formatPriceString, formatDateNoDay } from "@/lib/utils";
 
 import { ComparisonChartExternalTooltip } from "@/types/chart";
 import { useGetMultipleSuspendedDcaReturns } from "@/queries/dca-returns";
@@ -152,7 +152,7 @@ export function DcaComparisonChart({
         </div>
         {hoverDataToRender.map((data, idx) => {
           const totalValFormatted = data.totalVal
-            ? formatPrice(data.totalVal)
+            ? formatPriceString(data.totalVal)
             : "--";
 
           return (

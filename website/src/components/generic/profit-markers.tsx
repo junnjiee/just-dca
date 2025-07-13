@@ -1,6 +1,6 @@
 import { ArrowUpRight, ArrowDownRight, ArrowRight } from "lucide-react";
 
-import { cn, formatPrice, formatPct } from "@/lib/utils";
+import { cn, formatPriceString, formatPctString } from "@/lib/utils";
 
 type ProfitPctBadgeProps = {
   profitPct: number;
@@ -14,7 +14,7 @@ const getTrend = (amount: number) => {
 export function ProfitPctBadge({ profitPct, className }: ProfitPctBadgeProps) {
   const trend = getTrend(profitPct);
 
-  const profitPctFormatted = formatPct(Math.abs(profitPct));
+  const profitPctFormatted = formatPctString(Math.abs(profitPct));
 
   return (
     <div
@@ -56,7 +56,7 @@ export function ProfitAmtColored({ profit, className }: ProfitAmtColoredProps) {
       )}
     >
       {trend === "positive" && "+"}
-      {formatPrice(profit)}
+      {formatPriceString(profit)}
     </p>
   );
 }

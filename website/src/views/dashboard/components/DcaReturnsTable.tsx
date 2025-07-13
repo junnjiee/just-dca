@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 
-import { formatDateNoDay, formatPrice, formatNumber } from "@/lib/utils";
+import { formatDateNoDay, formatPriceString, formatNumber } from "@/lib/utils";
 
 import { useUserInput } from "@/contexts/user-input/context";
 
@@ -24,12 +24,12 @@ const tableColumns: ColumnDef<InferArrayType<DcaReturnsQueryOutput>>[] = [
   {
     accessorKey: "contribution",
     header: "Total Contribution",
-    cell: ({ row }) => formatPrice(row.getValue("contribution")),
+    cell: ({ row }) => formatPriceString(row.getValue("contribution")),
   },
   {
     accessorKey: "total_val",
     header: "Total Value",
-    cell: ({ row }) => formatPrice(row.getValue("total_val")),
+    cell: ({ row }) => formatPriceString(row.getValue("total_val")),
   },
   {
     accessorKey: "profit",
@@ -44,7 +44,7 @@ const tableColumns: ColumnDef<InferArrayType<DcaReturnsQueryOutput>>[] = [
   {
     accessorKey: "stock_price",
     header: "Share Price",
-    cell: ({ row }) => formatPrice(row.getValue("stock_price")),
+    cell: ({ row }) => formatPriceString(row.getValue("stock_price")),
   },
   {
     accessorKey: "shares_bought",

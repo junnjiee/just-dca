@@ -1,6 +1,6 @@
 import { Area, AreaChart, XAxis } from "recharts";
 
-import { formatPrice, formatNumber, cn, formatDateNoDay } from "@/lib/utils";
+import { formatPriceString, formatNumber, cn, formatDateNoDay } from "@/lib/utils";
 import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
 import { useUserInput } from "@/contexts/user-input/context";
 import { DcaReturnsQueryOutput } from "@/types/financial-queries";
@@ -33,8 +33,8 @@ export function CardGroup({ className }: CardGroupProps) {
 
   const filteredData = data.filter((row) => !row.padded_row);
 
-  const totalVal = formatPrice(data[data.length - 1].total_val);
-  const contri = formatPrice(data[data.length - 1].contribution);
+  const totalVal = formatPriceString(data[data.length - 1].total_val);
+  const contri = formatPriceString(data[data.length - 1].contribution);
   const sharesOwned = formatNumber(data[data.length - 1].shares_owned);
 
   const avgSharesBought = formatNumber(
@@ -71,7 +71,7 @@ export function CardGroup({ className }: CardGroupProps) {
           <CardDescription>US{contri}</CardDescription>
         </CardHeader>
         <CardContent className="text-muted-foreground text-xs mt-1">
-          You invested {formatPrice(userInput.contri)}/month over{" "}
+          You invested {formatPriceString(userInput.contri)}/month over{" "}
           {filteredData.length} months
         </CardContent>
       </Card>
