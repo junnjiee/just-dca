@@ -35,6 +35,7 @@ export function DcaPerformanceChart() {
         ...acc,
         {
           ...row,
+          total_val: parseFloat(row.total_val.toFixed(2)),
           date: formatDateNoDay(row.date, "numeric"),
         },
       ];

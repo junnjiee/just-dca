@@ -46,9 +46,9 @@ export function formatDateNoDay(
   });
 }
 
-export function formatNumber(num: number) {
+export function formatNumberString(num: number) {
   if (num < 1) {
-    return num.toPrecision(3);
+    return num.toPrecision(2);
   }
   return num.toLocaleString("en-US", {
     minimumFractionDigits: 2,

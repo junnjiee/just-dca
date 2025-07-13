@@ -1,7 +1,7 @@
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { TrendingUpIcon, TrendingDownIcon } from "lucide-react";
 
-import { formatDateNoDay, formatPctString } from "@/lib/utils";
+import { formatDateNoDay } from "@/lib/utils";
 import { useUserInput } from "@/contexts/user-input/context";
 import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
 import { DcaReturnsQueryOutput } from "@/types/financial-queries";
@@ -56,7 +56,8 @@ export function PctGrowthChart() {
           ...acc,
           {
             ...row,
-            stockPct: row.stock_price / initialStockPrice - 1,
+            stockPct: parseFloat(((row.stock_price / initialStockPrice - 1) * 100).toFixed(2)),
+            profitPct: parseFloat((row.profitPct * 100).toFixed(2)),
             date: formatDateNoDay(row.date, "numeric"),
           },
         ];
@@ -87,7 +88,7 @@ export function PctGrowthChart() {
           Investment Growth
         </CardTitle>
         <CardDescription className="text-sm font-normal text-muted-foreground">
-          Compare your DCA growth to{" "}
+          Compare your dollar-cost averaged {userInput.ticker} growth to{" "}
           <span className="font-medium">{userInput.ticker}</span>
           's growth, from {filteredData[0].date} to{" "}
           {filteredData[filteredData.length - 1].date}
@@ -106,7 +107,7 @@ export function PctGrowthChart() {
               tickLine={false}
               axisLine={false}
               dx={-10}
-              tickFormatter={(value) => formatPctString(value)}
+              tickFormatter={(value) => value + "%"}
             />
             <ChartTooltip
               content={<ChartTooltipContent className="w-[170px]" />}
@@ -120,7 +121,7 @@ export function PctGrowthChart() {
           Dollar-cost averaging generated a{" "}
           {(trend === "positive" || trend === "neutral") && <>growth</>}
           {trend === "negative" && <>loss</>} of{" "}
-          {formatPctString(Math.abs(filteredData[filteredData.length - 1].profitPct))}
+          {Math.abs(filteredData[filteredData.length - 1].profitPct)}%
           {trend === "positive" && <TrendingUpIcon className="ps-1 w-5 h-5" />}
           {trend === "negative" && (
             <TrendingDownIcon className="ps-1 w-5 h-5" />
@@ -131,9 +132,9 @@ export function PctGrowthChart() {
           {(trend === "positive" || trend === "neutral") && <>grew</>}
           {trend === "negative" && <>fell</>} by{" "}
           <span className="font-medium">
-            {formatPctString(
-              Math.abs(filteredData[filteredData.length - 1].stockPct),
-            )}
+            {
+              Math.abs(filteredData[filteredData.length - 1].stockPct)
+            }%
           </span>
         </p>
       </CardFooter>

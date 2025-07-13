@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 
-import { formatDateNoDay, formatPriceString, formatNumber } from "@/lib/utils";
+import { formatDateNoDay, formatPriceString, formatNumberString } from "@/lib/utils";
 
 import { useUserInput } from "@/contexts/user-input/context";
 
@@ -49,12 +49,12 @@ const tableColumns: ColumnDef<InferArrayType<DcaReturnsQueryOutput>>[] = [
   {
     accessorKey: "shares_bought",
     header: "Shares Bought",
-    cell: ({ row }) => formatNumber(row.getValue("shares_bought")),
+    cell: ({ row }) => formatNumberString(row.getValue("shares_bought")),
   },
   {
     accessorKey: "shares_owned",
     header: "Shares Owned",
-    cell: ({ row }) => formatNumber(row.getValue("shares_owned")),
+    cell: ({ row }) => formatNumberString(row.getValue("shares_owned")),
   },
 ];
 

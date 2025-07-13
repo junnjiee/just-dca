@@ -1,6 +1,6 @@
 import { Area, AreaChart, XAxis } from "recharts";
 
-import { formatPriceString, formatNumber, cn, formatDateNoDay } from "@/lib/utils";
+import { formatPriceString, formatNumberString, cn, formatDateNoDay } from "@/lib/utils";
 import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
 import { useUserInput } from "@/contexts/user-input/context";
 import { DcaReturnsQueryOutput } from "@/types/financial-queries";
@@ -35,9 +35,9 @@ export function CardGroup({ className }: CardGroupProps) {
 
   const totalVal = formatPriceString(data[data.length - 1].total_val);
   const contri = formatPriceString(data[data.length - 1].contribution);
-  const sharesOwned = formatNumber(data[data.length - 1].shares_owned);
+  const sharesOwned = formatNumberString(data[data.length - 1].shares_owned);
 
-  const avgSharesBought = formatNumber(
+  const avgSharesBought = formatNumberString(
     data[data.length - 1].shares_owned / filteredData.length,
   );
 
@@ -109,6 +109,7 @@ function SparkChart({ data }: SparkChartProps) {
 
   const filteredData = data.map((row) => ({
     ...row,
+    profit: parseFloat(row.profit.toFixed(2)),
     date: formatDateNoDay(row.date),
   }));
 

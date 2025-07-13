@@ -1,6 +1,6 @@
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
-import { formatDateNoDay } from "@/lib/utils";
+import { formatDateNoDay, formatPriceString } from "@/lib/utils";
 import { useUserInput } from "@/contexts/user-input/context";
 import { useGetSuspendedDcaReturns } from "@/queries/dca-returns";
 import { DcaReturnsQueryOutput } from "@/types/financial-queries";
@@ -20,6 +20,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter
 } from "@/components/ui/card";
 
 const dcaPerformanceChartConfig = {
@@ -50,7 +51,8 @@ export function CostPerShareChart() {
           ...acc,
           {
             ...row,
-            dca_price: row.contribution / row.shares_owned,
+            dca_price: parseFloat((row.contribution / row.shares_owned).toFixed(2)),
+            stock_price: parseFloat(row.stock_price.toFixed(2)),
             date: formatDateNoDay(row.date, "numeric"),
           },
         ];
@@ -88,7 +90,7 @@ export function CostPerShareChart() {
 
             <CartesianGrid vertical={false} />
             <XAxis dataKey="date" />
-            <YAxis tickLine={false} axisLine={false} dx={-10} />
+            <YAxis tickLine={false} axisLine={false} dx={-10} tickFormatter={value => formatPriceString(value)}/>
             <ChartTooltip
               content={<ChartTooltipContent className="w-[170px]" />}
             />
@@ -96,6 +98,9 @@ export function CostPerShareChart() {
           </LineChart>
         </ChartContainer>
       </CardContent>
+      <CardFooter className="flex-col text-sm items-start gap-y-1">
+        <p>What is DCA price?</p>
+      </CardFooter>
     </Card>
   );
 }
