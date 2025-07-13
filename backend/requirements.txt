@@ -1,5 +1,5 @@
 fastapi==0.115.6
-yfinance==0.2.51
+yfinance==0.2.58
 pandas==2.2.3
 hypercorn==0.17.3
 pydantic-settings==2.7.1
