@@ -76,9 +76,9 @@ export function CostPerShareChart() {
           Cost per Share
         </CardTitle>
         <CardDescription className="text-sm font-normal text-muted-foreground">
-          DCA helps smoothen price fluctuations. View how your dollar-cost
-          averaged price evolved compared to{" "}
-          <span className="font-medium">{userInput.ticker}</span>.
+          DCA helps smoothen price volatility. View how your DCA price evolved compared to {" "}
+          <span className="font-medium">{userInput.ticker}</span>'s price, from {filteredData[0].date} to{" "}
+          {filteredData[filteredData.length - 1].date}.
         </CardDescription>
       </CardHeader>
       <CardContent className="mt-6">
@@ -99,7 +99,9 @@ export function CostPerShareChart() {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col text-sm items-start gap-y-1">
-        <p>What is DCA price?</p>
+        <p className="font-medium">What is DCA price?</p>
+        <p>DCA price measures the average cost per unit of asset, used 
+          when you purchased the same asset multiple times over time.</p>
       </CardFooter>
     </Card>
   );

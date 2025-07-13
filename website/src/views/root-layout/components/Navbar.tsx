@@ -62,7 +62,7 @@ function NavLinks({ className }: { className?: string }) {
           )}
           variant={"ghost"}
           key={link.url}
-          onClick={() => (document.title = `just:dca | ${link.title}`)}
+          onClick={() => (document.title = `justDCA | ${link.title}`)}
           asChild
         >
           <Link to={link.url}>{link.title}</Link>
@@ -84,7 +84,7 @@ function NavDrawer({ className }: { className?: string }) {
           <DrawerClose
             className="ms-7 pb-4"
             key={link.url}
-            onClick={() => (document.title = `just:dca | ${link.title}`)}
+            onClick={() => (document.title = `justDCA | ${link.title}`)}
             asChild
           >
             <Link to={link.url}>{link.title}</Link>
@@ -124,7 +124,7 @@ function JustDcaLogo() {
       href={import.meta.env.VITE_WEBSITE_URL!}
     >
       <TrendingUpIcon />
-      <p className="font-bold tracking-wide">just:dca</p>
+      <p className="font-bold tracking-wide">justDCA</p>
     </a>
   );
 }

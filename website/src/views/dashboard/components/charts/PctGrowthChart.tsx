@@ -26,7 +26,7 @@ import {
 
 const dcaPerformanceChartConfig = {
   stockPct: {
-    label: "Stock Growth",
+    label: "Ticker Growth",
   },
   profitPct: {
     label: "DCA Growth",
@@ -85,13 +85,12 @@ export function PctGrowthChart() {
     <Card>
       <CardHeader>
         <CardTitle className="text-lg font-medium text-inherit">
-          Investment Growth
+          Investment Growth (%)
         </CardTitle>
         <CardDescription className="text-sm font-normal text-muted-foreground">
-          Compare your dollar-cost averaged {userInput.ticker} growth to{" "}
-          <span className="font-medium">{userInput.ticker}</span>
-          's growth, from {filteredData[0].date} to{" "}
-          {filteredData[filteredData.length - 1].date}
+          Compare your dollar-cost averaged <span className="font-medium">{userInput.ticker}</span>'s growth to{" "}
+          its actual performance, from {filteredData[0].date} to{" "}
+          {filteredData[filteredData.length - 1].date}.
         </CardDescription>
       </CardHeader>
       <CardContent className="mt-6">
@@ -129,7 +128,7 @@ export function PctGrowthChart() {
         </p>
         <p>
           In the same period, {userInput.ticker}{" "}
-          {(trend === "positive" || trend === "neutral") && <>grew</>}
+          {(trend === "positive" || trend === "neutral") && <>rose</>}
           {trend === "negative" && <>fell</>} by{" "}
           <span className="font-medium">
             {

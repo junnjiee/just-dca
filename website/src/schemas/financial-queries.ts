@@ -47,5 +47,5 @@ export const StockInfoQueryOutputSchema = z.object({
   longName: z.string(),
   currency: z.string(),
   quoteType: z.string(),
-  underlyingSymbol: z.string(),
+  // underlyingSymbol: z.string(),
 });
