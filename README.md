@@ -2,7 +2,7 @@
 
 <img src="./assets/banner.png" alt="banner">
 
-[just:dca](https://just-dca.pages.dev/) helps you **visualize** dollar-cost averaging returns of listed **stocks** and **cryptocurrencies**. View how consistent investments over time can impact your financial growth today.
+[justDCA](https://just-dca.pages.dev/) helps you **visualize** dollar-cost averaging returns of listed **stocks** and **cryptocurrencies**. View how consistent investments over time can impact your financial growth today.
 
 ## Dollar-Cost Averaging (DCA)
 
