@@ -1,4 +1,4 @@
-<h1 align="center">just:dca</h1>
+<h1 align="center">justDCA</h1>
 
 <img src="./assets/banner.png" alt="banner">
 
@@ -10,7 +10,7 @@ DCA is the practice of investing a fixed amount of money at regular intervals ov
 
 It's a good way to develop a good investing habit while removing the need to time the market.
 
-Not convinced? Take a look at historical returns using this strategy with [just:dca](https://just-dca.pages.dev/) today.
+Not convinced? Take a look at historical returns using this strategy with [justDCA](https://just-dca.pages.dev/) today.
 
 ## Disclaimer
 
