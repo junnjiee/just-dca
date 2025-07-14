@@ -1,6 +1,6 @@
 # just:dca Backend
 
-The backend is built with Python [FastAPI](https://fastapi.tiangolo.com/), and hosted on [Railway](https://railway.com/).
+The backend is built with Python [FastAPI](https://fastapi.tiangolo.com/), and hosted on [Vercel](https://vercel.com).
 
 The purpose of this backend is to interact with the [yfinance](https://github.com/ranaroussi/yfinance) library and run the dollar-cost averaging calculations.
 
